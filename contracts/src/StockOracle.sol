@@ -9,7 +9,7 @@ import {AggregatorV3Interface} from "./interfaces/AggregatorV3Interface.sol";
 import {IStockOracle} from "./interfaces/IStockOracle.sol";
 
 /// @title StockOracle
-/// @notice Lists the tokenized stocks Garante accepts and prices them in USD with Chainlink feeds.
+/// @notice Lists the tokenized stocks Seña accepts and prices them in USD with Chainlink feeds.
 /// @dev Coinbase tokenized-stock feeds on Base are total-return feeds: the answer already includes the
 ///      token's multiplier (dividends, splits), so `token amount x answer` is the position value.
 ///      Feeds follow market hours (24/5) and hold the last value while markets are closed, which is why
@@ -99,6 +99,7 @@ contract StockOracle is IStockOracle, Ownable2Step {
         int256 rawAnswer;
         (, rawAnswer,, updatedAt,) = AggregatorV3Interface(stock.feed).latestRoundData();
         if (rawAnswer <= 0 || updatedAt == 0 || updatedAt > block.timestamp) revert InvalidPrice(token, rawAnswer);
+        // forge-lint: disable-next-line(unsafe-typecast) positive int256 always fits in uint256
         answer = uint256(rawAnswer);
     }
 }

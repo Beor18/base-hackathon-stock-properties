@@ -18,7 +18,7 @@ interface IStockOracle {
         uint16 collateralRatioBps; // collateral value required per unit of coverage, e.g. 12_500 = 125%
         uint8 tokenDecimals;
         uint8 feedDecimals;
-        bool enabled; // disabled stocks keep pricing existing guarantees but cannot back new ones
+        bool enabled; // disabled stocks keep pricing existing reservations but cannot back new ones
     }
 
     event StockListed(address indexed token, address indexed feed, uint16 collateralRatioBps, bool enabled);

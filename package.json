@@ -11,7 +11,11 @@
     "forge": "node node_modules/@foundry-rs/forge/bin.mjs",
     "contracts:build": "npm run forge -- build",
     "contracts:test": "npm run forge -- test",
-    "contracts:abi": "npm run contracts:build && tsx scripts/export-abis.ts"
+    "contracts:abi": "npm run contracts:build && tsx scripts/export-abis.ts",
+    "chain": "npm run contracts:build && tsx scripts/chain.ts",
+    "deploy": "npm run contracts:build && tsx scripts/deploy.ts",
+    "demo:prices": "tsx scripts/demo-prices.ts",
+    "smoke": "tsx scripts/smoke.ts"
   },
   "dependencies": {
     "@base-org/account": "^2.6.0",
