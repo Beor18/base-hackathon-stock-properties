@@ -4,9 +4,13 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { Wordmark } from "@/components/brand/wordmark";
+import { deployment } from "@/config/deployment";
+import { useStats } from "@/hooks/queries";
 import type { Locale } from "@/i18n/config";
-import { fill } from "@/i18n/format";
+import { fill, formatAmount, formatBps, formatMoney } from "@/i18n/format";
 import type { PitchDeck, PitchSlide } from "@/i18n/pitch/es";
+import { DEPOSIT_PCT, MIN_CONTRIBUTION_USD } from "@/lib/product";
+import { wadToNumber } from "@/lib/view-models";
 
 /*
  * Deck colors are fixed (not theme tokens) so the presentation looks the same on any screen
@@ -19,8 +23,35 @@ const tones: Record<PitchSlide["tone"], { slide: string; muted: string; rule: st
   mango: { slide: "bg-[#f5b83d] text-[#15232b]", muted: "text-[#15232b]/80", rule: "border-[#15232b]", accent: "text-[#b3165a]" },
 };
 
+/** Deposit used for the worked example on the business model slide, in USD. */
+const EXAMPLE_DEPOSIT_USD = 5_000;
+
+/**
+ * Figures the slides quote from the product itself (fees, minimums, deposit range). They come from
+ * the deployment, so the deck can never disagree with what the app charges.
+ */
+function deckValues(lang: Locale): Record<string, string> {
+  const { contributionFeeBps, reservationFeeBps } = deployment.params;
+  const contributionFees = (EXAMPLE_DEPOSIT_USD * contributionFeeBps) / 10_000;
+  const reservationFee = (EXAMPLE_DEPOSIT_USD * reservationFeeBps) / 10_000;
+  const pct = (value: number) => formatBps(value * 100, lang);
+  return {
+    minContribution: formatMoney(MIN_CONTRIBUTION_USD, lang),
+    contributionFee: formatBps(contributionFeeBps, lang),
+    reservationFee: formatBps(reservationFeeBps, lang),
+    depositDefault: pct(DEPOSIT_PCT.default),
+    depositMin: pct(DEPOSIT_PCT.min),
+    depositMax: pct(DEPOSIT_PCT.max),
+    exampleDeposit: formatMoney(EXAMPLE_DEPOSIT_USD, lang),
+    exampleContributionFees: formatMoney(contributionFees, lang),
+    exampleReservationFee: formatMoney(reservationFee, lang),
+    exampleRevenue: formatMoney(contributionFees + reservationFee, lang),
+  };
+}
+
 export function Deck({ deck, lang }: { deck: PitchDeck; lang: Locale }) {
   const scroller = useRef<HTMLDivElement>(null);
+  const [values] = useState(() => deckValues(lang));
   const [index, setIndex] = useState(0);
   const total = deck.slides.length;
 
@@ -67,7 +98,7 @@ export function Deck({ deck, lang }: { deck: PitchDeck; lang: Locale }) {
         aria-label={deck.title}
       >
         {deck.slides.map((slide, slideIndex) => (
-          <Slide key={slide.id} slide={slide} index={slideIndex} total={total} deck={deck} lang={lang} />
+          <Slide key={slide.id} slide={slide} index={slideIndex} total={total} deck={deck} lang={lang} values={values} />
         ))}
       </div>
 
@@ -110,14 +141,17 @@ function Slide({
   total,
   deck,
   lang,
+  values,
 }: {
   slide: PitchSlide;
   index: number;
   total: number;
   deck: PitchDeck;
   lang: Locale;
+  values: Record<string, string>;
 }) {
   const tone = tones[slide.tone];
+  const text = (template: string) => fill(template, values);
   const titleSize =
     slide.layout === "cover" || slide.layout === "close" || slide.layout === "statement"
       ? "text-[clamp(2.5rem,7vw,5.5rem)] leading-[0.95]"
@@ -144,8 +178,10 @@ function Slide({
           </svg>
         )}
 
-        <h2 className={`type-wide max-w-5xl text-balance ${titleSize}`}>{slide.title}</h2>
-        {slide.body && <p className={`mt-6 max-w-2xl text-lead md:text-h3 md:leading-snug text-pretty ${tone.muted}`}>{slide.body}</p>}
+        <h2 className={`type-wide max-w-5xl text-balance ${titleSize}`}>{text(slide.title)}</h2>
+        {slide.body && (
+          <p className={`mt-6 max-w-2xl text-lead md:text-h3 md:leading-snug text-pretty ${tone.muted}`}>{text(slide.body)}</p>
+        )}
 
         {slide.points && slide.layout !== "team" && (
           <ol
@@ -164,14 +200,17 @@ function Slide({
                     {pointIndex + 1}
                   </span>
                 )}
-                <p className={`type-semiwide ${slide.layout === "points" && slide.id === "problem" ? "text-h1" : "text-h3"}`}>
-                  {point.title}
-                </p>
-                {point.body && <p className={`mt-2 text-pretty ${tone.muted}`}>{point.body}</p>}
+                {point.tag && <p className={`mb-2 text-label font-semibold uppercase tracking-wide ${tone.accent}`}>{point.tag}</p>}
+                <p className={`type-semiwide text-balance ${slide.numbers ? "text-h1" : "text-h3"}`}>{text(point.title)}</p>
+                {point.body && <p className={`mt-2 text-pretty ${tone.muted}`}>{text(point.body)}</p>}
               </li>
             ))}
           </ol>
         )}
+
+        {slide.layout === "live" && <LiveNumbers labels={deck.live} lang={lang} tone={tone} />}
+
+        {slide.layout === "compare" && slide.compare && <CompareTable compare={slide.compare} tone={tone} />}
 
         {slide.layout === "team" && slide.points && (
           <ul className="mt-10 grid gap-8 md:grid-cols-2">
@@ -184,6 +223,8 @@ function Slide({
           </ul>
         )}
 
+        {slide.foot && <p className={`mt-10 max-w-3xl text-label text-pretty ${tone.muted}`}>{text(slide.foot)}</p>}
+
         {slide.layout === "close" && (
           <Link
             href={`/${lang}/casa`}
@@ -194,5 +235,97 @@ function Slide({
         )}
       </div>
     </section>
+  );
+}
+
+type Tone = (typeof tones)[PitchSlide["tone"]];
+
+/**
+ * Traction read from the contracts at the moment the slide is shown. Zeros are shown as zeros:
+ * the point of the slide is that nobody typed these numbers.
+ */
+function LiveNumbers({ labels, lang, tone }: { labels: PitchDeck["live"]; lang: Locale; tone: Tone }) {
+  const { data, isError } = useStats();
+  const explorer = deployment.explorerUrl;
+  const numbers = data
+    ? [
+        { label: labels.goals, value: formatAmount(data.goalCount, lang) },
+        { label: labels.reservations, value: formatAmount(data.reservationCount, lang) },
+        { label: labels.locked, value: formatMoney(Math.round(wadToNumber(data.lockedValueUsd)), lang) },
+        { label: labels.stocks, value: formatAmount(data.listedStocks, lang) },
+      ]
+    : null;
+
+  return (
+    <div className="mt-10">
+      {numbers ? (
+        <dl className="grid grid-cols-2 gap-x-8 gap-y-8 lg:grid-cols-4">
+          {numbers.map((item) => (
+            <div key={item.label} className={`flex flex-col-reverse border-t-2 pt-4 ${tone.rule}`}>
+              <dt className={`mt-2 ${tone.muted}`}>{item.label}</dt>
+              <dd className="type-wide text-[clamp(2.25rem,6vw,4.5rem)] leading-none tabular">{item.value}</dd>
+            </div>
+          ))}
+        </dl>
+      ) : (
+        <p className={`text-lead ${tone.muted}`} role="status">
+          {isError ? labels.unavailable : labels.loading}
+        </p>
+      )}
+      {explorer && (
+        <p className={`mt-10 flex flex-wrap gap-x-6 gap-y-2 text-label ${tone.muted}`}>
+          <span>{labels.contracts}</span>
+          {[
+            { label: labels.escrow, address: deployment.contracts.reservationEscrow },
+            { label: labels.registry, address: deployment.contracts.goalRegistry },
+          ].map((contract) => (
+            <a
+              key={contract.address}
+              href={`${explorer}/address/${contract.address}`}
+              target="_blank"
+              rel="noreferrer"
+              className={`font-semibold underline underline-offset-4 ${tone.accent}`}
+            >
+              {contract.label}
+            </a>
+          ))}
+        </p>
+      )}
+    </div>
+  );
+}
+
+/** Alternatives against the three things Seña does at once. Our row is the only full one. */
+function CompareTable({ compare, tone }: { compare: NonNullable<PitchSlide["compare"]>; tone: Tone }) {
+  return (
+    <table className="mt-10 w-full max-w-4xl border-collapse text-left">
+      <thead>
+        <tr className={`border-b-2 ${tone.rule}`}>
+          <td />
+          {compare.columns.map((column) => (
+            <th key={column} scope="col" className={`w-[22%] px-1 pb-3 text-center align-bottom text-label font-semibold md:px-3 ${tone.muted}`}>
+              {column}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {compare.rows.map((row) => (
+          <tr key={row.name} className={row.ours ? "bg-[#b3165a] text-white" : "border-b border-[#15232b]/15"}>
+            <th scope="row" className={`py-3 pl-3 pr-2 font-semibold ${row.ours ? "type-semiwide text-h3" : ""}`}>
+              {row.name}
+            </th>
+            {row.cells.map((cell, cellIndex) => (
+              <td key={compare.columns[cellIndex]} className="px-1 py-3 text-center md:px-3">
+                <span className="sr-only">{cell ? compare.yes : compare.no}</span>
+                <svg viewBox="0 0 20 20" className={`mx-auto size-6 ${cell ? "" : "opacity-35"}`} aria-hidden fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                  {cell ? <path d="M4.5 10.5l3.5 3.5 7.5-8" /> : <path d="M6 6l8 8M14 6l-8 8" />}
+                </svg>
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }

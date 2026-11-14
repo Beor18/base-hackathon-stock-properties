@@ -3,6 +3,8 @@
 > **Seña: tu próxima casa, en acciones.**
 > Ahorrá en acciones con una casa como meta. Cuando llegás, tus acciones quedan como seña, sin venderlas.
 
+> **Actualizado el 14 nov 2026** con `docs/research/2026-11-14-mercado-y-competencia.md` (mercado, competencia y lo que es oficial del hackathon) y `docs/LEAN.md` (hipótesis, métricas y experimentos). Si un número de acá no coincide con el research, vale el research.
+
 Este documento es la historia de la startup de 0 a 1: problema, solución, por qué ahora, mercado, competencia, diferenciador, modelo de negocio, plan, equipo y ask. La fuente de verdad del producto es `docs/superpowers/specs/2026-11-14-sena-design.md`. Las cifras tienen fuente (ver `HANDOFF.md`, Apéndices B y B2). Lo que es supuesto o decisión pendiente de los fundadores está marcado con **[decidir]**, **[confirmar]** o **[completar]**.
 
 ---
@@ -79,7 +81,7 @@ Las acciones pueden bajar. Lo decimos en la landing y en el contrato: el contrat
 
 Hasta 2026 esto no se podía construir. Cuatro cosas cambiaron:
 
-1. **Las acciones ya son programables.** El 24 de agosto de 2026 Coinbase lanzó acciones tokenizadas nativas en Base (estándar B20), respaldadas 1:1, con precio de Chainlink y sin lista blanca de wallets. Por primera vez un contrato puede custodiar una acción real y venderla para saldar una deuda.
+1. **Las acciones ya son programables.** El 24 de agosto de 2026 Coinbase lanzó acciones tokenizadas nativas en Base (estándar B20), respaldadas 1:1, con precio de Chainlink y sin lista blanca de wallets. Desde septiembre de 2026, Morpho y Aave ya las aceptan como garantía de préstamos en Base. Lo que nadie hace todavía es bloquearlas a favor de un tercero como seña de una propiedad.
 2. **El mercado crece rápido.** Las acciones tokenizadas pasaron de USD 2.480M a **USD 3.770M** en menos de tres meses. Fuente: [rwa.xyz](https://app.rwa.xyz/stocks).
 3. **El crédito no llega.** Con 14,4% a 17,5% de las escrituras porteñas con hipoteca, el ahorro propio sigue siendo la forma de comprar.
 4. **La gente ya invierte.** En Argentina hay **12,3 millones de personas con cuenta comitente** (55% de la población activa) y **más de 1 millón tiene CEDEARs**: acciones de EE.UU. que hoy no sirven para nada a la hora de reservar una casa. Fuente: [iProfesional/BYMA, may 2026](https://www.iprofesional.com/finanzas/460259-la-mitad-de-los-argentinos-que-trabajan-ya-tiene-una-cuenta-para-invertir). Además el Gobierno pidió públicamente instrumentos en dólares para atraer lo que está fuera del sistema (nota de iProfesional, 2026).
@@ -133,6 +135,8 @@ Advertencias que hay que decir antes de que las pregunte un jurado:
 | Planes de ahorro y fideicomisos de obra | Ahorro con una unidad futura | Atados a un proyecto y sin liquidez **[completar con ejemplos]** |
 | Plataformas de propiedades tokenizadas | Venden fracciones de inmuebles | Invierten en el inmueble; no sirven para reservar una casa que elegís vos |
 | Préstamos con acciones de colateral (Aave, Morpho) | Crédito contra acciones | Es deuda, no seña |
+| Hipoteca con cripto en prenda (Better y Coinbase, EE.UU., desde el 26 ago 2026) | Segundo préstamo para el anticipo, garantizado con bitcoin o USDC sin venderlos. Planean sumar acciones tokenizadas | Es la más cercana. Es deuda, es para el anticipo al escriturar y no para la seña, y solo en EE.UU. |
+| Hipotecas con cartera en prenda (Morgan Stanley, Merrill) | Prendás tu cartera en vez de poner el anticipo en efectivo | Solo para carteras grandes en ese banco. Es deuda |
 
 El research previo (para la garantía de alquiler) no encontró ningún producto que use acciones tokenizadas como garantía, ni entre unos 40 repositorios públicos del hackathon. **[confirmar]** con una búsqueda nueva específica de "ahorro para propiedad con acciones" antes del Loom.
 
@@ -145,7 +149,7 @@ Cuatro cosas lo sostienen:
 1. **Lo construye un equipo que ya opera en real estate.** Smarlin es nuestro producto y está en producción; Kelvin cierra operaciones allá. El producto habla el idioma del negocio (seña, reserva, corredor, árbitro). Las propiedades de la portada son reales, no un catálogo de muestra.
 2. **Datos que nadie más tiene.** Cada casa de Puerto Rico viene con precio justo, renta de corto plazo, renta de mercado y comparables, a partir de cierres reales.
 3. **Cualquiera lo usa mañana, con USD 5.** Pegás el link de un portal argentino y tenés una meta. Cada aporte es uso real on-chain.
-4. **La reserva es una acción programada que no existe en otro lado.** Bloquear, soltar o vender para cobrar en USDC según lo que pase con la operación. Es lo que pide el track Programmable Stock Markets.
+4. **La reserva es una acción programada que no encontramos en otro lado.** Aave y Morpho prestan contra las acciones, pero eso es deuda con interés. Bloquear, soltar o vender para cobrar en USDC según lo que pase con la operación. Es lo que pide el track Programmable Stock Markets.
 
 **Por qué es difícil de copiar:** la tecnología se puede clonar. La red de corredores que aceptan la reserva y los datos de Smarlin, no. Cada corredor que la adopta la vuelve aceptable para todos sus compradores.
 
@@ -223,15 +227,15 @@ Hay que decirlo sin maquillaje: **el ingreso por persona es chico al principio.*
 
 **One-liner**
 
-> Seña lets people outside the US save in tokenized stocks on Base toward a specific property, and lock those stocks as the reservation deposit when they get there, without selling them. If the buyer backs out, the broker is paid in USDC. Listings come live from Smarlin, our real estate platform in Puerto Rico, or from any Argentine portal by pasting a link.
+> Seña lets people outside the US save in tokenized stocks on Base toward a specific property, and lock those stocks as the reservation deposit when they get there, without selling them. If the buyer backs out, the broker is paid in USDC. Listings come live from Smarlin, our property platform in Puerto Rico, or from any Argentine portal by pasting a link.
 
 **Form: project description (1 to 2 sentences)**
 
-> Seña is a savings account in tokenized stocks with a real property as the goal. Add USDC or digital pesos, pick a home from Smarlin or paste any portal link, and when you reach the deposit your stocks are locked in an onchain escrow as the reservation, never sold. If the buyer backs out, the contract sells just enough stock to pay the broker in USDC.
+> Seña is a savings account in tokenized stocks with a specific property as the goal. Add USDC or digital pesos, pick a home from Smarlin or paste any portal link, and when you reach the deposit your stocks are locked in an onchain escrow as the reservation, never sold. If the buyer backs out, the contract sells just enough stock to pay the broker in USDC.
 
 **Form: "Why should we select you?"**
 
-> In Argentina, homes are bought in dollars and in cash: in Buenos Aires, 17.5% of August 2026 deeds used a mortgage, so the rest came from years of saved dollars sitting idle (INDEC puts USD 254.9B of private dollars outside the banking system). Meanwhile over a million Argentines already hold US stocks that are useless the day they must reserve a home. Seña turns that saving into a goal and the goal into a deposit, without selling. Every contribution is real onchain usage, from USD 5, and the final reservation is a programmed stock action that does not exist anywhere else: lock, release, or sell to pay a broker in USDC with a slippage cap enforced by the contract. We are the team behind Smarlin, a live AI real estate platform in Puerto Rico with 11,925 active listings and 120,002 closed sales analyzed. One of us sells properties there; the other builds onchain from Buenos Aires, where the product can be used today. US persons are blocked on mainnet and no US person ever receives stocks.
+> In Argentina, homes are bought in dollars and in cash: in Buenos Aires, 17.5% of August 2026 deeds used a mortgage, so the rest came from years of saved dollars sitting idle (INDEC puts USD 254.9B of private dollars outside the banking system). Meanwhile over a million Argentines already hold US stocks that are useless the day they must reserve a home. Seña turns that saving into a goal and the goal into a deposit, without selling. Every contribution is onchain usage, from USD 5, and the final reservation is a programmed stock action that does not exist anywhere else: lock, release, or sell to pay a broker in USDC with a slippage cap enforced by the contract. We are the team behind Smarlin, a live AI property platform in Puerto Rico with 11,925 active listings and 120,002 closed sales analyzed. One of us sells properties there; the other builds onchain from Buenos Aires, where the product can be used today. US persons are blocked on mainnet and no US person ever receives stocks.
 
 **Loom, 3 minutos**
 
@@ -239,7 +243,7 @@ Hay que decirlo sin maquillaje: **el ingreso por persona es chico al principio.*
 |---|---|---|
 | 0:00 a 0:20 | Una cuenta con dólares quietos y un portal con una casa | "In Argentina you buy a home with dollars you saved for years. That money sits still. And when you find the home, you must sell what you invested to reserve it." |
 | 0:20 a 0:40 | Landing con el 1-2-3 | "Seña: your next home, in stocks. Three steps." |
-| 0:40 a 1:10 | Elegir una casa de Puerto Rico en Smarlin (datos de precio justo y renta) y pegar un link de un portal argentino | "Pick a real listing from Smarlin, or paste any link. We compute the deposit." |
+| 0:40 a 1:10 | Elegir una casa de Puerto Rico en Smarlin (datos de precio justo y renta) y pegar un link de un portal argentino | "Pick a listing from Smarlin, or paste any link. We compute the deposit." |
 | 1:10 a 1:50 | Sumar con USDC y con pesos digitales; pantalla de meta con "la casa +x %, tus acciones +y %" | "Add dollars or pesos. They become the stock you chose. Fee always visible. Every step is onchain." |
 | 1:50 a 2:30 | Reservar: link del corredor, un toque, página pública de la reserva; luego reclamo y cobro en USDC | "You reached the goal. One tap locks your stocks as the deposit. If you back out, the broker claims and is paid in USDC, with a slippage cap enforced onchain. If the deal closes, your stocks come home." |
 | 2:30 a 3:00 | Stats on-chain y roadmap | "Built during Stocks Maxxing. Next: first brokers, a plan for agencies on Smarlin, other portals." |
@@ -248,6 +252,6 @@ Hay que decirlo sin maquillaje: **el ingreso por persona es chico al principio.*
 
 > In Argentina you buy a home with dollars you saved for years. That money sits still.
 >
-> We built Seña: save in tokenized stocks toward a real home. When you get there, your stocks become the deposit. You never sell them.
+> We built Seña: save in tokenized stocks toward the home you want. When you get there, your stocks become the deposit. You never sell them.
 >
 > Seña: your next home, in stocks. @buildonbase

@@ -8,11 +8,11 @@ Built for [Base Stocks Maxxing](https://www.base.org/stocksmaxxing), track **Pro
 
 In Argentina, homes are bought in dollars and in cash. In Buenos Aires, 17.5% of August 2026 deeds used a mortgage; the rest came from years of idle savings. Seña turns that saving into a goal and the goal into a deposit:
 
-1. **Pick a home.** Real Puerto Rico listings from [Smarlin](https://www.smarlin.com) (our live AI real estate platform: 11,925 listings, 120,002 closed sales analyzed, 78 municipalities), or paste a link from any Argentine portal. Deposit = `price x deposit %` (default 5%, adjustable 1% to 10%).
+1. **Pick a home.** Real Puerto Rico listings from [Smarlin](https://www.smarlin.com) (our live AI property platform: 11,925 listings, 120,002 closed sales analyzed, 78 municipalities), or paste a link from any Argentine portal. Deposit = `price x deposit %` (default 5%, adjustable 1% to 10%).
 2. **Add.** Contribute USDC or wARS (digital pesos). It becomes the tokenized stock chosen for the goal. The goal screen shows progress and "the home +x %, your stocks +y %" since the start.
 3. **Reserve.** One tap locks the stocks in an escrow in favor of the broker, with a neutral arbiter. If the deal closes, the stocks return. If the buyer backs out, the broker claims and **is paid in USDC**: the contract sells the stock needed. Nobody on the seller side ever receives stocks.
 
-Users are outside the US (Argentina first). Puerto Rico is the showcase and the demo, but the first real usage is in Argentina. See `docs/NARRATIVE.md` section 4.
+Users are outside the US (Argentina first). Puerto Rico is the showcase, but the first usage is in Argentina. See `docs/NARRATIVE.md` section 4.
 
 Product rules: email login (Privy smart wallet), gas sponsored by the Coinbase paymaster, no signing modals, approve plus action in one batched call, mobile first, fees always visible, Spanish (`es`, default) and English (`en`).
 
@@ -108,7 +108,7 @@ There are no tokenized stocks on testnet: that is why the mocks exist. `TODO(ver
 - [ ] Builder Code from dashboard.base.org, attached to every write (ERC-8021)
 - [ ] Privy app created, `NEXT_PUBLIC_PRIVY_APP_ID` set
 - [ ] Deployed on Base Sepolia (demo) and Base (capped)
-- [ ] Real on-chain usage (goals, contributions, at least one real reservation); no self-trading (Rules section 13)
+- [ ] Real on-chain usage (goals, contributions, at least one reservation with a broker); no self-trading (Rules section 13)
 - [ ] US geo-block active on mainnet
 - [ ] Loom of 3 minutes and X post tagging @buildonbase (texts in `docs/NARRATIVE.md`)
 - [ ] Daily build-in-public posts
