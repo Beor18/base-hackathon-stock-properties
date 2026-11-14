@@ -9,7 +9,9 @@ Este documento es la historia de la startup de 0 a 1: problema, solución, por q
 
 ## 0. De dónde venimos
 
-Somos el equipo que construyó **Smarlin**, una plataforma de IA de bienes raíces que ya funciona en Puerto Rico: búsqueda de propiedades por estilo de vida, análisis de precio justo y riesgo por propiedad, y datos de mercado de los 78 municipios a partir de cierres reales. Kelvin vende propiedades allá; Fernando construye el producto.
+Somos el equipo que construyó **Smarlin**, una plataforma de IA de bienes raíces que ya funciona en Puerto Rico: búsqueda de propiedades por estilo de vida, análisis de precio justo y riesgo por propiedad, y datos de mercado a partir de cierres reales. Hoy tiene **11.925 propiedades publicadas**, **120.002 ventas cerradas analizadas** y cobertura de los **78 municipios** (cifras de su propia API, 14 nov 2026). Kelvin vende propiedades allá; Fernando construye el producto desde Argentina.
+
+**Garante se conecta a esa base.** Las propiedades que se garantizan o reservan no son un catálogo de ejemplo: son publicaciones reales de Smarlin, consumidas por API, con su precio, su ubicación y su corredor.
 
 Garante sale de lo que vemos en operaciones reales: **en cada alquiler y en cada compra hay un momento en que alguien tiene que inmovilizar efectivo para demostrar que va en serio.** Y cada vez más gente tiene su patrimonio en acciones, no en efectivo.
 
@@ -55,9 +57,11 @@ El inquilino bloquea acciones tokenizadas (Apple, Nvidia, Tesla y otras, emitida
 
 | | Inquilino | Propietario |
 |---|---|---|
-| **1** | Acordá los términos (alquiler, meses de garantía, fecha de fin) | Creá tu link de solicitud (sin transacción, sin costo) |
+| **1** | Elegí la propiedad: una publicación real de Smarlin; el monto sale de su precio | Compartí el link de tu publicación (sin transacción, sin costo) |
 | **2** | Elegí qué acción bloquear | El inquilino bloquea sus acciones |
 | **3** | Bloqueá y compartí el comprobante | Verificá la garantía; reclamá solo si hace falta |
+
+Si la propiedad no está en Smarlin, los términos se cargan a mano y el resto del flujo es igual.
 
 ### Un mismo contrato, dos usos
 
@@ -112,9 +116,11 @@ Por eso la estrategia separa dónde aprendemos y distribuimos de dónde se mueve
 
 | Mercado | Qué papel cumple | Qué hacemos ahora |
 |---|---|---|
-| **Puerto Rico** | Mercado propio: conocimiento del negocio, datos de cierres reales y distribución vía Smarlin | Integración en modo demostración sobre propiedades reales de Smarlin; pilotos en testnet con operaciones de Kelvin. Queda listo para activarse el día que las acciones tokenizadas se abran a EE.UU. |
-| **Extranjeros que alquilan o compran en Puerto Rico** | Puente entre los dos mundos: propiedad en PR, comprador o inquilino elegible | Validar si el segmento existe y qué tamaño tiene **[completar con datos de Kelvin]** |
-| **Latinoamérica, Argentina primero** | Donde el producto puede operar hoy con activos reales | Primeras garantías reales en mainnet: de acá sale la tracción on-chain que pesa en el puntaje |
+| **Propiedades de Puerto Rico, usuarios de fuera de EE.UU.** | El producto insignia: publicación real de Smarlin, corredor real (Kelvin) y quien bloquea las acciones es una persona elegible. Fernando, desde Argentina, es el primer caso | Flujo completo sobre publicaciones de Smarlin. **Hipótesis a validar con Kelvin:** cuántos de sus compradores e inquilinos son extranjeros no estadounidenses **[completar]** |
+| **Latinoamérica, alquiler local (Argentina primero)** | Volumen: el problema del garante es masivo y los usuarios son elegibles | Primeras garantías reales en mainnet entre inquilinos y propietarios locales: de acá sale la tracción on-chain que pesa en el puntaje |
+| **Residentes de Puerto Rico** | El mercado más grande para Smarlin, hoy no habilitado | Modo demostración en testnet; queda listo para activarse el día que las acciones tokenizadas se abran a EE.UU. |
+
+**Un punto de diseño pendiente:** cuando el beneficiario está en Puerto Rico, un reclamo debería pagarse en dólares digitales (USDC) y no en acciones, para que nadie en EE.UU. reciba acciones tokenizadas.
 
 Esta sección es la respuesta a la pregunta que va a hacer cualquier jurado: "si son de Puerto Rico, ¿por qué no lanzan ahí?".
 
@@ -129,7 +135,7 @@ Esta sección es la respuesta a la pregunta que va a hacer cualquier jurado: "si
 | **SAM** | Inquilinos que ya tienen acciones | Argentina: ~210.000 hogares (1M de cuentas con CEDEARs × 21% que alquila) ≈ USD 241M de cobertura. Brasil: ~1,3M de hogares (5,7M de inversores de B3 × 23%) |
 | **SOM (12 meses)** | Lo alcanzable con el equipo actual | 1.000 contratos en CABA ≈ USD 1,15M en custodia **[decidir meta]** |
 
-**Puerto Rico [completar con datos propios de Smarlin]:** ventas cerradas por año, precio típico de cierre, alquileres activos y monto típico de opción y de depósito. Es un dato que casi ningún otro equipo puede mostrar: sale de cierres reales, no de estimaciones.
+**Puerto Rico, con datos propios de Smarlin:** 11.925 propiedades publicadas, de las cuales 5.282 son alquileres, y 120.002 ventas cerradas analizadas. Es un dato que casi ningún otro equipo puede mostrar: sale de cierres reales, no de estimaciones. **[completar]:** monto típico de opción y de depósito, y cuántas de esas operaciones involucran a compradores o inquilinos de fuera de EE.UU.
 
 Dos advertencias que hay que decir antes de que las pregunte un jurado:
 
@@ -156,7 +162,7 @@ El research no encontró **ningún producto que use acciones tokenizadas como ga
 
 Tres cosas lo sostienen:
 
-1. **Lo construye un equipo que ya opera en real estate.** Smarlin es nuestro producto y está en producción en Puerto Rico; Kelvin cierra operaciones allá. Garante habla el idioma del negocio (garantía, opción, contrato, reclamo, árbitro) porque sale de ahí, no de DeFi. El árbitro natural es quien ya administra la propiedad o corre la operación. Y la distribución ya existe: cada propiedad publicada en Smarlin puede mostrar "garantizá o reservá con X acciones" con una sola llamada a la API de cotización.
+1. **Lo construye un equipo que ya opera en real estate.** Smarlin es nuestro producto y está en producción en Puerto Rico; Kelvin cierra operaciones allá. Garante habla el idioma del negocio (garantía, opción, contrato, reclamo, árbitro) porque sale de ahí, no de DeFi. El árbitro natural es quien ya administra la propiedad o corre la operación. Las propiedades son reales: el producto consume las publicaciones de Smarlin por API, no un catálogo de muestra. Y la distribución ya existe: cada propiedad publicada puede mostrar "garantizá o reservá con X acciones" con una sola llamada a la API de cotización.
 2. **Cero fricción para el propietario.** No firma transacciones ni paga gas para aceptar: comparte un link y verifica en una página pública. Solo necesita una wallet si algún día reclama.
 3. **Diseñado para acciones reales, no para tokens genéricos.** El ratio de colateral se calcula por acción según su caída histórica; y el contrato distingue entre precio para *entrar* colateral y precio para *pagar*, porque los mercados cierran los fines de semana y los feeds se congelan.
 
@@ -206,10 +212,10 @@ La primitiva que queda construida es más general que el alquiler: **cualquier o
 
 ## 11. Equipo
 
-- **Kelvin — real estate y producto.** Vende propiedades en Puerto Rico y es la voz del negocio: conoce de primera mano cómo se reservan, garantizan y cierran las operaciones. **[completar: licencia, años en el rubro, operaciones cerradas]**
+- **Kelvin Garcia Vale — real estate y producto.** Vende propiedades en Puerto Rico (Kelvin Garcia Realty) y es la voz del negocio: conoce de primera mano cómo se reservan, garantizan y cierran las operaciones. Sus publicaciones son las primeras habilitadas en Garante. **[completar: licencia, años en el rubro, operaciones cerradas; confirmar cómo quiere figurar]**
 - **Fernando Lopez — ingeniería.** Full-stack (Node, React, Next.js, Elixir, Python) y builder web3 (Tuneport, Elei Protocol). Vive en Buenos Aires, donde el problema del garante se sufre todos los días y donde el producto puede operar hoy.
 
-**Ya construimos juntos un producto que funciona:** Smarlin, en producción en Puerto Rico. **[completar: usuarios, propiedades publicadas, corredores, cualquier métrica real]**
+**Ya construimos juntos un producto que funciona:** Smarlin, en producción en Puerto Rico, con 11.925 propiedades publicadas y 120.002 ventas cerradas analizadas. **[completar: usuarios y corredores activos]**
 
 **Por qué este equipo:** ya probó que puede llevar un producto inmobiliario a producción, tiene a alguien que cierra operaciones reales y a alguien que construye on-chain, y está parado en los dos mercados que el plan necesita.
 
@@ -238,15 +244,15 @@ La primitiva que queda construida es más general que el alquiler: **cualquier o
 
 **One-liner**
 
-> Garante lets renters lock tokenized stocks on Base as their rental guarantee instead of a cash deposit, a property-owning guarantor or a non-refundable insurance fee. They keep the upside and get the stocks back when the lease ends.
+> Garante lets people lock tokenized stocks on Base as the deposit for a real property, instead of cash, a property-owning guarantor or a non-refundable insurance fee. Listings come live from Smarlin, our real estate platform. They keep the upside and get the stocks back when the deal ends.
 
 **Form — project description (1–2 sentences)**
 
-> Garante turns tokenized stocks into rental guarantees. A renter locks Coinbase tokenized stocks in an onchain escrow; the landlord gets a USD-denominated, over-collateralized, claimable guarantee; the stocks return to the renter when the lease ends.
+> Garante turns tokenized stocks into real estate deposits. Pick a real listing from Smarlin, lock Coinbase tokenized stocks in an onchain escrow, and the owner gets a USD-denominated, over-collateralized, claimable guarantee. The stocks return when the lease or the purchase closes.
 
 **Form — "Why should we select you?"**
 
-> Renters in Latin America pay for guarantees they never get back: in Argentina a rental insurance policy costs 4–7% of the whole lease, and Brazilians paid R$2.0B in rental-guarantee premiums in 2025. Meanwhile over a million Argentines hold US stocks that are useless when they sign a lease. Garante makes those stocks the guarantee. It is a new primitive, USD-denominated obligations secured by tokenized stocks, aimed at people who are not traders. We are the team behind Smarlin, a live AI real estate platform in Puerto Rico: one of us sells properties there, the other builds onchain from Buenos Aires, where the product can operate today.
+> Renters in Latin America pay for guarantees they never get back: in Argentina a rental insurance policy costs 4–7% of the whole lease, and Brazilians paid R$2.0B in rental-guarantee premiums in 2025. Meanwhile over a million Argentines hold US stocks that are useless when they sign a lease. Garante makes those stocks the guarantee. It is a new primitive, USD-denominated obligations secured by tokenized stocks, aimed at people who are not traders. We are the team behind Smarlin, a live AI real estate platform in Puerto Rico with 11,925 active listings and 120,002 closed sales analyzed. Garante plugs into those real listings. One of us sells properties there; the other builds onchain from Buenos Aires, where the product can operate today.
 
 **Loom, 3 minutos**
 
@@ -254,7 +260,7 @@ La primitiva que queda construida es más general que el alquiler: **cualquier o
 |---|---|---|
 | 0:00–0:20 | Una pantalla con el costo de entrar a un alquiler | "To rent in Buenos Aires you need a property-owning guarantor or an insurance fee you never get back. If you hold stocks, you sell them to pay for it." |
 | 0:20–0:40 | Landing con el 1-2-3 | "Garante makes your stocks the guarantee. Three steps." |
-| 0:40–1:30 | Flujo del inquilino en vivo: términos, elegir acción, bloquear | "Agree the terms, pick a stock, lock it. One transaction." |
+| 0:40–1:30 | Flujo en vivo: elegir una propiedad real de Smarlin, elegir acción, bloquear | "Pick a real listing, pick a stock, lock it. One transaction." |
 | 1:30–2:00 | Página pública de la garantía, vista del propietario | "The landlord verifies it here. No transaction, no gas." |
 | 2:00–2:30 | Reclamo, disputa y liberación | "If something goes wrong: claim, dispute window, neutral arbiter. Otherwise the stocks go home." |
 | 2:30–3:00 | Stats on-chain y roadmap | "Built during Stocks Maxxing. Next: first agencies in Buenos Aires, then Brazil." |

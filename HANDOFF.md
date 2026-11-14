@@ -130,7 +130,7 @@ scripts/dev-chain.ts               levanta anvil + deploy + escribe .env.local
 scripts/lib/{artifacts,stock-universe,risk,deploy-config}.ts
 ```
 
-**Flujo de 3 pasos (inquilino):** 1) términos (alquiler mensual, meses de garantía, fin del contrato, wallet del propietario; todo precargado si viene del link) → 2) elegir la acción (muestra saldo, cantidad necesaria, "obtener acciones demo" en testnet) → 3) revisar y bloquear, y luego compartir el link (botón de WhatsApp: es el canal de LatAm).
+**Flujo de 3 pasos (quien deposita):** 1) elegir la propiedad de Smarlin, de la que salen el monto y los datos (o cargar a mano alquiler mensual, meses de garantía, fin del contrato y wallet del beneficiario; todo precargado si viene de un link) → 2) elegir la acción (muestra saldo, cantidad necesaria, "obtener acciones demo" en testnet) → 3) revisar y bloquear, y luego compartir el link (botón de WhatsApp: es el canal de LatAm).
 
 **Flujo propietario:** conectar → completar 3 campos → link `/new?landlord=0x…&rent=…&months=…&end=…`.
 
@@ -140,6 +140,38 @@ scripts/lib/{artifacts,stock-universe,risk,deploy-config}.ts
 - **No usar `experimental_fallback` de viem**: manda las transacciones seguidas sin esperar confirmación y la segunda falla al estimar gas.
 
 **Lecturas:** datos del protocolo por las API routes (TanStack Query); saldo y allowance de la wallet directo con wagmi.
+
+## 6b. Integración con Smarlin (propiedades reales, nada hardcodeado)
+
+Fernando confirmó que **el equipo puede consumir las APIs de Smarlin** y que él, en Argentina, es el usuario elegible del lado de las acciones. Las propiedades del producto salen de ahí.
+
+**Endpoints observados en el sitio público** (sin autenticación, 14 nov 2026):
+
+| Endpoint | Devuelve |
+|---|---|
+| `GET https://www.smarlin.com/api/properties?limit=&offset=&status=active&listingType=sale\|rent&verifiedOnly=true` | `{ success, properties: [...], meta: { total, limit, offset, hasMore } }` |
+| `GET https://www.smarlin.com/api/properties/{id}` | `{ success, property: {...} }` (campos en camelCase, p. ej. `mlsNumber`, `sourceProvider`) |
+| `GET https://www.smarlin.com/api/home/cifras` | Cifras de la plataforma (publicadas, ventas cerradas analizadas, municipios) |
+| `GET https://www.smarlin.com/api/home/pulso` | Activas, alquileres, serie mensual |
+
+Campos útiles de una propiedad (listado, snake_case): `id` (uuid), `title`, `description`, `address`, `city`, `zip_code`, `property_type`, `listing_type` (`sale`/`rent`), `price` (USD; mensual si es alquiler), `bedrooms`, `bathrooms`, `square_feet`, `images[]`, `latitude`, `longitude`, `neighborhood`, `agent_name`, `agent_company`, `claimed_agent_id`, `status`.
+
+Con `verifiedOnly=true` había 9 propiedades en venta y 3 en alquiler, todas de Kelvin: son el set natural para la demo.
+
+**Diseño propuesto**
+- `src/server/clients/smarlin.ts`: cliente con `SMARLIN_API_URL` por env, respuestas validadas con zod y cacheadas (`"use cache"`).
+- **Lista blanca de campos en nuestro servidor.** La respuesta trae `embedding` (vector enorme), email y teléfono del agente: no reenviarlos al browser ni guardarlos.
+- `GET /api/properties` (búsqueda/listado) y `GET /api/properties/[id]`, como proxy de Smarlin.
+- **Paso 1 del flujo = elegir propiedad.** El monto sale de la publicación: alquiler → N meses × `price`; venta → porcentaje de `price` como depósito de opción **[decidir porcentaje con Kelvin]**.
+- Deep link desde Smarlin: `/new?property=<id>`; el precio se lee de la API, no de la URL, para que no se pueda alterar.
+- Guardar la referencia a la publicación on-chain (un `bytes32` con el hash del id de Smarlin; es dato público, no personal) para que la página de la garantía muestre la propiedad.
+- Camino manual ("mi propiedad no está en Smarlin") para alquileres locales en Latinoamérica.
+
+**Preguntas abiertas para Fernando y Kelvin**
+1. ¿Hay una ruta o API key pensada para integraciones? `/api/mercado/zonas` responde "Uso interno de Smarlin. No es una API pública"; conviene acordar qué endpoints son estables y con qué límites.
+2. **¿De dónde sale la wallet del beneficiario?** Smarlin no guarda wallets. Opción inmediata: el corredor genera el link desde su publicación con su wallet. Opción correcta: agregar el campo en el perfil del agente en Smarlin y exponerlo en la API.
+3. **Reclamos con beneficiario en Puerto Rico:** deberían pagarse en USDC y no en acciones (el beneficiario es persona de EE.UU.). Hoy `settleClaim` paga en acciones; cambiarlo implica vender en un DEX dentro del contrato. Decidir antes de mainnet.
+4. ¿Cuántos compradores e inquilinos de Kelvin son extranjeros no estadounidenses? Es la hipótesis más riesgosa del flujo sobre propiedades de Puerto Rico.
 
 ## 7. Gotchas del entorno (ahorran tiempo)
 
@@ -192,6 +224,9 @@ scripts/lib/{artifacts,stock-universe,risk,deploy-config}.ts
 
 ### 8.2 Cliente base
 `src/lib/wagmi.ts`, `providers.tsx`, i18n (`[lang]`, diccionarios en/es), componentes base, `useContractCalls`, hooks de datos, manejo de errores de contrato legibles (decodificar custom errors con el ABI).
+
+### 8.2 bis Integración con Smarlin
+Implementar lo descrito en la sección 6b: cliente, rutas `/api/properties`, paso 1 "elegir propiedad" y deep link `?property=<id>`. Verificar contra la API real.
 
 ### 8.3 Páginas núcleo
 `/new` (3 pasos), `/request`, `/g/[id]` (estado, barra de salud, línea de tiempo, acciones por rol: tenant / landlord / arbiter / cualquiera), `/dashboard`.
