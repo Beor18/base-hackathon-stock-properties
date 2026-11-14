@@ -1,0 +1,208 @@
+{
+  "network": "base-sepolia",
+  "chainId": 84532,
+  "rpcUrl": "https://sepolia.base.org",
+  "explorerUrl": "https://sepolia.basescan.org",
+  "rampUrl": null,
+  "deployedAt": "2026-11-14T21:45:44.871Z",
+  "startBlock": 58853927,
+  "owner": "0xAe0f63D5bCE6DCE7F8593F2073F3EeF5614a877A",
+  "treasury": "0xAe0f63D5bCE6DCE7F8593F2073F3EeF5614a877A",
+  "arbiter": "0xAe0f63D5bCE6DCE7F8593F2073F3EeF5614a877A",
+  "builderCode": null,
+  "contracts": {
+    "stockOracle": "0x04d3d4672024357d40a4739Ad03f04e68987101d",
+    "reservationEscrow": "0x5584F9a333faCbB8f01D22524c517Cf2BaB84a95",
+    "goalRegistry": "0x67cE534C1fB313763A03909994212cf4B5228Dca"
+  },
+  "exchange": "0xeda4C81C4D395B3b8F2E00290391D84defBAC9F7",
+  "routers": [
+    "0xeda4C81C4D395B3b8F2E00290391D84defBAC9F7"
+  ],
+  "payTokens": {
+    "usdc": {
+      "symbol": "USDC",
+      "address": "0x18C4F71F94deadeB37F56090910ba89874AE2e93",
+      "decimals": 6,
+      "feed": null,
+      "faucetCap": "1000000000"
+    },
+    "wars": {
+      "symbol": "wARS",
+      "address": "0x54ea177858e67282Fae2E92e43cb85288adaD729",
+      "decimals": 18,
+      "feed": {
+        "address": "0x4db03A37334f64Cd6052aa45E8E97973af3c35a6",
+        "decimals": 8,
+        "description": "USD / ARS",
+        "quote": "tokensPerUsd",
+        "mirrorFeed": "0x9eb8a54d0590798880C665C7A6d51B95f4078Ad7"
+      },
+      "faucetCap": "1680000000000000000000000"
+    }
+  },
+  "stocks": [
+    {
+      "symbol": "AAPLc",
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "token": "0xFa12973Be244384aa93E5120e85682747A202BC7",
+      "decimals": 8,
+      "feed": "0x5fE15baa74aB2527fE93cac4c88C97BeE7D9236E",
+      "feedDecimals": 8,
+      "collateralRatioBps": 11500,
+      "mirrorOf": "0xb200000000000000000000C2e324d24d7eEcd1fb",
+      "mirrorFeed": "0x787f13dEa48Db0897CbCDD985de77809D837F988"
+    },
+    {
+      "symbol": "AMZNc",
+      "ticker": "AMZN",
+      "name": "Amazon.com Inc.",
+      "token": "0xB573A2Fd476b43c26e933E7dD7aF176AdA1C03ae",
+      "decimals": 8,
+      "feed": "0x84A23bB9A9Fe0cd4b0808d447D1ba1b1cd2c719a",
+      "feedDecimals": 8,
+      "collateralRatioBps": 12500,
+      "mirrorOf": "0xb200000000000000000000d9192b6B456483C2E8",
+      "mirrorFeed": "0x06A8E4b3aBB3B7543d8396FB2B763d22820cB295"
+    },
+    {
+      "symbol": "CRCLc",
+      "ticker": "CRCL",
+      "name": "Circle Internet Group Inc.",
+      "token": "0x96040325d7380e54667B709583F6F8FDB4c589af",
+      "decimals": 8,
+      "feed": "0xB77033403B39339bDb25e499f60C1f1Db446b5aF",
+      "feedDecimals": 8,
+      "collateralRatioBps": 17000,
+      "mirrorOf": "0xB20000000000000000000019f6E7C675b73C2e4D",
+      "mirrorFeed": "0x0231cF2635D1E17bB5c2462cc7504Ba1fBd61f33"
+    },
+    {
+      "symbol": "GOOGLc",
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc.",
+      "token": "0x0f0830E9D1628786C91d6D0e8d74FDAFE64817E3",
+      "decimals": 8,
+      "feed": "0xc39d7B1730697F234C7aC0C66605b3fe8E818067",
+      "feedDecimals": 8,
+      "collateralRatioBps": 13000,
+      "mirrorOf": "0xb2000000000000000000002D0BA3164cc74f58B7",
+      "mirrorFeed": "0x5bF49E0ffA937CE2FfF033c739aD7C634c4D34F2"
+    },
+    {
+      "symbol": "INTCc",
+      "ticker": "INTC",
+      "name": "Intel Corporation",
+      "token": "0x3C51F3f742dDECD6D58dBc294CA4403eeBEE1924",
+      "decimals": 8,
+      "feed": "0x269bc1EC9bE3adD9E4e5947886eDa125E3A87983",
+      "feedDecimals": 8,
+      "collateralRatioBps": 20000,
+      "mirrorOf": "0xB2000000000000000000004AFF16039bA04bdFBc",
+      "mirrorFeed": "0xAB657C39bac0D5886250D70849e2E3E008F2EECB"
+    },
+    {
+      "symbol": "METAc",
+      "ticker": "META",
+      "name": "Meta Platforms Inc.",
+      "token": "0xe465523514acFc415D7cc7F293BFdAc64193b6d9",
+      "decimals": 8,
+      "feed": "0x3250eC2FdA9Fe752DC4E1393ca2157b79cc4621B",
+      "feedDecimals": 8,
+      "collateralRatioBps": 13000,
+      "mirrorOf": "0xb2000000000000000000008bC8786B856E61707C",
+      "mirrorFeed": "0x6526aE6797A76123638b863AeE4dD27Ba4E4b27D"
+    },
+    {
+      "symbol": "MSFTc",
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "token": "0xc45afF1f47516330BDaB830aaBd89BfB808e5160",
+      "decimals": 8,
+      "feed": "0x90ABbFE021a37D8ff8fae1a73AC6Cf95357ecEF0",
+      "feedDecimals": 8,
+      "collateralRatioBps": 13500,
+      "mirrorOf": "0xB200000000000000000000Ab99cFa739E253872B",
+      "mirrorFeed": "0xeB10A6c9aa7E537aEd766C08c35Dae35B321b18c"
+    },
+    {
+      "symbol": "MSTRc",
+      "ticker": "MSTR",
+      "name": "Strategy Inc.",
+      "token": "0x806195D9DC02715C706890beF22DF06d74890e8F",
+      "decimals": 8,
+      "feed": "0xec4A722fbFcDe75499200638665bD5ECbc18d84A",
+      "feedDecimals": 8,
+      "collateralRatioBps": 19500,
+      "mirrorOf": "0xb2000000000000000000004884b426556b92883d",
+      "mirrorFeed": "0xB3cE282CD188b35DA0E38D8Bc7d58e33173D202a"
+    },
+    {
+      "symbol": "NVDAc",
+      "ticker": "NVDA",
+      "name": "NVIDIA Corporation",
+      "token": "0x03995c5f26aA6554e850906EDBDFF20F73dEB3e2",
+      "decimals": 8,
+      "feed": "0xAd68661450A92E524FbA16981727cf5F1dAF7a65",
+      "feedDecimals": 8,
+      "collateralRatioBps": 14000,
+      "mirrorOf": "0xb20000000000000000000078ee7ce2fE4908108C",
+      "mirrorFeed": "0x04689a41629776563E6822F76f2e57D148d28513"
+    },
+    {
+      "symbol": "SNDKc",
+      "ticker": "SNDK",
+      "name": "Sandisk Corporation",
+      "token": "0x91F1B3E92fCa45cD4aE3399527C33E6dF7297256",
+      "decimals": 8,
+      "feed": "0xB408e2b3d664a96d2CD3a9139De930C8EDf45962",
+      "feedDecimals": 8,
+      "collateralRatioBps": 20000,
+      "mirrorOf": "0xb200000000000000000000397293Cb8cda9a10c5",
+      "mirrorFeed": "0x388b0dC46C0Fb05A74BeE0994fa5b02c6Fcca2eA"
+    },
+    {
+      "symbol": "SPCXc",
+      "ticker": "SPCX",
+      "name": "Space Exploration Technologies Corp.",
+      "token": "0x452D83c13094ca59F121A66BFC4DC6d42ffBcE1b",
+      "decimals": 8,
+      "feed": "0x026B7Fb9c0cFe8D6a5610aD9ab2e3a0C0eF438E2",
+      "feedDecimals": 8,
+      "collateralRatioBps": 20000,
+      "mirrorOf": "0xb2000000000000000000007b9fcbd005511aCBd5",
+      "mirrorFeed": "0x6A634B235903C4ad6376892180d6fF8612e3Fa68"
+    },
+    {
+      "symbol": "TSLAc",
+      "ticker": "TSLA",
+      "name": "Tesla Inc.",
+      "token": "0xf95C4ac57E87C0272C7C26CB48a2366e9867CD6A",
+      "decimals": 8,
+      "feed": "0xd2C4e812cFF20E4c8471B4dEcC440619525400b5",
+      "feedDecimals": 8,
+      "collateralRatioBps": 14500,
+      "mirrorOf": "0xb2000000000000000000001e800a7f5189430cD0",
+      "mirrorFeed": "0xFaf869185383a24F8cb00e27BdA6b63B9905DCb4"
+    }
+  ],
+  "params": {
+    "reservationBps": {
+      "default": 500,
+      "min": 100,
+      "max": 1000
+    },
+    "reservationFeeBps": 100,
+    "contributionFeeBps": 50,
+    "maxSlippageBps": 200,
+    "disputeWindowSeconds": 259200,
+    "claimWindowSeconds": 1296000,
+    "arbitrationTimeoutSeconds": 1209600,
+    "settlementMaxAgeSeconds": 93600,
+    "collateralMaxAgeSeconds": 345600,
+    "minContributionUsd": 5,
+    "reservationDays": 60,
+    "contributionSlippageBps": 100
+  }
+}
