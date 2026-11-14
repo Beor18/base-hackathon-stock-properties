@@ -167,8 +167,23 @@ Con `verifiedOnly=true` había 9 propiedades en venta y 3 en alquiler, todas de 
 - Guardar la referencia a la publicación on-chain (un `bytes32` con el hash del id de Smarlin; es dato público, no personal) para que la página de la garantía muestre la propiedad.
 - Camino manual ("mi propiedad no está en Smarlin") para alquileres locales en Latinoamérica.
 
+**Código fuente de Smarlin en la PC de Fernando:** `~/Documentos/test-opencode/real-state-startup` (remote `Beor18/real-state-matches`). Ante cualquier duda sobre la API, leer el código ahí en vez de inferir desde el sitio.
+
+**Ya existe una API para partners (leída del código el 14 nov 2026), y es la que conviene usar:**
+
+| Endpoint | Qué hace |
+|---|---|
+| `GET /api/partner/properties?agentEmail=…\|ownerId=…&status=active&mls=&limit=&offset=` | Inventario completo de **un** Agente Verificado, con el mismo shape que `/api/properties/[id]` y su perfil pro (`agent`: sello, licencia, contacto). Máx 200 por página. |
+| `GET /api/partner/insights?id=<uuid>\|mls=<n>` | Análisis PRO del listado: Fair Price Score, Equity Forecast, comparables y link al CMA. |
+
+- **Auth:** header `x-api-key`. La key sale de la tabla `partner_api_keys` (se crea desde el admin de Smarlin, `/api/admin/api-keys`) o del env legacy `PARTNER_API_KEYS` (`label:key,…`).
+- **Gate:** el agente pedido tiene que tener el sello de **Agente Verificado**; si no, responde 403 `agent_not_verified`. Todo indica que Kelvin está verificado, porque sus publicaciones son las únicas que devuelve `verifiedOnly=true`. Confirmarlo al crear la key.
+- **Webhook:** al guardar un listado, Smarlin avisa a los partners configurados en `PARTNER_WEBHOOKS` (`src/lib/partner-webhooks.ts`), y el partner vuelve a pedir solo ese `mls`. Garante puede registrarse como partner y refrescar su caché por webhook.
+- La respuesta trae `agent_phone` y `agent_email`: la lista blanca de campos de nuestro servidor sigue siendo obligatoria.
+- **Plan:** inventario de Kelvin por la API de partners (contrato estable y con key); el `/api/properties` público queda como respaldo y para el catálogo general.
+
 **Preguntas abiertas para Fernando y Kelvin**
-1. ¿Hay una ruta o API key pensada para integraciones? `/api/mercado/zonas` responde "Uso interno de Smarlin. No es una API pública"; conviene acordar qué endpoints son estables y con qué límites.
+1. ~~¿Hay una ruta o API key pensada para integraciones?~~ **Sí: la API de partners (arriba).** Falta crear la key de Garante en el admin de Smarlin y decidir si Garante recibe el webhook.
 2. **¿De dónde sale la wallet del beneficiario?** Smarlin no guarda wallets. Opción inmediata: el corredor genera el link desde su publicación con su wallet. Opción correcta: agregar el campo en el perfil del agente en Smarlin y exponerlo en la API.
 3. **Reclamos con beneficiario en Puerto Rico:** deberían pagarse en USDC y no en acciones (el beneficiario es persona de EE.UU.). Hoy `settleClaim` paga en acciones; cambiarlo implica vender en un DEX dentro del contrato. Decidir antes de mainnet.
 4. ¿Cuántos compradores e inquilinos de Kelvin son extranjeros no estadounidenses? Es la hipótesis más riesgosa del flujo sobre propiedades de Puerto Rico.
