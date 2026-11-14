@@ -3,6 +3,7 @@
   "chainId": 31337,
   "rpcUrl": "http://127.0.0.1:8545",
   "explorerUrl": null,
+  "rampUrl": null,
   "deployedAt": "2026-11-14T15:08:27.812Z",
   "startBlock": 1,
   "owner": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
@@ -199,6 +200,9 @@
     "claimWindowSeconds": 1296000,
     "arbitrationTimeoutSeconds": 1209600,
     "settlementMaxAgeSeconds": 93600,
-    "collateralMaxAgeSeconds": 345600
+    "collateralMaxAgeSeconds": 345600,
+    "minContributionUsd": 5,
+    "reservationDays": 60,
+    "contributionSlippageBps": 100
   }
 }

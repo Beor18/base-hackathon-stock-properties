@@ -63,6 +63,10 @@ export const productParamsSchema = z.object({
   arbitrationTimeoutSeconds: seconds,
   settlementMaxAgeSeconds: seconds,
   collateralMaxAgeSeconds: seconds,
+  /** App rules, not enforced on chain. */
+  minContributionUsd: z.number().positive(),
+  reservationDays: z.number().int().positive(),
+  contributionSlippageBps: bps,
 });
 
 export const deploymentSchema = z.object({
@@ -71,6 +75,8 @@ export const deploymentSchema = z.object({
   /** Public RPC endpoint. The server may override it with its own. */
   rpcUrl: z.url(),
   explorerUrl: z.url().nullable(),
+  /** Where to buy digital dollars or pesos with a bank transfer. Mainnet only; null elsewhere. */
+  rampUrl: z.url().nullable(),
   deployedAt: z.iso.datetime(),
   /** First block worth scanning for this deployment's events. */
   startBlock: z.number().int().nonnegative(),

@@ -58,7 +58,7 @@ const es = {
       },
       {
         title: "Sumá de a poco",
-        body: "Desde USD 5, con dólares o pesos digitales. Cada aporte se convierte en acciones.",
+        body: "Desde {min}, con dólares o pesos digitales. Cada aporte se convierte en acciones.",
       },
       {
         title: "Reservá sin vender",

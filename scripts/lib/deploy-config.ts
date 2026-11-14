@@ -6,15 +6,26 @@
 const HOUR = 60 * 60;
 const DAY = 24 * HOUR;
 
+/**
+ * `rampUrl`: where someone buys digital dollars or pesos with a bank transfer. Mainnet only; on test
+ * networks the test balance button replaces it. The app copy never names the service.
+ */
 export const NETWORKS = {
-  local: { chainId: 31337, rpcUrl: "http://127.0.0.1:8545", explorerUrl: null, mocks: true },
+  local: { chainId: 31337, rpcUrl: "http://127.0.0.1:8545", explorerUrl: null, mocks: true, rampUrl: null },
   "base-sepolia": {
     chainId: 84532,
     rpcUrl: "https://sepolia.base.org",
     explorerUrl: "https://sepolia.basescan.org",
     mocks: true,
+    rampUrl: null,
   },
-  base: { chainId: 8453, rpcUrl: "https://mainnet.base.org", explorerUrl: "https://basescan.org", mocks: false },
+  base: {
+    chainId: 8453,
+    rpcUrl: "https://mainnet.base.org",
+    explorerUrl: "https://basescan.org",
+    mocks: false,
+    rampUrl: "https://www.ripio.com/ar/",
+  },
 } as const;
 
 export type NetworkName = keyof typeof NETWORKS;
@@ -49,6 +60,12 @@ export const PRODUCT = {
   settlementMaxAgeSeconds: 26 * HOUR,
   /** Lenient price age to move value in: stock feeds are 24/5 and freeze over long weekends. */
   collateralMaxAgeSeconds: 96 * HOUR,
+  /** App rules (not enforced on chain). Smallest contribution ("Desde USD 5"): keeps fees and rounding meaningful. */
+  minContributionUsd: 5,
+  /** A reservation ends this many days after it is made: the expected closing date of the deal. */
+  reservationDays: 60,
+  /** Worst price move accepted between quoting a contribution and executing it. */
+  contributionSlippageBps: 100,
 } as const;
 
 export type ProductParams = typeof PRODUCT;

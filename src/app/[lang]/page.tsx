@@ -2,7 +2,9 @@ import { HeroHouse } from "@/components/landing/hero-house";
 import { LiveStatsLive } from "@/components/landing/live-stats-live";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { ButtonLink } from "@/components/ui/button";
+import { fill, formatMoney } from "@/i18n/format";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+import { MIN_CONTRIBUTION_USD } from "@/lib/product";
 
 /**
  * Landing, "sell me this pen": the need first (years of saving, idle dollars), then the product
@@ -45,7 +47,9 @@ export default async function LandingPage() {
                 {index + 1}
               </span>
               <p className="type-semiwide mt-4 text-h3 text-ink">{step.title}</p>
-              <p className="mt-2 max-w-sm text-ink-2 text-pretty">{step.body}</p>
+              <p className="mt-2 max-w-sm text-ink-2 text-pretty">
+                {fill(step.body, { min: formatMoney(MIN_CONTRIBUTION_USD, lang) })}
+              </p>
             </li>
           ))}
         </ol>

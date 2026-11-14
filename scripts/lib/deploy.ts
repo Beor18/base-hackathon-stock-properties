@@ -126,6 +126,7 @@ export async function runDeploy(options: DeployOptions) {
     chainId: network.chainId,
     rpcUrl: signer.rpcUrl,
     explorerUrl: network.explorerUrl,
+    rampUrl: network.rampUrl,
     deployedAt: new Date().toISOString(),
     startBlock,
     owner,

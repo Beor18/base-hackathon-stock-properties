@@ -55,7 +55,7 @@ const en: Dictionary = {
       },
       {
         title: "Add little by little",
-        body: "From USD 5, with digital dollars or pesos. Every contribution turns into stocks.",
+        body: "From {min}, with digital dollars or pesos. Every contribution turns into stocks.",
       },
       {
         title: "Reserve without selling",
