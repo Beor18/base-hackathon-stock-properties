@@ -4,7 +4,9 @@ Documento de traspaso para continuar el trabajo desde otra cuenta de Claude.
 Estado al **14 nov 2026**. Repo: `https://github.com/Beor18/base-hackathon-stock-properties` (rama `main`).
 
 > **Cómo usarlo:** abrí una sesión nueva de Claude Code con este repo adjunto y pegá:
-> _"Leé `HANDOFF.md` completo y continuá desde la sección 8 (Pendientes), en orden. Commiteá y pusheá a `main` después de cada hito."_
+> _"Leé `HANDOFF.md` y `docs/NARRATIVE.md` completos y continuá desde la sección 8 (Pendientes), en orden. Commiteá y pusheá a `main` después de cada hito."_
+
+**La narrativa de la startup está en [`docs/NARRATIVE.md`](docs/NARRATIVE.md):** problema, solución, por qué ahora, mercado, competencia, diferenciador, modelo de negocio, plan de 0 a 1, riesgos, equipo, ask y los textos de entrega en inglés (one-liner, respuestas del formulario, guion del Loom, post de X). Es la fuente de verdad del relato: la UI, el README y la página `/pitch` tienen que decir lo mismo.
 
 ---
 
@@ -56,8 +58,11 @@ Estado al **14 nov 2026**. Repo: `https://github.com/Beor18/base-hackathon-stock
 ### Escrito pero NO ejecutado todavía
 - Las API routes y los servicios **nunca corrieron contra una chain** (falta el script de deploy). Tratar como no probado. En particular, verificar que `"use cache"` + `cacheLife` funcione como se espera dentro de los servicios.
 
+### Narrativa
+- **Escrita** en `docs/NARRATIVE.md`. Quedan decisiones de los fundadores marcadas con **[decidir]** (nivel de fee, meta de 12 meses, uso del premio, monto de la ronda) y **[confirmar]** (rol de Kelvin y relación con Smarlin).
+
 ### No empezado
-- Script de deploy / chain local, toda la UI (cliente), i18n, `proxy.ts` (geo-bloqueo), Builder Codes, swap "comprar con USDC", ensayo en mainnet, pitch, README, `.env.example`.
+- Script de deploy / chain local, toda la UI (cliente), i18n, `proxy.ts` (geo-bloqueo), Builder Codes, swap "comprar con USDC", ensayo en mainnet, página `/pitch`, README, `.env.example`.
 - `src/app/page.tsx`, `layout.tsx` y `globals.css` siguen siendo los del scaffold de `create-next-app`.
 - `README.md` es el del scaffold.
 
@@ -207,10 +212,12 @@ Proveedor de swap en servidor detrás de una interfaz. **KyberSwap** funciona si
 ### 8.9 Ensayo en mainnet sin gastar fondos (prueba fuerte para los jueces)
 `scripts/rehearse-mainnet.ts` con **`eth_simulateV1`** sobre `https://mainnet.base.org` (soportado, con `stateOverrides` y múltiples llamadas): desplegar oráculo + escrow dentro de la simulación, listar AAPLc con su feed real, y que un holder real (p. ej. el pool de Aerodrome) haga `approve` + `createGuarantee`, luego `fileClaim`/`release`. Ojo: en fin de semana `settleClaim` debe revertir con `StalePrice` (es el comportamiento esperado).
 
-### 8.10 Narrativa
-- `/pitch` + `docs/PITCH.md`: problema, solución, cómo funciona, mercado (Apéndice B), competencia, modelo de negocio, diferenciador, tracción y plan 0→1, equipo, ask.
-- `README.md`: qué es, quickstart en 3 comandos, arquitectura, contratos, seguridad y supuestos, deploy, checklist del hackathon.
-- Guion del Loom (≤ 3 min) y plan de posts diarios etiquetando @buildonbase.
+### 8.10 Llevar la narrativa al producto
+La narrativa ya está escrita en `docs/NARRATIVE.md`. Falta:
+- Página `/pitch` que la presente como deck (en/es), con las mismas cifras y fuentes.
+- Que la landing use el mismo relato: tagline, el 1-2-3 y la tabla comparativa (caución vs depósito vs Garante).
+- `README.md`: qué es (resumen de la narrativa), quickstart en 3 comandos, arquitectura, contratos, seguridad y supuestos, deploy, checklist del hackathon.
+- Plan de posts diarios etiquetando @buildonbase (el guion del Loom y el post de lanzamiento ya están en la narrativa).
 
 ### 8.11 Cierre
 `npm run typecheck`, `npx eslint`, `npm run contracts:test`, `next build`, commit y push.
