@@ -223,7 +223,7 @@ function Slide({
           </ul>
         )}
 
-        {slide.foot && <p className={`mt-10 max-w-3xl text-label text-pretty ${tone.muted}`}>{text(slide.foot)}</p>}
+        {slide.foot && <p className={`${slide.layout === "compare" ? "mt-6" : "mt-10"} max-w-3xl text-label text-pretty ${tone.muted}`}>{text(slide.foot)}</p>}
 
         {slide.layout === "close" && (
           <Link
@@ -259,21 +259,27 @@ function LiveNumbers({ labels, lang, tone }: { labels: PitchDeck["live"]; lang: 
   return (
     <div className="mt-10">
       {numbers ? (
-        <dl className="grid grid-cols-2 gap-x-8 gap-y-8 lg:grid-cols-4">
+        <dl className="grid max-w-4xl gap-x-12 gap-y-8 sm:grid-cols-2">
           {numbers.map((item) => (
             <div key={item.label} className={`flex flex-col-reverse border-t-2 pt-4 ${tone.rule}`}>
               <dt className={`mt-2 ${tone.muted}`}>{item.label}</dt>
-              <dd className="type-wide text-[clamp(2.25rem,6vw,4.5rem)] leading-none tabular">{item.value}</dd>
+              <dd className="type-wide text-[clamp(2.25rem,5vw,3.75rem)] leading-none tabular">{item.value}</dd>
             </div>
           ))}
         </dl>
       ) : (
-        <p className={`text-lead ${tone.muted}`} role="status">
-          {isError ? labels.unavailable : labels.loading}
-        </p>
+        <div role="status">
+          {/* Every wait in Seña shows a bar, what is happening and how long it usually takes. */}
+          {!isError && (
+            <div className="mb-3 h-2.5 w-full max-w-md overflow-hidden rounded-full bg-white/15" aria-hidden>
+              <div className="h-full w-1/2 animate-pulse rounded-full bg-[#f5b83d]" />
+            </div>
+          )}
+          <p className={`text-lead ${tone.muted}`}>{isError ? labels.unavailable : labels.loading}</p>
+        </div>
       )}
       {explorer && (
-        <p className={`mt-10 flex flex-wrap gap-x-6 gap-y-2 text-label ${tone.muted}`}>
+        <p className={`mt-8 flex flex-wrap gap-x-6 gap-y-2 text-label ${tone.muted}`}>
           <span>{labels.contracts}</span>
           {[
             { label: labels.escrow, address: deployment.contracts.reservationEscrow },
@@ -298,12 +304,12 @@ function LiveNumbers({ labels, lang, tone }: { labels: PitchDeck["live"]; lang: 
 /** Alternatives against the three things Seña does at once. Our row is the only full one. */
 function CompareTable({ compare, tone }: { compare: NonNullable<PitchSlide["compare"]>; tone: Tone }) {
   return (
-    <table className="mt-10 w-full max-w-4xl border-collapse text-left">
+    <table className="mt-8 w-full max-w-5xl border-collapse text-left">
       <thead>
         <tr className={`border-b-2 ${tone.rule}`}>
           <td />
           {compare.columns.map((column) => (
-            <th key={column} scope="col" className={`w-[22%] px-1 pb-3 text-center align-bottom text-label font-semibold md:px-3 ${tone.muted}`}>
+            <th key={column} scope="col" className={`w-[19%] px-1 pb-3 text-center align-bottom text-label font-semibold md:w-[15%] md:px-3 ${tone.muted}`}>
               {column}
             </th>
           ))}
@@ -312,11 +318,12 @@ function CompareTable({ compare, tone }: { compare: NonNullable<PitchSlide["comp
       <tbody>
         {compare.rows.map((row) => (
           <tr key={row.name} className={row.ours ? "bg-[#b3165a] text-white" : "border-b border-[#15232b]/15"}>
-            <th scope="row" className={`py-3 pl-3 pr-2 font-semibold ${row.ours ? "type-semiwide text-h3" : ""}`}>
+            <th scope="row" className={`py-2.5 pl-3 pr-2 font-semibold ${row.ours ? "type-semiwide text-h3" : ""}`}>
               {row.name}
+              {row.note && <span className={`block text-label font-normal md:ml-2 md:inline ${tone.muted}`}>{row.note}</span>}
             </th>
             {row.cells.map((cell, cellIndex) => (
-              <td key={compare.columns[cellIndex]} className="px-1 py-3 text-center md:px-3">
+              <td key={compare.columns[cellIndex]} className="px-1 py-2.5 text-center md:px-3">
                 <span className="sr-only">{cell ? compare.yes : compare.no}</span>
                 <svg viewBox="0 0 20 20" className={`mx-auto size-6 ${cell ? "" : "opacity-35"}`} aria-hidden fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
                   {cell ? <path d="M4.5 10.5l3.5 3.5 7.5-8" /> : <path d="M6 6l8 8M14 6l-8 8" />}

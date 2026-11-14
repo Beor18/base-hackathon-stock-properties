@@ -16,7 +16,8 @@ export type PitchSlide = {
   /** Alternatives against what Seña does. `cells` follow `columns`; `ours` marks Seña's row. */
   compare?: {
     columns: string[];
-    rows: { name: string; cells: boolean[]; ours?: boolean }[];
+    /** `note` names examples of the alternative, shown smaller next to its name. */
+    rows: { name: string; note?: string; cells: boolean[]; ours?: boolean }[];
     yes: string;
     no: string;
   };
@@ -261,14 +262,14 @@ const es: PitchDeck = {
           { name: "Dólares en billete", cells: [false, true, true] },
           { name: "CEDEARs en un broker", cells: [true, true, false] },
           { name: "Fracciones de propiedades", cells: [true, true, false] },
-          { name: "Préstamo contra acciones (Aave, Morpho)", cells: [true, false, true] },
-          { name: "Hipoteca con cripto en prenda (Better y Coinbase, EE.UU.)", cells: [true, false, false] },
+          { name: "Préstamo contra acciones", note: "Aave, Morpho", cells: [true, false, true] },
+          { name: "Hipoteca con cripto en prenda", note: "Better y Coinbase, solo en EE.UU.", cells: [true, false, false] },
           { name: "Seña", cells: [true, true, true], ours: true },
         ],
         yes: "Sí",
         no: "No",
       },
-      foot: "Lo más parecido es de Coinbase: con Better, en EE.UU., se prenda bitcoin o USDC para el anticipo de la hipoteca, y piensan sumar acciones tokenizadas. Es un préstamo. Lo que no se copia: los corredores que aceptan la reserva y los datos de cierres de Smarlin.",
+      foot: "Lo más parecido viene de Coinbase: con Better se prenda bitcoin o USDC para el anticipo, y piensan sumar acciones. Es un préstamo. Lo que no se copia: los corredores que aceptan la reserva y los datos de Smarlin.",
       tone: "paper",
       layout: "compare",
     },
