@@ -1,8 +1,8 @@
 "use client";
 
-import { dataSuffix, PrivyProvider, useLoginWithEmail, usePrivy } from "@privy-io/react-auth";
+import { dataSuffix, PrivyProvider, useCreateWallet, useLoginWithEmail, usePrivy } from "@privy-io/react-auth";
 import { SmartWalletsProvider, useSmartWallets } from "@privy-io/react-auth/smart-wallets";
-import { useCallback, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { getAddress } from "viem";
 
 import { deployment } from "@/config/deployment";
@@ -40,9 +40,25 @@ export function PrivyAccountProvider({ appId, children }: { appId: string; child
 }
 
 function PrivySession({ children }: { children: ReactNode }) {
-  const { ready, authenticated } = usePrivy();
+  const { ready, authenticated, user } = usePrivy();
   const { client, getClientForChain } = useSmartWallets();
   const { sendCode, loginWithCode } = useLoginWithEmail();
+  const { createWallet } = useCreateWallet();
+
+  // `createOnLogin` covers Privy's own login screens; our email form is headless, so make sure the
+  // embedded signer (and with it the smart account) exists. No UI: wallet screens are off.
+  const creatingWallet = useRef(false);
+  useEffect(() => {
+    if (!ready || !authenticated || !user || creatingWallet.current) return;
+    const hasEmbedded = user.linkedAccounts.some((account) => account.type === "wallet" && account.walletClientType === "privy");
+    if (hasEmbedded) return;
+    creatingWallet.current = true;
+    createWallet().catch((cause: unknown) => {
+      // Usually a race with `createOnLogin` creating it first; the session picks the wallet up either way.
+      console.warn("[account] could not create the embedded wallet", cause);
+      creatingWallet.current = false;
+    });
+  }, [ready, authenticated, user, createWallet]);
 
   const [step, setStep] = useState<SignInProps["step"]>("email");
   const [email, setEmail] = useState("");
