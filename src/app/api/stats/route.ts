@@ -1,0 +1,10 @@
+import { connection } from "next/server";
+
+import { respond } from "@/server/http";
+import { getProtocolStats } from "@/server/services/stats";
+
+/** GET /api/stats: public traction numbers (guarantees, coverage, value locked). */
+export async function GET() {
+  await connection();
+  return respond(() => getProtocolStats());
+}

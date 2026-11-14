@@ -6,14 +6,21 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "forge": "node node_modules/@foundry-rs/forge/bin.mjs",
+    "contracts:build": "npm run forge -- build",
+    "contracts:test": "npm run forge -- test",
+    "contracts:abi": "npm run contracts:build && tsx scripts/export-abis.ts"
   },
   "dependencies": {
     "@base-org/account": "^2.6.0",
     "@tanstack/react-query": "^5.107.1",
     "next": "16.4.6",
+    "ox": "^1.8.16",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "server-only": "^0.0.1",
     "viem": "^2.57.19",
     "wagmi": "^3.7.11",
     "zod": "^4.6.7"

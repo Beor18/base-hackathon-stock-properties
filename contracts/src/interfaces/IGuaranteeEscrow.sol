@@ -148,4 +148,10 @@ interface IGuaranteeEscrow {
     function guaranteeIdsOf(address account) external view returns (uint256[] memory);
 
     function guaranteeCount() external view returns (uint256);
+
+    /// @notice Number of guarantees currently holding collateral.
+    function activeGuaranteeCount() external view returns (uint256);
+
+    /// @notice Total USD coverage (18 decimals) of all active guarantees.
+    function activeCoverageUsd() external view returns (uint256);
 }

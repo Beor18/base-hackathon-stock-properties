@@ -77,6 +77,8 @@ contract GuaranteeEscrowTest is Test {
         assertEq(stock.balanceOf(treasury), 0.1e8, "1% of $2,000 = $20 = 0.1 share");
         assertEq(escrow.guaranteeIdsOf(tenant)[0], id);
         assertEq(escrow.guaranteeIdsOf(landlord)[0], id);
+        assertEq(escrow.activeGuaranteeCount(), 1);
+        assertEq(escrow.activeCoverageUsd(), 2_000 * USD);
     }
 
     function test_Create_UsesDefaultArbiterWhenNoneGiven() public {
@@ -215,6 +217,7 @@ contract GuaranteeEscrowTest is Test {
         assertEq(stock.balanceOf(landlord), 2.5e8, "$500 at $200 = 2.5 shares");
         assertEq(guarantee.collateral, 10e8);
         assertEq(guarantee.coverageUsd, 1_500 * USD);
+        assertEq(escrow.activeCoverageUsd(), 1_500 * USD);
         assertEq(uint8(guarantee.claim.status), uint8(IGuaranteeEscrow.ClaimStatus.None));
         assertEq(uint8(guarantee.status), uint8(IGuaranteeEscrow.Status.Active));
     }
@@ -366,6 +369,8 @@ contract GuaranteeEscrowTest is Test {
 
         assertEq(stock.balanceOf(tenant) - tenantBalance, 12.5e8);
         assertEq(uint8(escrow.getGuarantee(id).status), uint8(IGuaranteeEscrow.Status.Closed));
+        assertEq(escrow.activeGuaranteeCount(), 0);
+        assertEq(escrow.activeCoverageUsd(), 0);
 
         vm.expectRevert(abi.encodeWithSelector(IGuaranteeEscrow.NotActive.selector, id));
         vm.prank(landlord);

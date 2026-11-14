@@ -40,6 +40,9 @@ contract GuaranteeEscrow is IGuaranteeEscrow, Ownable2Step, ReentrancyGuard {
     uint16 public feeBps;
 
     uint256 public guaranteeCount;
+    /// @notice Live traction counters, kept onchain so anyone can verify them without an indexer.
+    uint256 public activeGuaranteeCount;
+    uint256 public activeCoverageUsd;
 
     mapping(uint256 id => Guarantee) private _guarantees;
     mapping(address account => uint256[]) private _idsByAccount;
@@ -103,6 +106,8 @@ contract GuaranteeEscrow is IGuaranteeEscrow, Ownable2Step, ReentrancyGuard {
 
         _idsByAccount[msg.sender].push(id);
         _idsByAccount[params.landlord].push(id);
+        activeGuaranteeCount++;
+        activeCoverageUsd += params.coverageUsd;
 
         IERC20(params.token).safeTransferFrom(msg.sender, address(this), params.collateral);
         _chargeFee(id, params.token, params.coverageUsd);
@@ -265,6 +270,7 @@ contract GuaranteeEscrow is IGuaranteeEscrow, Ownable2Step, ReentrancyGuard {
 
         guarantee.collateral -= tokensPaid;
         guarantee.coverageUsd -= claim.amountUsd;
+        activeCoverageUsd -= claim.amountUsd;
         delete guarantee.claim;
 
         IERC20(token).safeTransfer(guarantee.landlord, tokensPaid);
@@ -350,6 +356,8 @@ contract GuaranteeEscrow is IGuaranteeEscrow, Ownable2Step, ReentrancyGuard {
         guarantee.collateral = 0;
         guarantee.status = Status.Closed;
         delete guarantee.claim;
+        activeGuaranteeCount--;
+        activeCoverageUsd -= guarantee.coverageUsd;
 
         if (collateral > 0) IERC20(guarantee.token).safeTransfer(guarantee.tenant, collateral);
 
