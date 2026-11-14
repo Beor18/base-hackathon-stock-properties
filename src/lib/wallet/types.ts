@@ -23,4 +23,6 @@ export type AccountSession =
   /** Public network without `NEXT_PUBLIC_PRIVY_APP_ID`: accounts cannot work, the app says so. */
   | { status: "unconfigured" }
   | { status: "signed-out"; signIn: SignInProps }
+  /** Signed in, but the account never became usable (e.g. the sign-in provider's wallet frame did not load). */
+  | { status: "failed" }
   | { status: "ready"; address: Address; wallet: AccountWallet };

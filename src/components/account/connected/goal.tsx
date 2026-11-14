@@ -61,7 +61,9 @@ export function ConnectedGoalScreen({ lang, labels }: { lang: Locale; labels: La
     };
   }, [draftParams, property.data]);
 
-  if (session.status === "unconfigured") return <AccountUnavailable lang={lang} labels={labels} />;
+  if (session.status === "unconfigured" || session.status === "failed") {
+    return <AccountUnavailable lang={lang} labels={labels} reason={session.status} />;
+  }
 
   let state: GoalScreenState;
   if (session.status === "loading") {

@@ -22,7 +22,9 @@ export function ConnectedRequestLinkScreen({
   labels: Labels;
 }) {
   const session = useAccount();
-  if (session.status === "unconfigured") return <AccountUnavailable lang={lang} labels={labels} />;
+  if (session.status === "unconfigured" || session.status === "failed") {
+    return <AccountUnavailable lang={lang} labels={labels} reason={session.status} />;
+  }
 
   const state: RequestLinkScreenState =
     session.status === "ready"

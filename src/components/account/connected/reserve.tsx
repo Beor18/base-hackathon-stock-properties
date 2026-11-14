@@ -49,7 +49,9 @@ export function ConnectedReserveScreen({ lang, labels }: { lang: Locale; labels:
     retry: false,
   });
 
-  if (session.status === "unconfigured") return <AccountUnavailable lang={lang} labels={labels} />;
+  if (session.status === "unconfigured" || session.status === "failed") {
+    return <AccountUnavailable lang={lang} labels={labels} reason={session.status} />;
+  }
 
   let state: ReserveScreenState;
   if (session.status === "loading") {

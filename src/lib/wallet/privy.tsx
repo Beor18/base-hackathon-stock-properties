@@ -1,6 +1,6 @@
 "use client";
 
-import { dataSuffix, PrivyProvider, useCreateWallet, useLoginWithEmail, usePrivy } from "@privy-io/react-auth";
+import { dataSuffix, PrivyProvider, useCreateWallet, useLoginWithEmail, usePrivy, useWallets } from "@privy-io/react-auth";
 import { SmartWalletsProvider, useSmartWallets } from "@privy-io/react-auth/smart-wallets";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { getAddress } from "viem";
@@ -13,6 +13,9 @@ import { AccountContext } from "./context";
 import type { AccountSession, AccountWallet } from "./types";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** After signing in, how long the account may take to appear before the app gives up and says so. */
+const ACCOUNT_TIMEOUT_MS = 30_000;
 
 /**
  * Email login with an invisible, sponsored smart account. The smart account type (Coinbase Smart
@@ -44,12 +47,15 @@ function PrivySession({ children }: { children: ReactNode }) {
   const { client, getClientForChain } = useSmartWallets();
   const { sendCode, loginWithCode } = useLoginWithEmail();
   const { createWallet } = useCreateWallet();
+  const { ready: walletsReady } = useWallets();
 
   // `createOnLogin` covers Privy's own login screens; our email form is headless, so make sure the
-  // embedded signer (and with it the smart account) exists. No UI: wallet screens are off.
+  // embedded signer (and with it the smart account) exists. Only once Privy's wallet frame is up
+  // (`useWallets().ready` includes it): called earlier, `createWallet` falls back to Privy's own
+  // "Creating your wallet" modal, which tries once and hangs if the frame never loads.
   const creatingWallet = useRef(false);
   useEffect(() => {
-    if (!ready || !authenticated || !user || creatingWallet.current) return;
+    if (!ready || !authenticated || !user || !walletsReady || creatingWallet.current) return;
     const hasEmbedded = user.linkedAccounts.some((account) => account.type === "wallet" && account.walletClientType === "privy");
     if (hasEmbedded) return;
     creatingWallet.current = true;
@@ -58,7 +64,7 @@ function PrivySession({ children }: { children: ReactNode }) {
       console.warn("[account] could not create the embedded wallet", cause);
       creatingWallet.current = false;
     });
-  }, [ready, authenticated, user, createWallet]);
+  }, [ready, authenticated, user, walletsReady, createWallet]);
 
   const [step, setStep] = useState<SignInProps["step"]>("email");
   const [email, setEmail] = useState("");
@@ -116,11 +122,22 @@ function PrivySession({ children }: { children: ReactNode }) {
   );
 
   const address = client?.account?.address;
+
+  // If the account never shows up (the wallet frame is blocked, the network fails), say so instead
+  // of showing "preparing" forever. Keyed by user so a later sign-in starts a fresh wait.
+  const userId = authenticated ? user?.id : undefined;
+  const [stalledUserId, setStalledUserId] = useState<string | null>(null);
+  useEffect(() => {
+    if (!ready || !userId || address) return;
+    const timer = window.setTimeout(() => setStalledUserId(userId), ACCOUNT_TIMEOUT_MS);
+    return () => window.clearTimeout(timer);
+  }, [ready, userId, address]);
+
   const session = useMemo<AccountSession>(() => {
     if (!ready) return { status: "loading" };
     if (!authenticated) return { status: "signed-out", signIn };
     // Right after login the embedded signer and its smart account take a moment to exist.
-    if (!address) return { status: "loading" };
+    if (!address) return stalledUserId !== null && stalledUserId === userId ? { status: "failed" } : { status: "loading" };
 
     const wallet: AccountWallet = {
       kind: "privy",
@@ -136,7 +153,7 @@ function PrivySession({ children }: { children: ReactNode }) {
       },
     };
     return { status: "ready", address: wallet.address, wallet };
-  }, [ready, authenticated, signIn, address, client, getClientForChain]);
+  }, [ready, authenticated, signIn, address, stalledUserId, userId, client, getClientForChain]);
 
   return <AccountContext.Provider value={session}>{children}</AccountContext.Provider>;
 }

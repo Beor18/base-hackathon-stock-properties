@@ -30,7 +30,9 @@ export function ConnectedFundScreen({ lang, labels }: { lang: Locale; labels: La
   const tx = useTransaction(labels.txErrors);
   const [result, setResult] = useState<"success" | null>(null);
 
-  if (session.status === "unconfigured") return <AccountUnavailable lang={lang} labels={labels} />;
+  if (session.status === "unconfigured" || session.status === "failed") {
+    return <AccountUnavailable lang={lang} labels={labels} reason={session.status} />;
+  }
 
   let state: FundScreenState;
   if (session.status === "loading") {

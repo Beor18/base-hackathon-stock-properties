@@ -67,7 +67,9 @@ export function ConnectedContributeScreen({ lang, labels }: { lang: Locale; labe
     retry: false,
   });
 
-  if (session.status === "unconfigured") return <AccountUnavailable lang={lang} labels={labels} />;
+  if (session.status === "unconfigured" || session.status === "failed") {
+    return <AccountUnavailable lang={lang} labels={labels} reason={session.status} />;
+  }
 
   let state: ContributeScreenState;
   if (session.status === "loading") {
