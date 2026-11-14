@@ -3,9 +3,15 @@
 > **Tus acciones son tu garante.**
 > Alquilá sin garante propietario y sin regalar plata en un seguro de caución: bloqueá acciones tokenizadas como garantía, seguí siendo su dueño y recuperalas cuando te mudás.
 
-Este documento es la historia de la startup de 0 a 1: problema, solución, por qué ahora, mercado, competencia, diferenciador, modelo de negocio, plan, equipo y ask. Las cifras tienen fuente (ver `HANDOFF.md`, Apéndice B); lo que es supuesto o decisión pendiente de los fundadores está marcado con **[decidir]** o **[confirmar]**.
+Este documento es la historia de la startup de 0 a 1: problema, solución, por qué ahora, mercado, competencia, diferenciador, modelo de negocio, plan, equipo y ask. Las cifras tienen fuente (ver `HANDOFF.md`, Apéndice B); lo que es supuesto o decisión pendiente de los fundadores está marcado con **[decidir]**, **[confirmar]** o **[completar]**.
 
 ---
+
+## 0. De dónde venimos
+
+Somos el equipo que construyó **Smarlin**, una plataforma de IA de bienes raíces que ya funciona en Puerto Rico: búsqueda de propiedades por estilo de vida, análisis de precio justo y riesgo por propiedad, y datos de mercado de los 78 municipios a partir de cierres reales. Kelvin vende propiedades allá; Fernando construye el producto.
+
+Garante sale de lo que vemos en operaciones reales: **en cada alquiler y en cada compra hay un momento en que alguien tiene que inmovilizar efectivo para demostrar que va en serio.** Y cada vez más gente tiene su patrimonio en acciones, no en efectivo.
 
 ## 1. El problema
 
@@ -29,6 +35,12 @@ Los números detrás del caso:
 
 **El problema de fondo:** las garantías de alquiler de hoy destruyen valor. O es plata que el inquilino pierde (seguro), o es plata muerta (depósito), o es el patrimonio de un tercero (garante).
 
+### La misma traba aparece al comprar
+
+En una compraventa, el comprador entrega un **depósito de opción** que queda inmovilizado hasta el cierre. Quien tiene su patrimonio en acciones tiene que venderlas para reservar la propiedad, aunque el cierre sea en pocas semanas. Es el proceso que Kelvin maneja en Puerto Rico.
+
+**[completar con datos de Kelvin y de Smarlin]:** monto típico de la opción, días hasta el cierre, quién custodia el depósito, cuántas operaciones se caen y por qué.
+
 ## 2. La solución
 
 **Garante convierte las acciones del inquilino en la garantía del alquiler, sin venderlas.**
@@ -46,6 +58,18 @@ El inquilino bloquea acciones tokenizadas (Apple, Nvidia, Tesla y otras, emitida
 | **1** | Acordá los términos (alquiler, meses de garantía, fecha de fin) | Creá tu link de solicitud (sin transacción, sin costo) |
 | **2** | Elegí qué acción bloquear | El inquilino bloquea sus acciones |
 | **3** | Bloqueá y compartí el comprobante | Verificá la garantía; reclamá solo si hace falta |
+
+### Un mismo contrato, dos usos
+
+| | Alquiler: garantía | Compra: depósito de opción **[decidir si entra en esta etapa]** |
+|---|---|---|
+| Quién bloquea acciones | Inquilino | Comprador |
+| A favor de quién | Propietario | Vendedor |
+| Árbitro natural | Administrador o inmobiliaria | Corredor de la operación |
+| Duración | Meses o años | Semanas, hasta el cierre |
+| Ticket | 1 a 3 meses de alquiler | Un porcentaje del precio de la propiedad |
+
+El contrato ya construido cubre ambos: es una obligación en dólares, con beneficiario, fecha de fin, reclamo, disputa y árbitro. La compra tiene además dos ventajas: el plazo corto reduce el riesgo de precio y el ticket más alto mejora el ingreso por operación.
 
 ### Qué pasa si algo sale mal
 
@@ -77,7 +101,24 @@ Hasta 2026 esto no se podía construir. Cuatro cosas cambiaron:
 3. **La regulación de alquileres se abrió.** En Argentina, el DNU 70/2023 dejó librado al acuerdo entre partes el monto y la moneda de la garantía.
 4. **La gente ya invierte.** En Argentina hay **12,3 millones de personas con cuenta comitente** (55% de la población activa) y **más de 1 millón tiene CEDEARs**: acciones de EE.UU. que hoy no sirven para nada a la hora de alquilar.
 
-## 4. Mercado
+## 4. Dónde lanzamos, y por qué el uso real no empieza en Puerto Rico
+
+Puerto Rico es el mercado que conocemos y donde ya tenemos producto y distribución. Pero hay una restricción que no depende de nosotros:
+
+- Las acciones tokenizadas de Coinbase solo están disponibles para **personas fuera de Estados Unidos**. A efectos regulatorios, un residente de Puerto Rico cuenta como persona de EE.UU. **[confirmar con asesor legal]**
+- Las reglas del hackathon excluyen los proyectos que habiliten trading a usuarios de EE.UU.
+
+Por eso la estrategia separa dónde aprendemos y distribuimos de dónde se mueve valor real hoy:
+
+| Mercado | Qué papel cumple | Qué hacemos ahora |
+|---|---|---|
+| **Puerto Rico** | Mercado propio: conocimiento del negocio, datos de cierres reales y distribución vía Smarlin | Integración en modo demostración sobre propiedades reales de Smarlin; pilotos en testnet con operaciones de Kelvin. Queda listo para activarse el día que las acciones tokenizadas se abran a EE.UU. |
+| **Extranjeros que alquilan o compran en Puerto Rico** | Puente entre los dos mundos: propiedad en PR, comprador o inquilino elegible | Validar si el segmento existe y qué tamaño tiene **[completar con datos de Kelvin]** |
+| **Latinoamérica, Argentina primero** | Donde el producto puede operar hoy con activos reales | Primeras garantías reales en mainnet: de acá sale la tracción on-chain que pesa en el puntaje |
+
+Esta sección es la respuesta a la pregunta que va a hacer cualquier jurado: "si son de Puerto Rico, ¿por qué no lanzan ahí?".
+
+## 5. Mercado
 
 **A quién le hablamos primero:** inquilinos que ya ahorran en acciones o cripto y no tienen garante propietario — profesionales jóvenes del interior, trabajadores remotos que cobran en dólares, extranjeros no estadounidenses. Y del otro lado, propietarios e inmobiliarias que ya aceptan dólares o cripto.
 
@@ -88,12 +129,14 @@ Hasta 2026 esto no se podía construir. Cuatro cosas cambiaron:
 | **SAM** | Inquilinos que ya tienen acciones | Argentina: ~210.000 hogares (1M de cuentas con CEDEARs × 21% que alquila) ≈ USD 241M de cobertura. Brasil: ~1,3M de hogares (5,7M de inversores de B3 × 23%) |
 | **SOM (12 meses)** | Lo alcanzable con el equipo actual | 1.000 contratos en CABA ≈ USD 1,15M en custodia **[decidir meta]** |
 
+**Puerto Rico [completar con datos propios de Smarlin]:** ventas cerradas por año, precio típico de cierre, alquileres activos y monto típico de opción y de depósito. Es un dato que casi ningún otro equipo puede mostrar: sale de cierres reales, no de estimaciones.
+
 Dos advertencias que hay que decir antes de que las pregunte un jurado:
 
 - **La oferta de colateral todavía es chica:** hay unos USD 47,5M de acciones de Coinbase emitidas. Crecemos con ese mercado, no por delante.
 - **Colombia probablemente quede afuera:** la Ley 820/2003 prohíbe depósitos y cauciones reales en alquileres de vivienda.
 
-## 5. Competencia
+## 6. Competencia
 
 | Alternativa | Qué hace | Por qué no resuelve el problema |
 |---|---|---|
@@ -107,19 +150,19 @@ Dos advertencias que hay que decir antes de que las pregunte un jurado:
 
 El research no encontró **ningún producto que use acciones tokenizadas como garantía de alquiler**, ni entre unos 40 repositorios públicos del hackathon (no se pudieron revisar los proyectos que solo publican en X).
 
-## 6. Diferenciador
+## 7. Diferenciador
 
 **Garante es la única garantía en la que la plata del inquilino sigue siendo suya y sigue invertida.** Todo lo demás es un costo hundido o capital muerto.
 
 Tres cosas lo sostienen:
 
-1. **Nace del real estate, no de DeFi.** El producto habla el idioma del alquiler: garantía, contrato, reclamo, árbitro. El árbitro natural es quien ya administra la propiedad. Con Smarlin (plataforma de IA de bienes raíces en Puerto Rico, con broker licenciado) el equipo tiene el lado inmobiliario adentro **[confirmar relación]**. Cualquier portal puede mostrar "garantizá este alquiler con X acciones" con una sola llamada a la API de cotización.
+1. **Lo construye un equipo que ya opera en real estate.** Smarlin es nuestro producto y está en producción en Puerto Rico; Kelvin cierra operaciones allá. Garante habla el idioma del negocio (garantía, opción, contrato, reclamo, árbitro) porque sale de ahí, no de DeFi. El árbitro natural es quien ya administra la propiedad o corre la operación. Y la distribución ya existe: cada propiedad publicada en Smarlin puede mostrar "garantizá o reservá con X acciones" con una sola llamada a la API de cotización.
 2. **Cero fricción para el propietario.** No firma transacciones ni paga gas para aceptar: comparte un link y verifica en una página pública. Solo necesita una wallet si algún día reclama.
 3. **Diseñado para acciones reales, no para tokens genéricos.** El ratio de colateral se calcula por acción según su caída histórica; y el contrato distingue entre precio para *entrar* colateral y precio para *pagar*, porque los mercados cierran los fines de semana y los feeds se congelan.
 
 **Por qué es difícil de copiar:** la tecnología se puede clonar; la red de propietarios, inmobiliarias y árbitros que aceptan la garantía, no. Cada inmobiliaria que la adopta la vuelve aceptable para todos sus inquilinos.
 
-## 7. Modelo de negocio
+## 8. Modelo de negocio
 
 **Hoy (en el contrato):** un fee único sobre el monto garantizado, cobrado al crear la garantía. El tope on-chain es 3%.
 
@@ -137,20 +180,20 @@ Hay que decirlo sin maquillaje: **el fee por contrato residencial es chico.** A 
 
 La primitiva que queda construida es más general que el alquiler: **cualquier obligación en dólares garantizada con acciones.**
 
-## 8. De 0 a 1
+## 9. De 0 a 1
 
 | Etapa | Cuándo | Objetivo | Cómo se mide |
 |---|---|---|---|
-| **0. Terminar el producto** | Hasta ~20 nov | Flujo completo andando; demo pública en testnet; registro en el hackathon; Builder Code | Demo recorrible de punta a punta |
+| **0. Terminar el producto** | Hasta ~20 nov | Flujo completo andando; demo pública en testnet **integrada a propiedades reales de Smarlin**; registro en el hackathon; Builder Code | Demo recorrible de punta a punta desde una publicación de Smarlin |
 | **1. Primeras garantías reales** | 20 nov – 5 dic | Mainnet con topes de monto; 10 garantías con gente conocida y 2–3 inmobiliarias de Buenos Aires; entrega | Garantías activas, wallets únicas, cobertura en USD (contadores on-chain) |
-| **2. Probar que el propietario la acepta** | Meses 1–3 | 100 garantías; 5 inmobiliarias; dictamen legal en Argentina; auditoría del contrato; integración de cotización en un portal | Tasa de aceptación de propietarios; % de inquilinos que completan el flujo |
-| **3. Repetible** | Meses 3–12 | 1.000 garantías; apertura de Brasil; alquiler comercial y señas | Costo de adquisición por contrato; ingreso por contrato; tasa de reclamos |
+| **2. Probar que el propietario la acepta** | Meses 1–3 | 100 garantías; 5 inmobiliarias; dictamen legal en Argentina y en Puerto Rico; auditoría del contrato; pilotos en modo demostración con operaciones de Kelvin | Tasa de aceptación de propietarios y vendedores; % de usuarios que completan el flujo |
+| **3. Repetible** | Meses 3–12 | 1.000 garantías; apertura de Brasil; depósitos de opción de compra; activación en Puerto Rico si la regulación lo permite | Costo de adquisición por contrato; ingreso por contrato; tasa de reclamos |
 
 **Por dónde entrar:** las inmobiliarias son el canal que ya vende garantías (Finaer trabaja con más de 12.000). Un "sí" de una inmobiliaria habilita a todos sus inquilinos. En paralelo, las comunidades cripto de Argentina aportan los primeros inquilinos con saldo.
 
 **La hipótesis más riesgosa** no es técnica: es que un propietario acepte acciones como garantía. La etapa 1 existe para probar eso con 10 casos reales antes de gastar en crecer.
 
-## 9. Riesgos y cómo se responden
+## 10. Riesgos y cómo se responden
 
 | Riesgo | Respuesta |
 |---|---|
@@ -161,19 +204,21 @@ La primitiva que queda construida es más general que el alquiler: **cualquier o
 | Poder del emisor | El emisor puede pausar o incautar tokens; se documenta como supuesto de confianza |
 | Dependencia de un solo emisor | El oráculo admite cualquier acción tokenizada con feed de precio; se pueden sumar emisores |
 
-## 10. Equipo
+## 11. Equipo
 
-- **Fernando Lopez — ingeniería.** Full-stack (Node, React, Next.js, Elixir, Python) y builder web3 (Tuneport, Elei Protocol). Vive en Buenos Aires, donde el problema del garante se sufre todos los días.
-- **Kelvin — producto y real estate. [confirmar rol y bio]** Vinculado a Smarlin, plataforma de IA de bienes raíces en Puerto Rico.
+- **Kelvin — real estate y producto.** Vende propiedades en Puerto Rico y es la voz del negocio: conoce de primera mano cómo se reservan, garantizan y cierran las operaciones. **[completar: licencia, años en el rubro, operaciones cerradas]**
+- **Fernando Lopez — ingeniería.** Full-stack (Node, React, Next.js, Elixir, Python) y builder web3 (Tuneport, Elei Protocol). Vive en Buenos Aires, donde el problema del garante se sufre todos los días y donde el producto puede operar hoy.
 
-**Por qué este equipo:** uno construye on-chain y vive en el mercado de lanzamiento; el otro conoce el negocio inmobiliario desde adentro. Garante necesita exactamente esas dos mitades.
+**Ya construimos juntos un producto que funciona:** Smarlin, en producción en Puerto Rico. **[completar: usuarios, propiedades publicadas, corredores, cualquier métrica real]**
 
-## 11. El ask
+**Por qué este equipo:** ya probó que puede llevar un producto inmobiliario a producción, tiene a alguien que cierra operaciones reales y a alguien que construye on-chain, y está parado en los dos mercados que el plan necesita.
+
+## 12. El ask
 
 **Al hackathon:** el premio del track Programmable Stock Markets (pool de USD 20.000). Uso propuesto **[decidir]**: auditoría del contrato, dictamen legal en Argentina y subsidio del fee de las primeras 100 garantías.
 
 **A Base y Coinbase:**
-- Claridad sobre los países elegibles para las acciones tokenizadas.
+- Claridad sobre los países elegibles para las acciones tokenizadas, y sobre el camino para Puerto Rico y EE.UU.
 - Que el contrato de custodia quede exento de incautación a nivel de política del token, para que la garantía sea sólida para el propietario.
 - Difusión del caso de uso: es "lo próximo que pueden hacer las acciones" con un usuario que no es trader.
 
@@ -201,7 +246,7 @@ La primitiva que queda construida es más general que el alquiler: **cualquier o
 
 **Form — "Why should we select you?"**
 
-> Renters in Latin America pay for guarantees they never get back: in Argentina a rental insurance policy costs 4–7% of the whole lease, and Brazilians paid R$2.0B in rental-guarantee premiums in 2025. Meanwhile over a million Argentines hold US stocks that are useless when they sign a lease. Garante makes those stocks the guarantee. It is a new primitive, USD-denominated obligations secured by tokenized stocks, aimed at people who are not traders. Our team pairs an onchain engineer living in the launch market with a real estate operator.
+> Renters in Latin America pay for guarantees they never get back: in Argentina a rental insurance policy costs 4–7% of the whole lease, and Brazilians paid R$2.0B in rental-guarantee premiums in 2025. Meanwhile over a million Argentines hold US stocks that are useless when they sign a lease. Garante makes those stocks the guarantee. It is a new primitive, USD-denominated obligations secured by tokenized stocks, aimed at people who are not traders. We are the team behind Smarlin, a live AI real estate platform in Puerto Rico: one of us sells properties there, the other builds onchain from Buenos Aires, where the product can operate today.
 
 **Loom, 3 minutos**
 

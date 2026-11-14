@@ -28,13 +28,15 @@ Estado al **14 nov 2026**. Repo: `https://github.com/Beor18/base-hackathon-stock
 |---|---|
 | Producto | **Garante** — "Your stocks are your guarantor" / "Tus acciones son tu garante". El inquilino bloquea acciones tokenizadas en Base como **garantía de alquiler**, en vez de un depósito en efectivo, un garante propietario o un seguro de caución. |
 | Track | **Programmable Stock Markets** (pool Base USD 20.000). Encaja en "financing tools" y "market infrastructure". Solo se puede entrar a un track. |
-| Mercado inicial | **Latinoamérica, Argentina primero.** Las acciones tokenizadas de Coinbase son solo para no-US, y las reglas descalifican proyectos que habiliten trading a usuarios de EE.UU. (Puerto Rico incluido). |
-| Vínculo con Smarlin | Smarlin es una plataforma de IA de bienes raíces en Puerto Rico (búsqueda por estilo de vida, análisis de propiedad, "precalificarse", broker licenciado). Garante es la capa financiera: el broker/administrador es el árbitro natural y el portal de propiedades es el canal de distribución (`/api/quote` permite mostrar "garantizá este alquiler con X acciones" en cada listing). |
+| Mercados | **Puerto Rico es el mercado propio** (ahí están Smarlin, Kelvin y el conocimiento del negocio). **El uso real on-chain arranca fuera de EE.UU.** (Latinoamérica, Argentina primero), porque las acciones tokenizadas de Coinbase son solo para no-US y las reglas descalifican proyectos que habiliten trading a usuarios de EE.UU., Puerto Rico incluido. En PR: integración en modo demostración/testnet sobre propiedades de Smarlin. Ver `docs/NARRATIVE.md` §4. |
+| Vínculo con Smarlin | **Confirmado por el usuario: Smarlin es un producto propio del equipo, ya funcionando en Puerto Rico, y Kelvin vende propiedades allá.** Es una plataforma de IA de bienes raíces (búsqueda por estilo de vida, análisis de propiedad, datos de cierres reales de los 78 municipios). Garante es su capa financiera: el corredor/administrador es el árbitro natural y Smarlin es el canal de distribución (`/api/quote` permite mostrar "garantizá o reservá con X acciones" en cada publicación). |
 | Flujo | Lo inicia el inquilino con **una sola transacción** (`createGuarantee`). El propietario solo comparte un **link de solicitud** (sin transacción, sin gas) y verifica en una página pública. |
 | Modelo de negocio | Fee único on-chain sobre la cobertura (`feeBps`, tope 3%), cobrado en acciones a la tesorería. |
 | Stack | Next.js 16.4.6 (App Router, Cache Components), React 19, TypeScript, Tailwind 4, wagmi 3 + viem 2, zod 4, Foundry (vía npm). Sin base de datos: **el contrato es la base de datos**. |
 
-**Supuesto a confirmar con el usuario:** que Kelvin es fundador/parte de Smarlin (inferido por el mail y la referencia, no confirmado). No inventar bios: Fernando Lopez = full-stack/web3 (GitHub `Beor18`, Buenos Aires); el rol de Kelvin hay que preguntarlo.
+**Datos que faltan pedirle al usuario** (no inventarlos): licencia y trayectoria de Kelvin, métricas reales de Smarlin (usuarios, propiedades, corredores), y cómo funcionan en Puerto Rico la opción de compra y los depósitos (montos, plazos, quién custodia). Están marcados con **[completar]** en la narrativa.
+
+**Propuesta abierta [decidir]:** sumar el **depósito de opción de compra** como segundo caso de uso (es lo que Kelvin opera a diario). El contrato ya lo soporta sin cambios de lógica: `tenant` = quien deposita, `landlord` = beneficiario, `arbiter` = corredor, `endsAt` = fecha de cierre. Si se aprueba, la UI necesita un selector "Alquiler / Compra" con textos propios, y conviene evaluar renombrar los roles del contrato a nombres neutros (`depositor` / `beneficiary`).
 
 ## 3. Reglas del hackathon (leídas de la página oficial y `/stocksmaxxing/rules`)
 
@@ -230,8 +232,10 @@ La narrativa ya está escrita en `docs/NARRATIVE.md`. Falta:
 4. Deploy en Vercel con las variables de entorno.
 5. **Confirmar elegibilidad por país**: Coinbase solo dice "jurisdicciones elegibles fuera de EE.UU."; no hay lista pública, así que Argentina/Brasil no están confirmados.
 6. Posts diarios en X con @buildonbase, Loom, y envío final antes del 4 dic.
-7. Confirmar el rol/bio de Kelvin y la relación con Smarlin para la slide de equipo.
-8. Preguntar por escrito a Base/partners cómo se mide la tracción y si testnet cuenta.
+7. Completar los **[completar]** de la narrativa: trayectoria de Kelvin, métricas de Smarlin y datos del mercado de Puerto Rico.
+8. Decidir si el depósito de opción de compra entra como segundo caso de uso.
+9. Preguntar por escrito a Base/partners cómo se mide la tracción y si testnet cuenta.
+10. Consultar con un asesor legal el encuadre de residentes de Puerto Rico como personas de EE.UU. para las acciones tokenizadas.
 
 ---
 
