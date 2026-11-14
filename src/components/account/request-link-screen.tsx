@@ -27,6 +27,7 @@ import type { SignInProps } from "./types";
  * The screen reads the property itself; integration only provides the session.
  */
 export type RequestLinkScreenState =
+  | { kind: "loading" }
   | { kind: "signed-out"; signIn: SignInProps }
   | { kind: "ready"; brokerAddress: string };
 
@@ -90,6 +91,14 @@ export function RequestLinkScreen({ lang, propertyRef, sourceUrl, state, labels 
     imageUrl: property.imageUrl ?? property.images[0] ?? null,
     priceUsd: property.priceUsd ?? 0,
   };
+
+  if (state.kind === "loading") {
+    return (
+      <Screen title={t.title} lead={t.body}>
+        <GoalPropertyRow property={row} lang={lang} />
+      </Screen>
+    );
+  }
 
   if (state.kind === "signed-out") {
     return (

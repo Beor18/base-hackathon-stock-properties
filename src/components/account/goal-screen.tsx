@@ -38,6 +38,8 @@ export type GoalScreenState =
       onSave: () => void;
       saving: TxProgress | null;
       saveError: boolean;
+      /** Plain-words reason of the failure, when known. */
+      saveErrorDetail?: string | null;
     }
   | { kind: "active"; goal: Goal; justSaved?: boolean };
 
@@ -129,7 +131,12 @@ function GoalSetup({
           <WaitBar steps={t.saving} current={state.saving.step} typicalSeconds={t.savingSeconds} labels={common} />
         ) : (
           <>
-            {state.saveError && <Notice tone="error">{t.saveError}</Notice>}
+            {state.saveError && (
+              <Notice tone="error">
+                {t.saveError}
+                {state.saveErrorDetail && <span className="mt-1 block font-semibold">{state.saveErrorDetail}</span>}
+              </Notice>
+            )}
             <Button block disabled={!selected} onClick={state.onSave}>
               {selected ? fill(t.setupCta, { stock: selected.name }) : t.setupPick}
             </Button>
@@ -172,6 +179,11 @@ function GoalSetup({
                   <span className="block text-label text-ink-2 tabular">
                     {fill(t.pricePerShare, { price: formatMoney(stock.priceUsd, lang) })}
                   </span>
+                  {stock.needUsd ? (
+                    <span className="block text-label font-semibold text-ink tabular">
+                      {fill(t.stockNeed, { amount: formatMoney(stock.needUsd, lang) })}
+                    </span>
+                  ) : null}
                 </span>
                 {stock.change12mPct !== null && (
                   <span className="text-right text-label">
@@ -254,6 +266,11 @@ function GoalProgress({
       <p className="mt-2 text-lead text-ink-2 tabular">
         {reached ? t.reachedBody : fill(t.remaining, { amount: formatMoney(remaining, lang) })}
       </p>
+      {!reached && goal.targetUsd > goal.senaUsd && (
+        <p className="mt-2 text-label text-ink-2 text-pretty tabular">
+          {fill(t.margin, { sena: formatMoney(goal.senaUsd, lang), target: formatMoney(goal.targetUsd, lang) })}
+        </p>
+      )}
 
       <div className="mt-6 flex items-center gap-3 rounded-[var(--radius-sheet)] bg-surface p-4">
         <StockIcon stock={goal.stock} />

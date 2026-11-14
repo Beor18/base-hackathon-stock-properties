@@ -58,6 +58,8 @@ export type ContributeScreenState =
       onSubmit: (draft: ContributionDraft) => void;
       tx: TxProgress | null;
       txError: boolean;
+      /** Plain-words reason of the failure, when known. */
+      txErrorDetail?: string | null;
     }
   | { kind: "success"; amount: number; currency: PayCurrency; goal: Goal };
 
@@ -189,7 +191,12 @@ function ContributeForm({
           />
         ) : (
           <>
-            {state.txError && <Notice tone="error">{t.error}</Notice>}
+            {state.txError && (
+              <Notice tone="error">
+                {t.error}
+                {state.txErrorDetail && <span className="mt-1 block font-semibold">{state.txErrorDetail}</span>}
+              </Notice>
+            )}
             {tooBig ? (
               <ButtonLink href={`/${lang}/cargar`} block>
                 {t.fundCta}

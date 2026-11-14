@@ -33,6 +33,8 @@ export type FundScreenState =
       faucetAmountUsd: number;
       onFaucet: () => void;
       faucet: TxProgress | "success" | "error" | null;
+      /** Plain-words reason of a faucet failure, when known. */
+      faucetErrorDetail?: string | null;
       rampUrl: string | null;
     };
 
@@ -97,6 +99,7 @@ export function FundScreen({ lang, state, labels }: FundScreenProps) {
       {state.testMode && state.faucet === "error" && (
         <Notice tone="error" className="mb-5">
           {t.testError}
+          {state.faucetErrorDetail && <span className="mt-1 block font-semibold">{state.faucetErrorDetail}</span>}
         </Notice>
       )}
 

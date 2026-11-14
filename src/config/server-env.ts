@@ -10,7 +10,7 @@ const schema = z.object({
   /** Coinbase's public, keyless reference API for tokenized stocks on Base. */
   COINBASE_STOCKS_API_URL: z.preprocess(emptyToUndefined, z.url().default("https://api.coinbase.com/v1/tokenized-stocks")),
   /** KyberSwap asks integrators to identify themselves; the aggregator itself is keyless. */
-  SWAP_CLIENT_ID: z.preprocess(emptyToUndefined, z.string().default("garante")),
+  SWAP_CLIENT_ID: z.preprocess(emptyToUndefined, z.string().default("sena")),
   /** Smarlin's public property API (our own product). Override only to point at a preview deploy. */
   SMARLIN_API_URL: z.preprocess(emptyToUndefined, z.url().default("https://www.smarlin.com")),
   /** Base mainnet RPC for the USD/ARS reference rate, read on mainnet whatever chain the app runs on. */

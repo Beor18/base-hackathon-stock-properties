@@ -1,13 +1,15 @@
 import type { NextRequest } from "next/server";
+import { connection } from "next/server";
 
 import { respond } from "@/server/http";
 import { addressParam } from "@/server/schemas";
-import { listGuaranteesOf } from "@/server/services/guarantees";
+import { listReservationsOf } from "@/server/services/reservations";
 
-/** GET /api/guarantees?account=0x…: guarantees where the account is tenant or landlord. */
+/** GET /api/reservations?account=0x…: reservations where the account is the depositor or the beneficiary. */
 export async function GET(request: NextRequest) {
+  await connection();
   return respond(async () => {
     const account = addressParam.parse(request.nextUrl.searchParams.get("account") ?? "");
-    return listGuaranteesOf(account);
+    return listReservationsOf(account);
   });
 }

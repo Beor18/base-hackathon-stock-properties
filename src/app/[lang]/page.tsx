@@ -1,5 +1,5 @@
 import { HeroHouse } from "@/components/landing/hero-house";
-import { LiveStats } from "@/components/landing/live-stats";
+import { LiveStatsLive } from "@/components/landing/live-stats-live";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { ButtonLink } from "@/components/ui/button";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -60,9 +60,9 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* INTEGRATION: pass live counters from /api/stats; null renders nothing. */}
+      {/* Live counters from the contracts (/api/stats). Nothing renders until there is real usage. */}
       <div className="mt-16">
-        <LiveStats stats={null} lang={lang} labels={t} />
+        <LiveStatsLive lang={lang} labels={{ statsTitle: t.statsTitle, stats: t.stats }} />
       </div>
 
       <section aria-labelledby="closing-heading" className="mx-auto mt-16 w-full max-w-6xl px-5 md:mt-24 md:px-8">

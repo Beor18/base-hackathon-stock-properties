@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { UnwiredFundScreen } from "@/components/account/unwired";
+import { ConnectedFundScreen } from "@/components/account/connected/fund";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -8,21 +8,23 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * `/cargar`: the account address (QR + copy) and, on test networks, the test balance button.
- *
- * INTEGRATION: render `<FundScreen lang labels state />` (account/fund-screen.tsx).
- * Data: session, account `address`, `Balances`, `testMode` (chain is not 8453),
- * `faucetAmountUsd` (MockUSDC faucet cap), `rampUrl` (external on-ramp, or null).
- * Callback: `onFaucet()` → MockUSDC faucet call, tracked with `faucet: { step }`, then
- * `"success"` or `"error"`.
+ * `/cargar`: the account address (QR + copy) and, on test networks, the test balance button
+ * (`/api/plan/faucet`). On mainnet it links to an external service to buy digital dollars.
  */
 export default async function CargarPage() {
   const lang = await getLocale();
   const dict = await getDictionary(lang);
   return (
-    <UnwiredFundScreen
+    <ConnectedFundScreen
       lang={lang}
-      labels={{ fund: dict.fund, signIn: dict.signIn, common: dict.common, contribute: dict.contribute }}
+      labels={{
+        fund: dict.fund,
+        signIn: dict.signIn,
+        common: dict.common,
+        contribute: dict.contribute,
+        account: dict.account,
+        txErrors: dict.txErrors,
+      }}
     />
   );
 }

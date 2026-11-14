@@ -53,6 +53,8 @@ export type ReserveScreenState =
       onReserve: () => void;
       tx: TxProgress | null;
       txError: boolean;
+      /** Plain-words reason of the failure, when known. */
+      txErrorDetail?: string | null;
     }
   | { kind: "success"; goal: Goal; reservationId: string; reservationUrl: string; endsAt: number };
 
@@ -175,7 +177,12 @@ function ReserveReady({
           <WaitBar steps={t.steps} current={state.tx.step} typicalSeconds={t.stepsSeconds} labels={common} />
         ) : (
           <>
-            {state.txError && <Notice tone="error">{t.error}</Notice>}
+            {state.txError && (
+              <Notice tone="error">
+                {t.error}
+                {state.txErrorDetail && <span className="mt-1 block font-semibold">{state.txErrorDetail}</span>}
+              </Notice>
+            )}
             <p className="flex justify-between text-label text-ink-2 tabular">
               <span>{fill(common.feeLine, { pct: formatBps(state.feeBps, lang) })}</span>
               <span className="font-semibold text-ink">{formatMoney(state.feeUsd, lang)}</span>

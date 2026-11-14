@@ -1,18 +1,16 @@
+import { DEPOSIT_PCT, depositUsd } from "@/lib/product";
+
 /**
- * Deposit (seña) parameters used by the UI.
- *
- * INTEGRATION: these mirror product parameters from the spec (§2: default 5 %, adjustable 1–10 %).
- * When the single product configuration file exists, import the values from there and delete
- * these constants so the UI and the planners never disagree.
+ * Deposit (seña) parameters used by the UI. The range and the default come from the product
+ * parameters in `deployment.json` (`params.reservationBps`), the same ones the planners enforce.
  */
-export const DEPOSIT_PCT_DEFAULT = 5;
-export const DEPOSIT_PCT_MIN = 1;
-export const DEPOSIT_PCT_MAX = 10;
+export const DEPOSIT_PCT_DEFAULT = DEPOSIT_PCT.default;
+export const DEPOSIT_PCT_MIN = DEPOSIT_PCT.min;
+export const DEPOSIT_PCT_MAX = DEPOSIT_PCT.max;
+/** Slider step. Presentation only. */
 export const DEPOSIT_PCT_STEP = 0.5;
 
-export function depositUsd(priceUsd: number, pct: number): number {
-  return Math.round(priceUsd * (pct / 100));
-}
+export { depositUsd };
 
 export function clampPct(pct: number): number {
   if (!Number.isFinite(pct)) return DEPOSIT_PCT_DEFAULT;

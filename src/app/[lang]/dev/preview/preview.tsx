@@ -40,7 +40,8 @@ function goal(savedUsd: number): Goal {
   return {
     property,
     depositPct: 5,
-    targetUsd: 19_700,
+    targetUsd: 22_880,
+    senaUsd: 19_700,
     savedUsd,
     shares: savedUsd / stocks[0].priceUsd,
     stock: stocks[0],

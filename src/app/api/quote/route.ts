@@ -11,8 +11,8 @@ const querySchema = z.object({
 });
 
 /**
- * GET /api/quote?coverageUsd=1200&token=0x…
- * Stock needed to guarantee a rental. Without `token`, quotes every accepted stock.
+ * GET /api/quote?coverageUsd=19700&token=0x…
+ * Stock an account must hold to reserve a seña of `coverageUsd`. Without `token`, quotes every accepted stock.
  */
 export async function GET(request: NextRequest) {
   return respond(async () => {

@@ -1,6 +1,6 @@
 /**
  * Collateral math shared by the server and the browser. It mirrors the onchain rules in
- * `GuaranteeEscrow.sol` / `StockOracle.sol` so quotes never disagree with the contract.
+ * `ReservationEscrow.sol` / `StockOracle.sol` so quotes never disagree with the contract.
  */
 
 export const USD_DECIMALS = 18;
@@ -63,7 +63,7 @@ export function healthBps(collateralValueUsd: bigint, coverageUsd: bigint): numb
   return Number((collateralValueUsd * BPS) / coverageUsd);
 }
 
-/** Tokens the tenant can withdraw while staying at the required ratio. */
+/** Tokens the depositor can withdraw while staying at the required ratio. */
 export function withdrawableExcess(params: {
   collateral: bigint;
   coverageUsd: bigint;

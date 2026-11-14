@@ -2,41 +2,54 @@ import "server-only";
 
 import { cacheLife } from "next/cache";
 
-import { publicEnv } from "@/config/public-env";
-import { stockOracleAbi } from "@/contracts/abis";
+import { deployment } from "@/config/deployment";
 import type { ProtocolConfig } from "@/domain/types";
-import { escrowContract, publicClient } from "@/server/chain";
+import { escrowContract, oracleContract, publicClient } from "@/server/chain";
 
-/** Protocol rules read from the contracts. Only the fee and default arbiter can change after deployment. */
+/**
+ * Protocol rules read from the contracts. Only the fee, the treasury and the default arbiter can
+ * change after deployment; the contribution fee is applied by the planners and lives in `deployment.json`.
+ */
 export async function getProtocolConfig(): Promise<ProtocolConfig> {
   "use cache";
   cacheLife("minutes");
 
-  const read = <Name extends "oracle" | "defaultArbiter" | "feeBps" | "disputeWindow" | "claimWindow" | "arbitrationTimeout">(
+  const read = <
+    Name extends
+      | "defaultArbiter"
+      | "treasury"
+      | "feeBps"
+      | "maxSlippageBps"
+      | "disputeWindow"
+      | "claimWindow"
+      | "arbitrationTimeout",
+  >(
     functionName: Name,
   ) => publicClient.readContract({ ...escrowContract, functionName });
 
-  const [oracleAddress, defaultArbiter, feeBps, disputeWindow, claimWindow, arbitrationTimeout] = await Promise.all([
-    read("oracle"),
-    read("defaultArbiter"),
-    read("feeBps"),
-    read("disputeWindow"),
-    read("claimWindow"),
-    read("arbitrationTimeout"),
-  ]);
-
-  const oracle = { address: oracleAddress, abi: stockOracleAbi } as const;
-  const [collateralMaxAge, settlementMaxAge] = await Promise.all([
-    publicClient.readContract({ ...oracle, functionName: "collateralMaxAge" }),
-    publicClient.readContract({ ...oracle, functionName: "settlementMaxAge" }),
-  ]);
+  const [defaultArbiter, treasury, feeBps, maxSlippageBps, disputeWindow, claimWindow, arbitrationTimeout, collateralMaxAge, settlementMaxAge] =
+    await Promise.all([
+      read("defaultArbiter"),
+      read("treasury"),
+      read("feeBps"),
+      read("maxSlippageBps"),
+      read("disputeWindow"),
+      read("claimWindow"),
+      read("arbitrationTimeout"),
+      publicClient.readContract({ ...oracleContract, functionName: "collateralMaxAge" }),
+      publicClient.readContract({ ...oracleContract, functionName: "settlementMaxAge" }),
+    ]);
 
   return {
-    chainId: publicEnv.chainId,
-    escrowAddress: publicEnv.escrowAddress,
-    oracleAddress,
+    chainId: deployment.chainId,
+    escrowAddress: deployment.contracts.reservationEscrow,
+    goalRegistryAddress: deployment.contracts.goalRegistry,
+    oracleAddress: deployment.contracts.stockOracle,
     defaultArbiter,
-    feeBps,
+    treasury,
+    reservationFeeBps: feeBps,
+    contributionFeeBps: deployment.params.contributionFeeBps,
+    maxSlippageBps,
     disputeWindowSeconds: Number(disputeWindow),
     claimWindowSeconds: Number(claimWindow),
     arbitrationTimeoutSeconds: Number(arbitrationTimeout),

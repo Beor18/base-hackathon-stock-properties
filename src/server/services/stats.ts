@@ -5,20 +5,22 @@ import { erc20Abi } from "viem";
 
 import { tokensToUsd } from "@/domain/collateral";
 import type { ProtocolStats } from "@/domain/types";
-import { escrowContract, publicClient } from "@/server/chain";
+import { escrowContract, goalRegistryContract, publicClient } from "@/server/chain";
 
 import { listStocks } from "./stocks";
 
-/** Public traction numbers. Counters live in the contract, so anyone can verify them onchain. */
+/** Public traction numbers. Counters live in the contracts, so anyone can verify them onchain. */
 export async function getProtocolStats(): Promise<ProtocolStats> {
   "use cache";
   cacheLife("seconds");
 
   const stocks = await listStocks();
 
-  const [totalGuarantees, activeGuarantees, activeCoverageUsd, balances] = await Promise.all([
-    publicClient.readContract({ ...escrowContract, functionName: "guaranteeCount" }),
-    publicClient.readContract({ ...escrowContract, functionName: "activeGuaranteeCount" }),
+  const [goalCount, activeGoals, reservationCount, activeReservations, activeCoverageUsd, balances] = await Promise.all([
+    publicClient.readContract({ ...goalRegistryContract, functionName: "goalCount" }),
+    publicClient.readContract({ ...goalRegistryContract, functionName: "activeGoals" }),
+    publicClient.readContract({ ...escrowContract, functionName: "reservationCount" }),
+    publicClient.readContract({ ...escrowContract, functionName: "activeReservationCount" }),
     publicClient.readContract({ ...escrowContract, functionName: "activeCoverageUsd" }),
     Promise.all(
       stocks.map((stock) =>
@@ -38,8 +40,10 @@ export async function getProtocolStats(): Promise<ProtocolStats> {
   );
 
   return {
-    totalGuarantees: Number(totalGuarantees),
-    activeGuarantees: Number(activeGuarantees),
+    goalCount: Number(goalCount),
+    activeGoals: Number(activeGoals),
+    reservationCount: Number(reservationCount),
+    activeReservations: Number(activeReservations),
     activeCoverageUsd: activeCoverageUsd.toString(),
     lockedValueUsd: lockedValueUsd.toString(),
     listedStocks: stocks.filter((stock) => stock.enabled).length,

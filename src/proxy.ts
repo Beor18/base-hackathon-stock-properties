@@ -1,11 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { defaultLocale, hasLocale, LOCALE_COOKIE, locales, type Locale } from "@/i18n/config";
+import { isBlockedRegion } from "@/lib/region";
 
 /**
- * Request proxy. Runs a list of steps in order; the first one that returns a response wins.
- * Today it only adds the language prefix. The mainnet geo-block (owned by the integration role)
- * plugs in as another step placed before `localeRedirect`.
+ * Request proxy. Runs a list of steps in order; the first one that returns a response wins:
+ * the mainnet geo-block first, then the language prefix.
  */
 type ProxyStep = (request: NextRequest) => NextResponse | undefined;
 
@@ -46,7 +46,23 @@ const localeRedirect: ProxyStep = (request) => {
   return NextResponse.redirect(url);
 };
 
-const steps: ProxyStep[] = [localeRedirect];
+/**
+ * Mainnet only: the United States and its territories see the "not available" page instead of the
+ * app (the platform's country header decides). The URL stays as requested.
+ */
+const geoBlock: ProxyStep = (request) => {
+  if (!isBlockedRegion(request.headers)) return undefined;
+
+  const { pathname } = request.nextUrl;
+  const locale = pathnameLocale(pathname) ?? preferredLocale(request);
+  if (pathname === `/${locale}/unavailable`) return undefined;
+
+  const url = request.nextUrl.clone();
+  url.pathname = `/${locale}/unavailable`;
+  return NextResponse.rewrite(url);
+};
+
+const steps: ProxyStep[] = [geoBlock, localeRedirect];
 
 export function proxy(request: NextRequest) {
   for (const step of steps) {

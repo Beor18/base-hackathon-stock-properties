@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import { UnwiredRequestLinkScreen } from "@/components/account/unwired";
+import { ConnectedRequestLinkScreen } from "@/components/account/connected/request-link";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -11,9 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
 /**
  * `/pedir?casa=<ref>[&url=<sourceUrl>]`: the broker creates the reservation link (no transaction).
  *
- * INTEGRATION: render `<RequestLinkScreen lang propertyRef sourceUrl labels state />`
- * (account/request-link-screen.tsx). It reads the property by itself; it only needs the session:
- * `{ kind: "signed-out", signIn }` or `{ kind: "ready", brokerAddress }`.
+ * The screen reads the property by itself; the container only adds the broker's session.
  */
 async function RequestLink({ searchParams }: Pick<PageProps<"/[lang]/pedir">, "searchParams">) {
   const [query, lang] = await Promise.all([searchParams, getLocale()]);
@@ -21,11 +19,18 @@ async function RequestLink({ searchParams }: Pick<PageProps<"/[lang]/pedir">, "s
   const ref = typeof query.casa === "string" ? query.casa : null;
   const url = typeof query.url === "string" ? query.url : null;
   return (
-    <UnwiredRequestLinkScreen
+    <ConnectedRequestLinkScreen
       lang={lang}
       propertyRef={ref}
       sourceUrl={url}
-      labels={{ request: dict.request, signIn: dict.signIn, common: dict.common, detail: dict.detail }}
+      labels={{
+        request: dict.request,
+        signIn: dict.signIn,
+        common: dict.common,
+        detail: dict.detail,
+        account: dict.account,
+        txErrors: dict.txErrors,
+      }}
     />
   );
 }

@@ -15,6 +15,11 @@ export type StockOption = {
   priceUsd: number;
   /** Change over the last 12 months, in percent (12.5 = +12,5 %). Null hides it. */
   change12mPct: number | null;
+  /**
+   * Goal setup only: USD in this stock needed to reserve the draft's seña (the stock's safety
+   * margin and the fee included). Null or missing hides it.
+   */
+  needUsd?: number | null;
 };
 
 export type GoalProperty = {
@@ -35,8 +40,13 @@ export type GoalDraft = {
 export type Goal = {
   property: GoalProperty;
   depositPct: number;
-  /** The seña in USD. */
+  /**
+   * USD in stocks needed to reserve: the seña plus the safety margin the stock requires and the
+   * reservation fee. Progress and "reached" are measured against it.
+   */
   targetUsd: number;
+  /** The seña in USD (what the broker can claim). */
+  senaUsd: number;
   /** Current market value of the shares held for this goal, in USD. */
   savedUsd: number;
   shares: number;

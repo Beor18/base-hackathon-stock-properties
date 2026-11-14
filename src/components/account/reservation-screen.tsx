@@ -27,6 +27,8 @@ export type ReservationView = {
   status: ReservationStatus;
   property: GoalProperty;
   senaUsd: number;
+  /** What the broker can still claim (less than the seña after a partial payment). Defaults to `senaUsd`. */
+  claimableUsd?: number;
   shares: number;
   stock: StockOption;
   /** Current value of the locked shares. */
@@ -70,6 +72,8 @@ export type ReservationScreenState =
       actions: ReservationActions;
       pending: { action: ReservationAction; step: number } | null;
       actionError: boolean;
+      /** Plain-words reason of the failure, when known. */
+      actionErrorDetail?: string | null;
       shareUrl: string;
     };
 
@@ -244,7 +248,12 @@ function ReservationReady({
       dock={
         dock ? (
           <>
-            {state.actionError && <Notice tone="error">{t.actionError}</Notice>}
+            {state.actionError && (
+              <Notice tone="error">
+                {t.actionError}
+                {state.actionErrorDetail && <span className="mt-1 block font-semibold">{state.actionErrorDetail}</span>}
+              </Notice>
+            )}
             {dock}
           </>
         ) : undefined
@@ -259,10 +268,13 @@ function ReservationReady({
       {claiming && actions.onClaim && !pending && (
         <ClaimForm
           lang={lang}
-          max={r.senaUsd}
+          max={r.claimableUsd ?? r.senaUsd}
           labels={t}
           onCancel={() => setClaiming(false)}
-          onSubmit={(amount, reason) => actions.onClaim?.(amount, reason)}
+          onSubmit={(amount, reason) => {
+            setClaiming(false);
+            actions.onClaim?.(amount, reason);
+          }}
           close={common.close}
         />
       )}

@@ -2,7 +2,7 @@ import "server-only";
 
 import type { Address } from "viem";
 
-import { collateralFor, feeFor, tokensToUsd } from "@/domain/collateral";
+import { BPS, collateralFor, feeFor, tokensToUsd } from "@/domain/collateral";
 import type { CollateralQuote, Stock } from "@/domain/types";
 import { NotFoundError } from "@/server/errors";
 
@@ -10,8 +10,8 @@ import { getProtocolConfig } from "./protocol";
 import { listStocks } from "./stocks";
 
 /**
- * How much of each accepted stock a tenant must lock to guarantee `coverageUsd`.
- * Also the integration point for listing portals: one call prices a guarantee for any rental.
+ * How much of each accepted stock an account must hold to reserve `coverageUsd` (a seña).
+ * Also the integration point for listing portals: one call prices a reservation for any property.
  */
 export async function quoteCollateral(coverageUsd: bigint, token?: Address): Promise<CollateralQuote[]> {
   const [stocks, protocol] = await Promise.all([listStocks(), getProtocolConfig()]);
@@ -19,17 +19,19 @@ export async function quoteCollateral(coverageUsd: bigint, token?: Address): Pro
   const candidates = stocks.filter(
     (stock) => stock.enabled && (!token || stock.address.toLowerCase() === token.toLowerCase()),
   );
-  if (token && candidates.length === 0) throw new NotFoundError(`Stock ${token} is not accepted as collateral`);
+  if (token && candidates.length === 0) throw new NotFoundError(`Stock ${token} is not accepted`);
 
-  return candidates.map((stock) => quoteStock(stock, coverageUsd, protocol.feeBps));
+  return candidates.map((stock) => quoteStock(stock, coverageUsd, protocol.reservationFeeBps));
 }
 
-function quoteStock(stock: Stock, coverageUsd: bigint, feeBps: number): CollateralQuote {
+/** Pure quote at the stock's current oracle price. Mirrors the contract's rounding. */
+export function quoteStock(stock: Stock, coverageUsd: bigint, feeBps: number): CollateralQuote {
   const priceUsd = BigInt(stock.priceUsd);
   const pricing = { coverageUsd, priceUsd, tokenDecimals: stock.decimals };
 
   const collateral = collateralFor({ ...pricing, collateralRatioBps: stock.collateralRatioBps });
   const fee = feeFor({ ...pricing, feeBps });
+  const totalTokens = collateral + fee;
 
   return {
     stock,
@@ -37,7 +39,9 @@ function quoteStock(stock: Stock, coverageUsd: bigint, feeBps: number): Collater
     collateral: collateral.toString(),
     collateralValueUsd: tokensToUsd(collateral, priceUsd, stock.decimals).toString(),
     fee: fee.toString(),
-    feeUsd: tokensToUsd(fee, priceUsd, stock.decimals).toString(),
-    totalTokens: (collateral + fee).toString(),
+    // What the escrow charges. `fee` in tokens is padded for the approval; the person pays this.
+    feeUsd: ((coverageUsd * BigInt(feeBps)) / BPS).toString(),
+    totalTokens: totalTokens.toString(),
+    totalValueUsd: tokensToUsd(totalTokens, priceUsd, stock.decimals).toString(),
   };
 }

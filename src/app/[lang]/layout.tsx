@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { isTestMode } from "@/components/layout/test-mode";
 import { locales } from "@/i18n/config";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+import { Providers } from "@/lib/providers";
 
 import "../globals.css";
 
@@ -55,10 +56,12 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         >
           {dict.common.skipToContent}
         </a>
-        <SiteHeader lang={lang} common={dict.common} testMode={isTestMode()} />
-        <main id="contenido" className="flex flex-1 flex-col">
-          {children}
-        </main>
+        <Providers labels={dict.account}>
+          <SiteHeader lang={lang} common={dict.common} testMode={isTestMode()} />
+          <main id="contenido" className="flex flex-1 flex-col">
+            {children}
+          </main>
+        </Providers>
       </body>
     </html>
   );
