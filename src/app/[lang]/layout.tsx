@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Archivo } from "next/font/google";
 
 import { SiteHeader } from "@/components/layout/site-header";
-import { isTestMode } from "@/components/layout/test-mode";
 import { locales } from "@/i18n/config";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { Providers } from "@/lib/providers";
@@ -57,7 +56,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
           {dict.common.skipToContent}
         </a>
         <Providers labels={dict.account}>
-          <SiteHeader lang={lang} common={dict.common} testMode={isTestMode()} />
+          <SiteHeader lang={lang} common={dict.common} />
           <main id="contenido" className="flex flex-1 flex-col">
             {children}
           </main>

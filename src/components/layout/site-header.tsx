@@ -10,10 +10,9 @@ import { LangSwitch } from "./lang-switch";
 type SiteHeaderProps = {
   lang: Locale;
   common: Dictionary["common"];
-  testMode: boolean;
 };
 
-export function SiteHeader({ lang, common, testMode }: SiteHeaderProps) {
+export function SiteHeader({ lang, common }: SiteHeaderProps) {
   const switchTo = lang === "es" ? "en" : "es";
   return (
     <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-5 pt-3 md:px-8">
@@ -21,16 +20,6 @@ export function SiteHeader({ lang, common, testMode }: SiteHeaderProps) {
         <Wordmark title="" className="h-7 w-auto text-ink" />
       </Link>
       <div className="flex items-center gap-1">
-        {testMode && (
-          <span
-            className="inline-flex items-center gap-1.5 rounded-full border border-mango/70 bg-mango-soft px-2.5 py-1 text-label font-semibold text-ink"
-            title={common.testModeHint}
-          >
-            <span className="size-2 rounded-full bg-mango" aria-hidden />
-            {common.testMode}
-            <span className="sr-only">. {common.testModeHint}</span>
-          </span>
-        )}
         <Suspense
           fallback={
             <Link
