@@ -1,16 +1,18 @@
-# HANDOFF — Garante (Base Stocks Maxxing)
+# HANDOFF: Seña (Base Stocks Maxxing)
 
 Documento de traspaso para continuar el trabajo desde otra cuenta de Claude.
 Estado al **14 nov 2026**. Repo: `https://github.com/Beor18/base-hackathon-stock-properties` (rama `main`).
 
-> **Cómo usarlo:** abrí una sesión nueva de Claude Code con este repo adjunto y pegá:
-> _"Leé `HANDOFF.md` y `docs/NARRATIVE.md` completos y continuá desde la sección 8 (Pendientes), en orden. Commiteá y pusheá a `main` después de cada hito."_
+> **La fuente de verdad del producto es [`docs/superpowers/specs/2026-11-14-sena-design.md`](docs/superpowers/specs/2026-11-14-sena-design.md).** Si algo de este documento la contradice, gana el spec. El enfoque anterior ("Garante", garantía de alquiler) quedó reemplazado: sus datos técnicos y de mercado siguen valiendo y están acá abajo.
 
-**La narrativa de la startup está en [`docs/NARRATIVE.md`](docs/NARRATIVE.md):** problema, solución, por qué ahora, mercado, competencia, diferenciador, modelo de negocio, plan de 0 a 1, riesgos, equipo, ask y los textos de entrega en inglés (one-liner, respuestas del formulario, guion del Loom, post de X). Es la fuente de verdad del relato: la UI, el README y la página `/pitch` tienen que decir lo mismo.
+> **Cómo usarlo:** abrí una sesión nueva de Claude Code con este repo adjunto y pegá:
+> _"Leé el spec `docs/superpowers/specs/2026-11-14-sena-design.md`, `HANDOFF.md` y `docs/NARRATIVE.md` completos y continuá desde la sección 8 (Pendientes), en orden. Commiteá y pusheá a `main` después de cada hito."_
+
+**La narrativa de la startup está en [`docs/NARRATIVE.md`](docs/NARRATIVE.md):** de dónde venimos, problema, solución, por qué ahora, dónde lanzamos, mercado, competencia, diferenciador, modelo de negocio, plan de 0 a 1, riesgos, equipo, ask y los textos de entrega en inglés. La UI, el README y la página `/pitch` tienen que decir lo mismo.
 
 ---
 
-## 1. El pedido original (de Fernando)
+## 1. El pedido original (de Fernando, del enfoque inicial)
 
 - Producto **funcional de punta a punta**, en "one shot", para aplicar a **Base Stocks Maxxing** (`https://www.base.org/stocksmaxxing`). Objetivo: ganar el premio mayor (**pool de USD 20.000** del track).
 - Elegir el track. Sorprender. **Nada hardcodeado.**
@@ -26,17 +28,18 @@ Estado al **14 nov 2026**. Repo: `https://github.com/Beor18/base-hackathon-stock
 
 | Tema | Decisión |
 |---|---|
-| Producto | **Garante** — "Your stocks are your guarantor" / "Tus acciones son tu garante". El inquilino bloquea acciones tokenizadas en Base como **garantía de alquiler**, en vez de un depósito en efectivo, un garante propietario o un seguro de caución. |
-| Track | **Programmable Stock Markets** (pool Base USD 20.000). Encaja en "financing tools" y "market infrastructure". Solo se puede entrar a un track. |
-| Mercados | **Puerto Rico es el mercado propio** (ahí están Smarlin, Kelvin y el conocimiento del negocio). **El uso real on-chain arranca fuera de EE.UU.** (Latinoamérica, Argentina primero), porque las acciones tokenizadas de Coinbase son solo para no-US y las reglas descalifican proyectos que habiliten trading a usuarios de EE.UU., Puerto Rico incluido. En PR: integración en modo demostración/testnet sobre propiedades de Smarlin. Ver `docs/NARRATIVE.md` §4. |
-| Vínculo con Smarlin | **Confirmado por el usuario: Smarlin es un producto propio del equipo, ya funcionando en Puerto Rico, y Kelvin vende propiedades allá.** Es una plataforma de IA de bienes raíces (búsqueda por estilo de vida, análisis de propiedad, datos de cierres reales de los 78 municipios). Garante es su capa financiera: el corredor/administrador es el árbitro natural y Smarlin es el canal de distribución (`/api/quote` permite mostrar "garantizá o reservá con X acciones" en cada publicación). |
-| Flujo | Lo inicia el inquilino con **una sola transacción** (`createGuarantee`). El propietario solo comparte un **link de solicitud** (sin transacción, sin gas) y verifica en una página pública. |
-| Modelo de negocio | Fee único on-chain sobre la cobertura (`feeBps`, tope 3%), cobrado en acciones a la tesorería. |
-| Stack | Next.js 16.4.6 (App Router, Cache Components), React 19, TypeScript, Tailwind 4, wagmi 3 + viem 2, zod 4, Foundry (vía npm). Sin base de datos: **el contrato es la base de datos**. |
+| Producto | **Seña: tu próxima casa, en acciones.** La persona ahorra en acciones tokenizadas con una propiedad real como meta, aporta con USDC o wARS y, cuando llega, sus acciones quedan como reserva (seña) de la casa sin venderlas. Si se arrepiente, el corredor cobra en USDC. Hereda el mecanismo de Camalote (Camalote está en pausa). |
+| Track | **Programmable Stock Markets** (pool Base USD 20.000). Solo se puede entrar a un track. |
+| Usuarios y mercados | Fuera de EE.UU., **Argentina primero**. La portada y la demo son propiedades de **Puerto Rico** (Smarlin, Kelvin). La entrada es cualquier portal argentino pegando el link. Las acciones tokenizadas de Coinbase son solo para no-US y las reglas descalifican proyectos que habiliten trading a usuarios de EE.UU., Puerto Rico incluido: por eso nadie del lado del vendedor recibe acciones (el corredor cobra en USDC) y la app bloquea EE.UU. y territorios en mainnet. Ver `docs/NARRATIVE.md` §4. |
+| Flujo | Tres pasos: elegir la casa (seña = precio x % de seña, default 5%, ajustable 1% a 10%), sumar (USDC o wARS a la acción de la meta; una acción por meta en v1) y reservar (acciones al escrow a favor del corredor, con árbitro). El corredor genera un **link de reserva** (con login, sin transacción) y lo comparte por WhatsApp. |
+| Vínculo con Smarlin | Smarlin es producto propio, en producción en Puerto Rico; Kelvin vende allá. Aporta las propiedades de la portada y los datos únicos (precio justo, renta de corto plazo, renta de mercado, comparables). Ver §6b. |
+| Modelo de negocio | Dos comisiones siempre visibles: en cada aporte y al reservar (`feeBps` on-chain, tope 3%). Vías de crecimiento: plan para corredores e inmobiliarias sobre Smarlin, tickets más grandes, otros portales. Nunca "gratis" ni "sin comisión". Porcentajes **[decidir]**. |
+| Reglas de producto | Cero fricción (email con Privy, gas pago, sin modales, aprobar y actuar en una llamada), una acción clara por pantalla, mobile first (375, 768, 1280), toda espera con progreso, copy rioplatense sin raya larga ni jerga cripto, sin marcas de terceros en la app, nada hardcodeado, una sola variable de entorno (`NEXT_PUBLIC_PRIVY_APP_ID`). Completas en el spec §3. |
+| Stack | Next.js 16.4.6 (App Router, Cache Components), React 19, TypeScript, Tailwind 4, wagmi 3 + viem 2, Privy, zod 4, Foundry (vía npm). Sin base de datos: el contrato es la base de datos. |
 
-**Datos que faltan pedirle al usuario** (no inventarlos): licencia y trayectoria de Kelvin, métricas reales de Smarlin (usuarios, propiedades, corredores), y cómo funcionan en Puerto Rico la opción de compra y los depósitos (montos, plazos, quién custodia). Están marcados con **[completar]** en la narrativa.
+**Datos que faltan pedirle a Fernando y Kelvin** (no inventarlos): licencia y trayectoria de Kelvin, métricas reales de Smarlin (usuarios, corredores), % de seña habitual en Puerto Rico y en Argentina, cuántos compradores de Kelvin son de fuera de EE.UU. Están marcados con **[completar]** en la narrativa.
 
-**Propuesta abierta [decidir]:** sumar el **depósito de opción de compra** como segundo caso de uso (es lo que Kelvin opera a diario). El contrato ya lo soporta sin cambios de lógica: `tenant` = quien deposita, `landlord` = beneficiario, `arbiter` = corredor, `endsAt` = fecha de cierre. Si se aprueba, la UI necesita un selector "Alquiler / Compra" con textos propios, y conviene evaluar renombrar los roles del contrato a nombres neutros (`depositor` / `beneficiary`).
+**Resuelto frente al enfoque anterior:** el depósito de compra ya no es "propuesta abierta": es el producto. Los roles del contrato se renombraron a `depositor` / `beneficiary` / `arbiter`, y la liquidación ya paga en USDC (antes era la pregunta abierta de los beneficiarios en Puerto Rico).
 
 ## 3. Reglas del hackathon (leídas de la página oficial y `/stocksmaxxing/rules`)
 
@@ -47,101 +50,72 @@ Estado al **14 nov 2026**. Repo: `https://github.com/Beor18/base-hackathon-stock
 - **Testnet está permitido** y "no se juzga menos favorablemente" (Rules §5). Aun así, mainnet con acciones reales es la ventaja para el 50% de tracción: casi todos los competidores están en Sepolia con mocks.
 - **Elegibilidad:** mayores de 18, equipos de hasta 5, no OFAC. **"Projects that enable trading for US users are not eligible."**
 - Rules §13 descalifica por manipular métricas de tracción.
-- Partners del track: **Bankr** (premios + mentoría) y **BaseStonk** (sin premio en efectivo; su incentivo es lanzar un token en su launchpad — no hacerlo solo por eso).
+- Partners del track: **Bankr** (premios + mentoría) y **BaseStonk** (sin premio en efectivo; su incentivo es lanzar un token en su launchpad : no hacerlo solo por eso).
 - Recursos oficiales: Builder Codes, Tokenized Stocks API, guía "Integrate tokenized stocks".
 
 ## 4. Estado del repo
 
-### Hecho y verificado
-- **Contratos** (`contracts/src`): `StockOracle.sol`, `GuaranteeEscrow.sol`, interfaces y mocks. **27 tests de Foundry pasan** (`npm run contracts:test`).
-- **ABIs generados** en `src/contracts/abis.ts` (`npm run contracts:abi`).
-- **Capa de servidor y API routes**: escritas; **`npm run typecheck` y `npx eslint src scripts` pasan**.
+Otros agentes construyen en paralelo, con dueños de archivos (spec §9): contratos y deploy, datos y backend, diseño y frontend; después integración. **`TODO(verify)`: actualizar esta sección cuando terminen.**
 
-### Escrito pero NO ejecutado todavía
-- Las API routes y los servicios **nunca corrieron contra una chain** (falta el script de deploy). Tratar como no probado. En particular, verificar que `"use cache"` + `cacheLife` funcione como se espera dentro de los servicios.
+### Heredado y verificado (enfoque anterior)
+- `StockOracle.sol` y `GuaranteeEscrow.sol` con **27 tests de Foundry** (`npm run contracts:test`); ABIs en `src/contracts/abis.ts` (`npm run contracts:abi`); capa de servidor y API routes con `typecheck` y `eslint` verdes.
+- Estos archivos se adaptan: `GuaranteeEscrow` pasa a `ReservationEscrow`, se suma `GoalRegistry`, y las rutas se adaptan a los contratos nuevos.
 
-### Narrativa
-- **Escrita** en `docs/NARRATIVE.md`. Quedan decisiones de los fundadores marcadas con **[decidir]** (nivel de fee, meta de 12 meses, uso del premio, monto de la ronda) y **[confirmar]** (rol de Kelvin y relación con Smarlin).
+### En construcción según el spec (§5 a §7)
+- Contratos: `ReservationEscrow` (con `propertyRef`, `settleClaim` a USDC, lista blanca de routers, `maxSlippageBps` inmutable), `GoalRegistry`, mocks (`MockUSDC`, `MockWARS`, `DemoExchange`).
+- Servidor: proveedores `smarlin` y `link` (anti-SSRF), cotización ARS, rutas `/api/properties`, `/api/link-preview`, `/api/rates`, planificadores de `calls[]`.
+- Cliente: `src/lib/wallet` (Privy y dev), pantallas `casa`, `meta`, `sumar`, `cargar`, `reservar`, `r/[id]`, `pedir`, `unavailable`, `pitch`, i18n `es` y `en`, `src/proxy.ts`.
 
-### No empezado
-- Script de deploy / chain local, toda la UI (cliente), i18n, `proxy.ts` (geo-bloqueo), Builder Codes, swap "comprar con USDC", ensayo en mainnet, página `/pitch`, README, `.env.example`.
-- `src/app/page.tsx`, `layout.tsx` y `globals.css` siguen siendo los del scaffold de `create-next-app`.
-- `README.md` es el del scaffold.
+### No ejecutado todavía
+- Las API routes nunca corrieron contra una chain. Verificar `"use cache"` + `cacheLife` dentro de los servicios.
 
-### Mapa de archivos
+### Mapa de archivos (heredado, a actualizar)
 ```
 contracts/src/StockOracle.sol              registro de acciones + precios Chainlink (2 cotas de frescura)
-contracts/src/GuaranteeEscrow.sol          escrow de garantías (ciclo completo)
+contracts/src/GuaranteeEscrow.sol          (se renombra a ReservationEscrow.sol)
 contracts/src/interfaces/*.sol             tipos, eventos y errores documentados
-contracts/src/mocks/MockStockToken.sol     acción demo con faucet() y mirrorOf() (local/testnet)
-contracts/src/mocks/MockPriceFeed.sol      feed demo (modo alwaysFresh para demos)
-contracts/test/GuaranteeEscrow.t.sol       27 tests
-foundry.toml                               config (solc 0.8.30, cancun, libs en node_modules)
+contracts/src/mocks/                       MockStockToken, MockPriceFeed (+ MockUSDC, MockWARS, DemoExchange)
+contracts/test/                            tests Foundry
 scripts/export-abis.ts                     genera src/contracts/abis.ts
 src/config/chains.ts                       chains soportadas: base, baseSepolia, foundry
-src/config/public-env.ts                   env del browser validado con zod (falla rápido)
-src/config/server-env.ts                   env solo-servidor
-src/domain/types.ts                        DTOs compartidos API <-> UI (bigints como strings)
-src/domain/collateral.ts                   matemática de colateral (espejo del contrato)
-src/server/chain.ts                        public client viem + getChainTime()
-src/server/clients/coinbase-stocks.ts      cliente de la Tokenized Stocks API (cacheado)
-src/server/services/{protocol,stocks,guarantees,stats,quotes}.ts
-src/server/{http,errors,schemas}.ts        respuesta uniforme de errores + parsers zod
-src/app/api/{stocks,protocol,stats,quote,guarantees,guarantees/[id]}/route.ts
+src/config/deployment.json                 (nuevo) direcciones y config, lo genera el deploy
+src/domain/                                DTOs y matemática de colateral (+ property, rates)
+src/server/                                chain, clients, services
+src/app/api/                               route handlers
 ```
+`src/config/public-env.ts` y `server-env.ts` del enfoque anterior deberían desaparecer: el spec deja una sola variable de entorno.
 
 ## 5. Diseño de los contratos
 
-**`StockOracle`** (Ownable2Step)
-- `setStock(token, feed, collateralRatioBps, enabled)` — el ratio debe ser > 100% y ≤ 300%.
-- `toUsd` / `toTokens(token, amount, PriceUse)` — USD con 18 decimales.
-- Dos cotas de frescura inmutables: `collateralMaxAge` (laxa, para **entrar** colateral: acepta el cierre del viernes) y `settlementMaxAge` (estricta, para **sacar** valor: reclamos y retiro de excedente). Motivo: los feeds de Coinbase/Chainlink son 24/5 y se congelan fines de semana y feriados.
+Vigente: spec §5. Resumen y herencia del enfoque anterior:
+
+**`StockOracle`** (Ownable2Step), sin cambios de fondo
+- `setStock(token, feed, collateralRatioBps, enabled)`: el ratio debe ser > 100% y <= 300%.
+- `toUsd` / `toTokens(token, amount, PriceUse)`: USD con 18 decimales.
+- Dos cotas de frescura inmutables: `collateralMaxAge` (laxa, para **entrar** colateral: acepta el cierre del viernes) y `settlementMaxAge` (estricta, para **sacar** valor). Motivo: los feeds de Coinbase/Chainlink son 24/5 y se congelan fines de semana y feriados.
 - `latestPrice(token)` sin chequeo de frescura, solo para UIs.
 
-**`GuaranteeEscrow`** (Ownable2Step, ReentrancyGuard)
-- Roles por garantía: `tenant`, `landlord`, `arbiter` (si se pasa `address(0)` usa `defaultArbiter`). Deben ser tres direcciones distintas.
-- Inquilino: `createGuarantee(params)`, `topUp` (abierto a cualquiera), `withdrawExcess`, `extendLease`, `acceptClaim`, `disputeClaim`.
-- Propietario: `fileClaim(id, amountUsd, reason)`, `withdrawClaim`, `release` (en cualquier momento).
-- Árbitro: `resolveDispute(id, awardedUsd)`; el `defaultArbiter` puede resolver tras `arbitrationTimeout`.
-- Cualquiera: `settleClaim` (si está aprobado o venció la ventana de disputa) y `release` (pasado `endsAt + claimWindow` y sin reclamo abierto). El colateral **siempre vuelve al inquilino**.
-- El reclamo se debe en USD y se paga en acciones al precio del oráculo. Si el colateral vale menos que el reclamo, el propietario recibe todo y la garantía se cierra.
-- Ventanas inmutables: `disputeWindow`, `claimWindow`, `arbitrationTimeout`. Contadores on-chain: `guaranteeCount`, `activeGuaranteeCount`, `activeCoverageUsd`.
-- `leaseHash` opcional (hash del PDF del contrato; no se sube ningún dato personal).
+**`ReservationEscrow`** (evolución de `GuaranteeEscrow`)
+- Roles: `depositor`, `beneficiary`, `arbiter` (si es `address(0)` usa `defaultArbiter`); tres direcciones distintas. Campo `propertyRef` (`bytes32`).
+- Mismo ciclo: crear, reforzar (`topUp`, abierto a cualquiera), retirar excedente, extender, reclamar, aceptar o disputar, resolver (árbitro; el `defaultArbiter` puede tras `arbitrationTimeout`), liquidar y liberar.
+- **Cambio clave:** `settleClaim(id, router, swapData)` vende las acciones necesarias por un router de la lista blanca del owner, verifica que lo recibido en USDC sea >= valor de oráculo x (1 - `maxSlippageBps` inmutable), paga el reclamo en USDC al beneficiario y devuelve el resto al depositante. El colateral restante **siempre vuelve al depositante**.
+- Comisión al crear (`feeBps`, tope 3%) a la tesorería. Ventanas inmutables: `disputeWindow`, `claimWindow`, `arbitrationTimeout`. Contadores on-chain.
 
-**Supuestos de confianza a documentar en el README:** el owner del oráculo (debería ser multisig + timelock en producción), el árbitro, y que el emisor B20 puede pausar o **incautar** tokens (la contabilidad por garantía no lo contempla). No hay chequeo de sequencer uptime feed.
+**`GoalRegistry`**: una meta por cuenta (`setGoal`, `clearGoal`, `goalOf`, contadores `goalCount` y `activeGoals`). El precio de la acción al inicio lo lee del oráculo.
 
-## 6. Arquitectura objetivo (lo que falta construir)
+**Supuestos de confianza (van en el README):** el owner del oráculo y de la lista blanca de routers (multisig + timelock en producción), el árbitro, y que el emisor B20 puede pausar o **incautar** tokens (la contabilidad por reserva no lo contempla). Sin chequeo de sequencer uptime feed.
 
-```
-src/app/[lang]/layout.tsx          root layout por idioma (en/es), generateStaticParams
-src/app/[lang]/page.tsx            landing: hero + 1-2-3 + stats en vivo (Suspense) + acciones aceptadas
-src/app/[lang]/new/page.tsx        inquilino, 3 pasos: términos -> elegir acción -> bloquear
-src/app/[lang]/request/page.tsx    propietario: genera link de solicitud (sin transacción)
-src/app/[lang]/g/[id]/page.tsx     página pública de la garantía + acciones según rol
-src/app/[lang]/dashboard/page.tsx  mis garantías (como inquilino / como propietario)
-src/app/[lang]/pitch/page.tsx      pitch deck como página
-src/app/[lang]/unavailable/page.tsx  bloqueo geográfico
-src/proxy.ts                       redirect de idioma + geo-bloqueo (Next 16: middleware -> proxy)
-src/i18n/{en,es}.ts                diccionarios; getDictionary() en servidor + provider en cliente
-src/components/, src/hooks/        UI y hooks (useStocks, useGuarantee, useContractCalls...)
-src/lib/wagmi.ts                   config wagmi: baseAccount + injected, ssr: true
-scripts/deploy.ts                  deploy local / base-sepolia / base
-scripts/dev-chain.ts               levanta anvil + deploy + escribe .env.local
-scripts/lib/{artifacts,stock-universe,risk,deploy-config}.ts
-```
+## 6. Arquitectura objetivo
 
-**Flujo de 3 pasos (quien deposita):** 1) elegir la propiedad de Smarlin, de la que salen el monto y los datos (o cargar a mano alquiler mensual, meses de garantía, fin del contrato y wallet del beneficiario; todo precargado si viene de un link) → 2) elegir la acción (muestra saldo, cantidad necesaria, "obtener acciones demo" en testnet) → 3) revisar y bloquear, y luego compartir el link (botón de WhatsApp: es el canal de LatAm).
+Vigente: spec §6 y §7. Pantallas en `src/app/[lang]/`: landing, `casa` (buscar y pegar link), `casa/[ref]` (detalle y "Esta es mi meta"), `meta`, `sumar`, `cargar` (dirección + QR; en testnet "Cargar saldo de prueba"), `reservar`, `r/[id]` (página pública según rol), `pedir` (el corredor genera el link), `unavailable`, `pitch`. `src/proxy.ts`: redirect de idioma y, solo en mainnet, bloqueo de EE.UU. y territorios (incluido PR) por el header de país de la plataforma.
 
-**Flujo propietario:** conectar → completar 3 campos → link `/new?landlord=0x…&rent=…&months=…&end=…`.
+**Transacciones:** una interfaz `sendCalls(calls) -> hash` con dos implementaciones: Privy smart wallet (email, sponsoreada, en lote, sin UI) y dev (cuentas de anvil, solo chain 31337). Aprobación y acción siempre en una llamada por lotes. **No usar `experimental_fallback` de viem:** manda las transacciones seguidas sin esperar confirmación y la segunda falla al estimar gas.
 
-**Transacciones (`useContractCalls`):**
-- Si la wallet soporta batch atómico (EIP-5792, `getCapabilities` → `atomic.status` `supported`/`ready`): un solo `sendCalls` con `approve` + `createGuarantee`, y `waitForCallsStatus`.
-- Si no: secuencial con `writeContract` + `waitForTransactionReceipt` entre pasos, saltando el `approve` si la allowance alcanza.
-- **No usar `experimental_fallback` de viem**: manda las transacciones seguidas sin esperar confirmación y la segunda falla al estimar gas.
-
-**Lecturas:** datos del protocolo por las API routes (TanStack Query); saldo y allowance de la wallet directo con wagmi.
+**Lecturas:** datos del protocolo por las API routes (TanStack Query); saldos directo con wagmi o viem.
 
 ## 6b. Integración con Smarlin (propiedades reales, nada hardcodeado)
+
+> Sigue vigente: es el proveedor `smarlin` del spec §6. Se suman los endpoints de datos (`/api/properties/fair-price`, `/api/mercado/str`, `/api/properties/renta-mercado`, `/api/properties/{id}/comparables`). El deep link ahora es `casa/[ref]` y el `ref` es la referencia de la propiedad (su keccak va on-chain como `propertyRef`).
 
 Fernando confirmó que **el equipo puede consumir las APIs de Smarlin** y que él, en Argentina, es el usuario elegible del lado de las acciones. Las propiedades del producto salen de ahí.
 
@@ -169,7 +143,9 @@ Con `verifiedOnly=true` había 9 propiedades en venta y 3 en alquiler, todas de 
 
 **Código fuente de Smarlin en la PC de Fernando:** `~/Documentos/test-opencode/real-state-startup` (remote `Beor18/real-state-matches`). Ante cualquier duda sobre la API, leer el código ahí en vez de inferir desde el sitio.
 
-**Ya existe una API para partners (leída del código el 14 nov 2026), y es la que conviene usar:**
+**Decisión (14 nov 2026): Seña usa los endpoints públicos de Smarlin, sin key.** Smarlin los documenta como contrato estable (`ENDPOINTS_SMARLIN` en `lectura-inmobiliaria-contrato.ts`): `GET /api/properties`, `GET /api/properties/<id>`, `GET /api/tasas/vigente`, `GET /api/mercado/str` y `GET /api/properties/renta-mercado`. También son públicos `fair-price` y `/api/properties/<id>/comparables`. Así la app no suma variables de entorno.
+
+**Para más adelante (opcional): la API para partners**, leída del código el 14 nov 2026. Sirve si hace falta el inventario completo de un agente o el webhook de cambios:
 
 | Endpoint | Qué hace |
 |---|---|
@@ -178,14 +154,14 @@ Con `verifiedOnly=true` había 9 propiedades en venta y 3 en alquiler, todas de 
 
 - **Auth:** header `x-api-key`. La key sale de la tabla `partner_api_keys` (se crea desde el admin de Smarlin, `/api/admin/api-keys`) o del env legacy `PARTNER_API_KEYS` (`label:key,…`).
 - **Gate:** el agente pedido tiene que tener el sello de **Agente Verificado**; si no, responde 403 `agent_not_verified`. Todo indica que Kelvin está verificado, porque sus publicaciones son las únicas que devuelve `verifiedOnly=true`. Confirmarlo al crear la key.
-- **Webhook:** al guardar un listado, Smarlin avisa a los partners configurados en `PARTNER_WEBHOOKS` (`src/lib/partner-webhooks.ts`), y el partner vuelve a pedir solo ese `mls`. Garante puede registrarse como partner y refrescar su caché por webhook.
+- **Webhook:** al guardar un listado, Smarlin avisa a los partners configurados en `PARTNER_WEBHOOKS` (`src/lib/partner-webhooks.ts`), y el partner vuelve a pedir solo ese `mls`. Seña puede registrarse como partner y refrescar su caché por webhook.
 - La respuesta trae `agent_phone` y `agent_email`: la lista blanca de campos de nuestro servidor sigue siendo obligatoria.
-- **Plan:** inventario de Kelvin por la API de partners (contrato estable y con key); el `/api/properties` público queda como respaldo y para el catálogo general.
+- Si algún día se usa, la key es una variable de entorno más de servidor (`SMARLIN_PARTNER_KEY`); por eso hoy no entra.
 
 **Preguntas abiertas para Fernando y Kelvin**
-1. ~~¿Hay una ruta o API key pensada para integraciones?~~ **Sí: la API de partners (arriba).** Falta crear la key de Garante en el admin de Smarlin y decidir si Garante recibe el webhook.
+1. ~~¿Hay una ruta o API key pensada para integraciones?~~ **Sí: la API de partners (arriba).** Hoy no hace falta porque alcanza con los endpoints públicos.
 2. **¿De dónde sale la wallet del beneficiario?** Smarlin no guarda wallets. Opción inmediata: el corredor genera el link desde su publicación con su wallet. Opción correcta: agregar el campo en el perfil del agente en Smarlin y exponerlo en la API.
-3. **Reclamos con beneficiario en Puerto Rico:** deberían pagarse en USDC y no en acciones (el beneficiario es persona de EE.UU.). Hoy `settleClaim` paga en acciones; cambiarlo implica vender en un DEX dentro del contrato. Decidir antes de mainnet.
+3. ~~Reclamos con beneficiario en Puerto Rico~~ **Resuelto en el diseño:** `settleClaim` vende por un router de la lista blanca y paga en USDC (spec §5).
 4. ¿Cuántos compradores e inquilinos de Kelvin son extranjeros no estadounidenses? Es la hipótesis más riesgosa del flujo sobre propiedades de Puerto Rico.
 
 ## 7. Gotchas del entorno (ahorran tiempo)
@@ -197,7 +173,7 @@ Con `verifiedOnly=true` había 9 propiedades en venta y 3 en alquiler, todas de 
   - `RouteContext<'/ruta/[id]'>` es global pero requiere `next typegen` (ya está en `npm run typecheck`).
   - Tailwind va por el loader `@tailwindcss/turbopack` en `next.config.ts` (no hay `postcss.config`).
   - i18n recomendado: segmento `app/[lang]` + redirect en `proxy.ts`.
-- **`public-env.ts` falla al importar si faltan variables.** Para `next build`/`typegen` hacen falta `NEXT_PUBLIC_CHAIN_ID` y `NEXT_PUBLIC_ESCROW_ADDRESS`.
+- **Configuración:** el enfoque anterior usaba `public-env.ts` con varias variables. En Seña queda **una** (`NEXT_PUBLIC_PRIVY_APP_ID`) y el resto sale de `src/config/deployment.json`. Si `next build` o `typegen` fallan por variables faltantes, es código viejo que hay que migrar.
 - **Foundry está instalado por npm** (`@foundry-rs/forge`, `anvil`, `cast`). Instalarlo con `curl | bash` fue bloqueado por permisos. Los links en `node_modules/.bin` se pierden después de cada `npm install`: usar siempre `npm run forge -- <cmd>` o `node node_modules/@foundry-rs/anvil/bin.mjs`. Si falta el binario: `npm rebuild @foundry-rs/forge @foundry-rs/anvil @foundry-rs/cast`.
 - **`forge-std` y OpenZeppelin vienen de npm**, con remappings a `node_modules` (sin submódulos git).
 - **wagmi v3:** `useAccount` → `useConnection`; `useConnect().connectors` ya no existe (usar `useConnectors()`); los hooks de mutación exponen `mutate`/`mutateAsync`; `useSendCalls`, `useCapabilities`, `useWaitForCallsStatus` se importan de `wagmi`. Los conectores son peers opcionales (`@base-org/account` ya instalado).
@@ -220,76 +196,53 @@ Con `verifiedOnly=true` había 9 propiedades en venta y 3 en alquiler, todas de 
 
 ## 8. Pendientes, en orden
 
-### 8.1 Script de deploy + chain local (desbloquea todo lo demás)
-- `scripts/lib/artifacts.ts`: leer ABI + bytecode de `contracts/out`.
-- `scripts/lib/stock-universe.ts`: armar el universo **sin hardcodear tickers**:
-  1. Tokenized Stocks API (`?page_size=500`, paginar con `next_page_token`) → tokens con `nav_price`.
-  2. Directorio de feeds de Chainlink `https://reference-data-directory.vercel.app/feeds-ethereum-mainnet-base-1.json` → registros con `docs.productTypeCode === "primaryTokenizedPrice"` (excluir `docs.hidden` / `feedType === "247Price"`).
-  3. Unir `docs.baseAsset + "c"` con `symbol` y **verificar** que `latestRoundData().answer` del feed coincida con `nav_price` (tolerancia ~2%). Si no coincide, saltear con warning.
-- `scripts/lib/risk.ts`: ratio de colateral **por acción** a partir de datos: peor caída en una ventana móvil de ~30 días del último año → `ratio = 1 / (1 − caída)`, redondeado hacia arriba a 5%, acotado (p. ej. 115%–200%). Historia en `https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?range=1y&interval=1d` (requiere header `User-Agent`). Validar que el último cierre de Yahoo coincida con el precio del feed (evita tickers equivocados); con poca historia (p. ej. SPCX tiene ~108 días) o sin datos, usar el ratio máximo.
-- `scripts/deploy.ts --network local|base-sepolia|base`:
-  - Deploy de `StockOracle` y `GuaranteeEscrow` con parámetros por env y defaults documentados (ventana de disputa 3 días, ventana de reclamo 15 días, timeout de arbitraje 14 días, fee 100 bps, `settlementMaxAge` ~26 h, `collateralMaxAge` ~96 h).
-  - **Mainnet:** `setStock(tokenReal, feedReal, ratio, true)`.
-  - **Local/testnet:** por cada acción, `MockStockToken(name, symbol, 8, mirrorOf = address de mainnet, faucetAmount)` + `MockPriceFeed(8, desc, nav_price, alwaysFresh = true)`.
-  - Local: usar las cuentas desbloqueadas de anvil (`eth_accounts`), **sin private keys en el código**; árbitro = otra cuenta distinta.
-  - Escribir `deployments/<chainId>.json` y, en local, `.env.local`.
-- `scripts/dev-chain.ts` + script `npm run chain`.
-- `.env.example` con todas las variables.
-- **Verificar:** levantar la chain, `npm run dev`, y pegarle con `curl` a `/api/stocks`, `/api/protocol`, `/api/stats`, `/api/quote?coverageUsd=1200`, `/api/guarantees?account=…`.
+Según la sección 9 del spec (ejecución con dueños de archivos) y la sección 10 (lo que solo hacen Fernando y Kelvin). Marcar `TODO(verify)` donde dependa de lo que entreguen los otros agentes.
 
-### 8.2 Cliente base
-`src/lib/wagmi.ts`, `providers.tsx`, i18n (`[lang]`, diccionarios en/es), componentes base, `useContractCalls`, hooks de datos, manejo de errores de contrato legibles (decodificar custom errors con el ABI).
+### 8.1 Contratos y deploy (rol CTO)
+- `ReservationEscrow` (renombrar `GuaranteeEscrow`), `GoalRegistry`, `MockUSDC`, `MockWARS`, `DemoExchange`; tests Foundry de todo el ciclo, incluidos slippage, router fuera de la lista blanca y precio viejo.
+- `scripts/`: deploy a `local | base-sepolia | base` que **genera y commitea** `src/config/deployment.json`; `npm run chain` (anvil + deploy). Universo de acciones sin hardcodear tickers: Tokenized Stocks API (`?page_size=500`, paginar con `next_page_token`) unida al directorio de Chainlink (`https://reference-data-directory.vercel.app/feeds-ethereum-mainnet-base-1.json`, `productTypeCode === "primaryTokenizedPrice"`, excluir `hidden` y `247Price`), verificando que el feed coincida con `nav_price` (~2%).
+- Ratio de colateral por acción desde datos (peor caída en ventana de ~30 días del último año, `ratio = 1 / (1 - caída)`, redondeo a 5%, acotado 115% a 200%; Yahoo chart con `User-Agent`; con poca historia, ratio máximo).
+- Local y testnet: anvil con cuentas desbloqueadas, sin private keys en el código. Público: `DEPLOYER_PRIVATE_KEY`.
+- wARS real `0x0DC4…D90D` (symbol `wARS` verificado), descubierto desde la fuente de Lapacho/Ripio, no copiado.
 
-### 8.2 bis Integración con Smarlin
-Implementar lo descrito en la sección 6b: cliente, rutas `/api/properties`, paso 1 "elegir propiedad" y deep link `?property=<id>`. Verificar contra la API real.
+### 8.2 Datos y backend
+- Proveedores `smarlin` (lista blanca de campos, caché) y `link` (JSON-LD, Open Graph, anti-SSRF); cotización ARS desde Chainlink USD/ARS; rutas `/api/properties`, `/api/properties/[ref]`, `/api/link-preview`, `/api/rates`. Verificar contra la API real de Smarlin (§6b).
 
-### 8.3 Páginas núcleo
-`/new` (3 pasos), `/request`, `/g/[id]` (estado, barra de salud, línea de tiempo, acciones por rol: tenant / landlord / arbiter / cualquiera), `/dashboard`.
+### 8.3 Diseño y frontend
+- Pantallas del §6, i18n `es`/`en`, landing "vendeme esta pluma" (necesidad primero), revisar en 375, 768 y 1280, progreso en toda espera. `/pitch` con la misma narrativa y cifras de `docs/NARRATIVE.md`.
 
-### 8.4 Landing
-Hero, 1-2-3, stats en vivo (`getProtocolStats` con Suspense), acciones aceptadas con precio, tabla comparativa (depósito en efectivo vs seguro de caución vs Garante), FAQ, disclaimers.
+### 8.4 Integración (fase 2)
+- `src/lib/wallet` (Privy + dev), hooks, planificadores (meta, aporte, reserva), Builder Code (ERC-8021) por llamada, geo-bloqueo solo en mainnet, e2e en chain local con `evm_increaseTime` para las ventanas.
+- Aporte en mainnet por el agregador KyberSwap (sin key: `GET https://aggregator-api.kyberswap.com/base/api/v1/routes?tokenIn=&tokenOut=&amountIn=`, luego `POST …/route/build` con header `x-client-id`; ruta wARS a AAPLc verificada el 14 nov) con fee a tesorería.
+- Ensayo en mainnet sin gastar fondos con `eth_simulateV1` sobre `https://mainnet.base.org` (desplegar oráculo y escrow dentro de la simulación, holder real hace aprobar y reservar, luego reclamo). En fin de semana `settleClaim` debe revertir con `StalePrice`.
 
-### 8.5 Cumplimiento
-`src/proxy.ts`: geo-bloqueo configurable por env (`GEO_BLOCKED_COUNTRIES`, default EE.UU. y territorios incl. `PR`) usando el header de país de la plataforma (`x-vercel-ip-country`), aplicado solo cuando la chain es mainnet. Disclaimers: no es asesoramiento; no otorga derechos sobre la empresa subyacente; no afirmar relación con Coinbase/Base/emisores.
+### 8.5 Narrativa y entrega
+- Revisar de nuevo la competencia con una búsqueda específica de "ahorro para propiedad con acciones" **[confirmar]**.
+- Plan de posts diarios "Día N" etiquetando @buildonbase; Loom de 3 min (guion en la narrativa); envío el 4 dic.
 
-### 8.6 Tracción
-Builder Code por env (`NEXT_PUBLIC_BUILDER_CODE`), `dataSuffix` en **todas** las escrituras. Paymaster opcional (`NEXT_PUBLIC_PAYMASTER_URL`, capability `paymasterService`).
-
-### 8.7 Prueba end-to-end en navegador
-Playwright (ya instalado, no reinstalar) contra la chain local, inyectando un provider EIP-1193 que reenvía a anvil. Recorrer: crear garantía → reclamo → disputa → resolución → pago → liberación. Usar `evm_increaseTime` para las ventanas.
-
-### 8.8 "Comprar con USDC" (solo mainnet, opcional pero baja mucho la fricción)
-Proveedor de swap en servidor detrás de una interfaz. **KyberSwap** funciona sin API key (verificado por el agente CTO): `GET https://aggregator-api.kyberswap.com/base/api/v1/routes?tokenIn=&tokenOut=&amountIn=` y luego `POST …/base/api/v1/route/build` con `{ routeSummary, sender, recipient, slippageTolerance }` (bps), header `x-client-id`. Aprobar USDC al `routerAddress`. La recomendación oficial de Base es 0x (requiere key). Usar el `minAmountOut` como colateral.
-
-### 8.9 Ensayo en mainnet sin gastar fondos (prueba fuerte para los jueces)
-`scripts/rehearse-mainnet.ts` con **`eth_simulateV1`** sobre `https://mainnet.base.org` (soportado, con `stateOverrides` y múltiples llamadas): desplegar oráculo + escrow dentro de la simulación, listar AAPLc con su feed real, y que un holder real (p. ej. el pool de Aerodrome) haga `approve` + `createGuarantee`, luego `fileClaim`/`release`. Ojo: en fin de semana `settleClaim` debe revertir con `StalePrice` (es el comportamiento esperado).
-
-### 8.10 Llevar la narrativa al producto
-La narrativa ya está escrita en `docs/NARRATIVE.md`. Falta:
-- Página `/pitch` que la presente como deck (en/es), con las mismas cifras y fuentes.
-- Que la landing use el mismo relato: tagline, el 1-2-3 y la tabla comparativa (caución vs depósito vs Garante).
-- `README.md`: qué es (resumen de la narrativa), quickstart en 3 comandos, arquitectura, contratos, seguridad y supuestos, deploy, checklist del hackathon.
-- Plan de posts diarios etiquetando @buildonbase (el guion del Loom y el post de lanzamiento ya están en la narrativa).
-
-### 8.11 Cierre
-`npm run typecheck`, `npx eslint`, `npm run contracts:test`, `next build`, commit y push.
+### 8.6 Cierre
+`npm run typecheck`, `npm run lint`, `npm run contracts:test`, `next build`, commit y push.
 
 ## 9. Cosas que solo pueden hacer Fernando y Kelvin
 
-1. **Registrarse hoy** en el formulario (track Programmable Stock Markets; partners Bankr y BaseStonk) y entrar a sus grupos de Telegram.
-2. Crear el **Builder Code** en `https://dashboard.base.org` (Settings → Project Settings → Builder Code).
-3. Wallet deployer con ETH en Base (y/o Base Sepolia) y correr el deploy. Definir owner/tesorería/árbitro (idealmente un multisig).
-4. Deploy en Vercel con las variables de entorno.
-5. **Confirmar elegibilidad por país**: Coinbase solo dice "jurisdicciones elegibles fuera de EE.UU."; no hay lista pública, así que Argentina/Brasil no están confirmados.
-6. Posts diarios en X con @buildonbase, Loom, y envío final antes del 4 dic.
-7. Completar los **[completar]** de la narrativa: trayectoria de Kelvin, métricas de Smarlin y datos del mercado de Puerto Rico.
-8. Decidir si el depósito de opción de compra entra como segundo caso de uso.
-9. Preguntar por escrito a Base/partners cómo se mide la tracción y si testnet cuenta.
-10. Consultar con un asesor legal el encuadre de residentes de Puerto Rico como personas de EE.UU. para las acciones tokenizadas.
+1. **Registrarse en el formulario** del hackathon (track Programmable Stock Markets; partners Bankr y BaseStonk) y entrar a sus grupos de Telegram.
+2. Crear la **app de Privy** (email, smart wallets tipo Coinbase Smart Wallet, paymaster de CDP para Base y Base Sepolia, `showWalletUIs` apagado) y pasar el `NEXT_PUBLIC_PRIVY_APP_ID`.
+3. **ETH de Base Sepolia** para el deployer (faucet de CDP) y, para mainnet, unos centavos de ETH en Base.
+4. **Builder Code** desde `https://dashboard.base.org` (Settings, Project Settings, Builder Code).
+5. **Tesorería y árbitro de mainnet** (idealmente multisig); definir quién es owner del oráculo y de la lista blanca de routers.
+6. **Kelvin:** % de seña habitual en Puerto Rico, si acepta figurar como corredor de la demo, licencia y trayectoria, cuántos de sus compradores son de fuera de EE.UU.
+7. **Confirmar elegibilidad por país** (Coinbase no publica la lista; Argentina no está confirmada) y consultar con un asesor legal el encuadre de Puerto Rico como EE.UU.
+8. Confirmar con un escribano el % de seña o reserva habitual en Argentina.
+9. Decidir **[decidir]** las dos comisiones (aporte y reserva), la meta de 12 meses, el uso del premio y el monto de la ronda.
+10. (Opcional, no bloquea) Si más adelante hace falta el inventario completo de un agente o el webhook, crear la key de partner de Smarlin en `/api/admin/api-keys`.
+11. Deploy en Vercel; posts diarios en X, Loom y envío final antes del 4 dic.
+12. Preguntar por escrito a Base y los partners cómo se mide la tracción y si testnet cuenta.
 
 ---
 
-## Apéndice A — Datos técnicos verificados
+---
+
+## Apéndice A : Datos técnicos verificados
 
 **Tokenized Stocks API** (pública, sin key): `https://api.coinbase.com/v1/tokenized-stocks` (`/`, `/chains`, `/metadata/{ticker}`, `/images/{symbol}`…). 358 tokens, todos con 8 decimales; 12 con `nav_price`: AAPLc, AMZNc, CRCLc, GOOGLc, INTCc, METAc, MSFTc, MSTRc, NVDAc, SNDKc, SPCXc, TSLAc. Solo existen en chain 8453.
 
@@ -323,13 +276,13 @@ Estas direcciones son referencia: **el script debe descubrirlas del directorio d
 
 **Tokens de ejemplo:** AAPLc `0xb200000000000000000000C2e324d24d7eEcd1fb`, NVDAc `0xb20000000000000000000078ee7ce2fE4908108C`, TSLAc `0xb2000000000000000000001e800a7f5189430cD0`. USDC en Base: `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`.
 
-**Liquidez** (GeckoTerminal, 14 nov): pools Aerodrome Slipstream contra USDC — AAPLc ~USD 495k (vol. 24 h USD 5,2M), NVDAc ~USD 1,59M (USD 15,4M), TSLAc ~USD 509k (USD 5,7M).
+**Liquidez** (GeckoTerminal, 14 nov): pools Aerodrome Slipstream contra USDC : AAPLc ~USD 495k (vol. 24 h USD 5,2M), NVDAc ~USD 1,59M (USD 15,4M), TSLAc ~USD 509k (USD 5,7M).
 
 **Base Sepolia:** la infraestructura B20 está activa pero no hay acciones de Coinbase ni feeds de acciones → usar mocks.
 
 **Fuente de cada dato:** verificados directamente en esta sesión: API de Coinbase y `/chains`, directorio de Chainlink, endpoint de Yahoo, reglas y premios. Reportados por el subagente CTO (con `eth_call`/`eth_simulateV1`, no re-verificados): comportamiento B20, igualdad feed = `nav_price`, liquidez, KyberSwap, Sepolia.
 
-## Apéndice B — Research de mercado (subagente; cada cifra con fuente)
+## Apéndice B : Research de mercado (subagente; cada cifra con fuente)
 
 **Problema**
 - Argentina: el seguro de caución cuesta **4–7% del valor total del contrato** (1–2 meses de alquiler), no reembolsable. https://www.iprofesional.com/finanzas/454624-alquiler-2026-que-conviene-mas-garantia-propietaria-o-seguro-de-caucion
@@ -359,7 +312,7 @@ Estas direcciones son referencia: **el script debe descubrirlas del directorio d
 
 **Cautelas para el pitch:** solo hay ~USD 47,5M de acciones de Coinbase emitidas (oferta de colateral chica); elegibilidad por país sin confirmar; cifras de alquiler son de capitales (cota superior).
 
-## Apéndice C — Checklist "cómo ganamos" (subagente de estrategia)
+## Apéndice C : Checklist "cómo ganamos" (subagente de estrategia)
 
 1. Registrarse ya y sumarse a los Telegram de Bankr y BaseStonk.
 2. Builder Code en todas las transacciones (verificar con `builder-code-checker.vercel.app`).
@@ -369,3 +322,14 @@ Estas direcciones son referencia: **el script debe descubrirlas del directorio d
 6. Build in public: post diario "Día N" con links a Basescan, etiquetando @buildonbase.
 7. Loom ≤ 3 min: problema (20 s), flujo real en mainnet, números de tracción, qué se construyó durante el Quest, roadmap.
 8. Enviar el 4 dic, un día antes del cierre.
+
+## Apéndice B2: Research nuevo para Seña (14 nov 2026)
+
+Cifras con fuente. Las que no tienen fuente están en **[completar]** en la narrativa.
+
+- Argentina, escrituras en CABA (agosto 2026): 6.055 compraventas, 1.059 con hipoteca (17,5%, cálculo propio; -20,8% interanual en hipotecas). Primeros siete meses: 14,4% con hipoteca. Solo CABA. https://www.colegio-escribanos.org.ar/2026/09/22/cantidad-de-escrituras-de-compraventa-realizadas-en-agosto-2026/
+- Argentina, dólares fuera del sistema bancario: USD 254.898 millones del sector privado al cierre de 2025 (INDEC; 48,5% de los activos financieros). Incluye moneda y cuentas, sin desglose. https://www.baenegocios.com/amp/el-indec-estimo-que-los-argentinos-guardaron-usd-254-898-millones-fuera-del-sistema-bancario/ . Otras notas dan cifras posteriores (USD 262.014M, USD 268.824M); verificar en INDEC antes de citarlas.
+- Años para ahorrar: con USD 1.000 por mes, entre 3 y 6,5 años para comprar en Buenos Aires; con USD 500 por mes, más de 6 años para un monoambiente de USD 37.000 (Propio, 21 ago 2026, sin gastos de la operación). https://mercado.com.ar/ladrillos-y-proyectos/propio-estimo-los-anos-de-ahorro-necesarios-para-comprar-un-departamento-en-buenos-aires . En sueldos: de ~5 años (2 ambientes de 40 m², zona accesible, Reporte Inmobiliario) a 20 o 25 años (50 m²); metodologías distintas.
+- Seña y reserva: las guías comerciales no coinciden. Reserva "acotada" (USD 1.000 a 5.000) o 5% a 10% del precio; entrega a cuenta en el boleto ~30%. No es norma. https://mudafy.com.ar/guias/post/como-comprar-un-departamento . **[confirmar con escribano y con Kelvin]**
+- Puerto Rico, compradores extranjeros: no se encontraron datos específicos de la isla. Dato nacional de NAR: 47% de los compradores internacionales pagó al contado contra 28% del total. https://www.rismedia.com/2025/07/15/foreign-buyers-up-pre-tariffs-future-uncertain/ . **[completar con Kelvin y Smarlin]**
+

@@ -1,238 +1,217 @@
-# Garante — la narrativa
+# Seña: la narrativa
 
-> **Tus acciones son tu garante.**
-> Alquilá sin garante propietario y sin regalar plata en un seguro de caución: bloqueá acciones tokenizadas como garantía, seguí siendo su dueño y recuperalas cuando te mudás.
+> **Seña: tu próxima casa, en acciones.**
+> Ahorrá en acciones con una casa como meta. Cuando llegás, tus acciones quedan como seña, sin venderlas.
 
-Este documento es la historia de la startup de 0 a 1: problema, solución, por qué ahora, mercado, competencia, diferenciador, modelo de negocio, plan, equipo y ask. Las cifras tienen fuente (ver `HANDOFF.md`, Apéndice B); lo que es supuesto o decisión pendiente de los fundadores está marcado con **[decidir]**, **[confirmar]** o **[completar]**.
+Este documento es la historia de la startup de 0 a 1: problema, solución, por qué ahora, mercado, competencia, diferenciador, modelo de negocio, plan, equipo y ask. La fuente de verdad del producto es `docs/superpowers/specs/2026-11-14-sena-design.md`. Las cifras tienen fuente (ver `HANDOFF.md`, Apéndices B y B2). Lo que es supuesto o decisión pendiente de los fundadores está marcado con **[decidir]**, **[confirmar]** o **[completar]**.
 
 ---
 
 ## 0. De dónde venimos
 
-Somos el equipo que construyó **Smarlin**, una plataforma de IA de bienes raíces que ya funciona en Puerto Rico: búsqueda de propiedades por estilo de vida, análisis de precio justo y riesgo por propiedad, y datos de mercado a partir de cierres reales. Hoy tiene **11.925 propiedades publicadas**, **120.002 ventas cerradas analizadas** y cobertura de los **78 municipios** (cifras de su propia API, 14 nov 2026). Kelvin vende propiedades allá; Fernando construye el producto desde Argentina.
+Somos el equipo que construyó **Smarlin**, una plataforma de IA de bienes raíces que ya funciona en Puerto Rico: búsqueda de propiedades por estilo de vida, análisis de precio justo y riesgo, y datos de mercado a partir de cierres reales. Hoy tiene **11.925 propiedades publicadas**, **120.002 ventas cerradas analizadas** y cobertura de los **78 municipios** (cifras de su propia API, 14 nov 2026). Kelvin vende propiedades allá. Fernando construye el producto desde Buenos Aires.
 
-**Garante se conecta a esa base.** Las propiedades que se garantizan o reservan no son un catálogo de ejemplo: son publicaciones reales de Smarlin, consumidas por API, con su precio, su ubicación y su corredor.
+**Seña se apoya en esa base.** La portada del producto son propiedades reales de Puerto Rico, sacadas de Smarlin por API, con datos que nadie más tiene: precio justo, renta de corto plazo, renta de mercado y comparables.
 
-Garante sale de lo que vemos en operaciones reales: **en cada alquiler y en cada compra hay un momento en que alguien tiene que inmovilizar efectivo para demostrar que va en serio.** Y cada vez más gente tiene su patrimonio en acciones, no en efectivo.
+Antes habíamos construido una garantía de alquiler con acciones (Garante). El contrato de custodia, el oráculo y el cobro en caso de reclamo quedaron. Lo que cambió es la historia: la garantía de un alquiler es un trámite que se hace una vez. **Ahorrar para una casa es algo que se hace todos los meses durante años.** Eso es uso real, repetido, y es lo que mide el hackathon.
 
 ## 1. El problema
 
-**Para alquilar en Latinoamérica no alcanza con poder pagar el alquiler: hay que demostrar que alguien responde por vos.**
+**En Argentina, una casa se paga en dólares y al contado. Se ahorra durante años y esa plata queda quieta.**
 
-Un caso ilustrativo (persona ficticia): Sofi tiene 27 años, trabaja remoto y se muda de Córdoba a Buenos Aires. Tiene USD 3.000 ahorrados en acciones. Para firmar le piden una de tres cosas:
-
-1. **Un garante propietario**: un familiar con una propiedad en la ciudad que la ponga en juego. No lo tiene.
-2. **Un seguro de caución**: cuesta entre **4% y 7% del valor total del contrato**, es decir 1 a 2 meses de alquiler, y **no vuelve nunca**.
-3. **Más depósito en efectivo**: plata quieta en la cuenta del propietario, que con **33,1% de inflación interanual** pierde un **25% de su valor real en 12 meses** y un 44% en 24.
-
-Sofi termina vendiendo sus acciones para pagar un seguro. Pasa de ser inversora a ser deudora de un trámite.
+Un caso ilustrativo (persona ficticia): Sofi tiene 31 años, trabaja remoto y vive en Córdoba. Quiere comprar un 2 ambientes de USD 100.000. Ahorra USD 300 por mes. Los guarda en billetes, o en una cuenta que no rinde. Tarda años. Mientras tanto el precio de lo que quiere comprar se mueve y su plata no se mueve con nada.
 
 Los números detrás del caso:
 
-- En Buenos Aires, entrar a un alquiler exige en promedio **4,2 meses de alquiler por adelantado** (depósito + mes adelantado + caución).
-- **76,5%** de los inquilinos del AMBA encuestados tuvo problemas para cumplir las condiciones de ingreso (2023, 1.500 casos).
-- El patrón se repite en la región: en Brasil el *seguro-fiança* cuesta 15–18% del contrato y la *caução* inmoviliza 3 meses; en México se pide aval con propiedad o una póliza jurídica; en Chile, mes de garantía más aval.
+- **Casi nadie compra con crédito.** En CABA, en agosto de 2026 se firmaron **6.055 escrituras de compraventa y 1.059 con hipoteca**: el **17,5%** (cálculo propio sobre los datos del Colegio de Escribanos). En los primeros siete meses del año fue el 14,4%. El resto, casi **5.000 escrituras por mes** en la Ciudad, se paga con ahorro previo. Fuente: [Colegio de Escribanos, agosto 2026](https://www.colegio-escribanos.org.ar/2026/09/22/cantidad-de-escrituras-de-compraventa-realizadas-en-agosto-2026/). Solo CABA: **[completar]** dato nacional.
+- **La plata está fuera del sistema.** El INDEC estima que el sector privado tenía **USD 254.898 millones** en moneda y cuentas fuera del sistema bancario nacional al cierre de 2025 (48,5% de los activos financieros del país según el mismo informe). Fuente: [BAE Negocios sobre INDEC, 28 mar 2026](https://www.baenegocios.com/amp/el-indec-estimo-que-los-argentinos-guardaron-usd-254-898-millones-fuera-del-sistema-bancario/). La cifra mezcla billetes y depósitos en el exterior: no es solo colchón.
+- **Ahorrar lleva años.** Con USD 1.000 por mes (supuesto de una pareja), Propio estima entre **3 y 6,5 años** para comprar una propiedad en Buenos Aires, según tipo de unidad y barrio. Con USD 500 por mes, más de 6 años para el monoambiente usado más barato que relevó (USD 37.000). Sin gastos de la operación. Fuente: [Propio vía Mercado, 21 ago 2026](https://mercado.com.ar/ladrillos-y-proyectos/propio-estimo-los-anos-de-ahorro-necesarios-para-comprar-un-departamento-en-buenos-aires). Medido en sueldos, las estimaciones van de unos 5 años (2 ambientes de 40 m² en zona accesible) a 20 o 25 años (departamento de 50 m²); las metodologías difieren.
+- **La inflación se come lo que dejás en pesos:** 33,1% interanual (INDEC, 12 nov 2026), unos 25% de valor real perdido en 12 meses. Fuente: [INDEC](https://www.indec.gob.ar/uploads/informesdeprensa/ipc_11_269335F5BA6B.pdf).
 
-**El propietario tampoco gana.** Un garante se ejecuta en tribunales; un depósito cubre poco; un seguro agrega un tercero. Lo que quiere es simple: saber que, si algo sale mal, hay valor real y cobrable.
+**El problema de fondo:** el ahorro para una casa es largo, quieto y sin meta visible. Y cuando por fin aparece la casa, hay que tener la seña en efectivo ya, aunque eso signifique vender lo que se había invertido.
 
-**El problema de fondo:** las garantías de alquiler de hoy destruyen valor. O es plata que el inquilino pierde (seguro), o es plata muerta (depósito), o es el patrimonio de un tercero (garante).
+### La seña es el momento que traba
 
-### La misma traba aparece al comprar
+Cuando el comprador encuentra la casa, tiene que reservarla. El monto y el momento varían: algunas guías hablan de una seña acotada de entre USD 1.000 y USD 5.000, otras de 5% a 10% del precio, y en el boleto la entrega a cuenta ronda el **30%** ([Mudafy](https://mudafy.com.ar/guias/post/como-comprar-un-departamento)). Son guías comerciales, no norma. **[confirmar con escribano y con Kelvin]** el porcentaje habitual de seña o reserva, en Argentina y en Puerto Rico. Si el comprador se arrepiente, pierde la seña.
 
-En una compraventa, el comprador entrega un **depósito de opción** que queda inmovilizado hasta el cierre. Quien tiene su patrimonio en acciones tiene que venderlas para reservar la propiedad, aunque el cierre sea en pocas semanas. Es el proceso que Kelvin maneja en Puerto Rico.
-
-**[completar con datos de Kelvin y de Smarlin]:** monto típico de la opción, días hasta el cierre, quién custodia el depósito, cuántas operaciones se caen y por qué.
+Quien tiene su ahorro invertido tiene que venderlo para reservar. Vende de golpe, a veces en mal momento, y paga la salida.
 
 ## 2. La solución
 
-**Garante convierte las acciones del inquilino en la garantía del alquiler, sin venderlas.**
+**Seña es una cuenta para ahorrar en acciones con una casa concreta como meta. Cuando llegás, las acciones quedan como reserva de la propiedad, sin venderlas.**
 
-El inquilino bloquea acciones tokenizadas (Apple, Nvidia, Tesla y otras, emitidas por Coinbase en Base) en un contrato de custodia. Mientras dura el alquiler:
+Tres pasos:
 
-- **El inquilino sigue expuesto al mercado.** Si la acción sube, la ganancia es suya. Los dividendos se reflejan en el token.
-- **El propietario tiene una garantía en dólares**, sobrecolateralizada, verificable en una página pública y cobrable on-chain.
-- **Al terminar el contrato, las acciones vuelven solas** al inquilino.
+1. **Elegí la casa.** Propiedades reales de Puerto Rico (Smarlin) o cualquier propiedad de un portal argentino pegando el link. La app calcula la seña: `precio × % de seña` (5% por defecto, ajustable de 1% a 10%).
+2. **Sumá.** Con dólares digitales (USDC) o pesos digitales (wARS). Se convierten en la acción que elegiste para tu meta. La pantalla muestra cuánto llevás frente a cuánto necesitás y, desde que empezaste, "la casa +x %, tus acciones +y %".
+3. **Reservá.** Cuando llegás, un toque bloquea las acciones en un contrato de custodia a favor del corredor, con un árbitro neutral. Si la operación cierra, las acciones vuelven. Si quien reservó se arrepiente, el corredor reclama y **cobra en USDC**: el contrato vende las acciones necesarias.
 
-### Tan simple como 1, 2, 3
+Nadie del lado del vendedor recibe acciones. Eso es a propósito: cumple la regla de no habilitar trading a usuarios de EE.UU.
 
-| | Inquilino | Propietario |
-|---|---|---|
-| **1** | Elegí la propiedad: una publicación real de Smarlin; el monto sale de su precio | Compartí el link de tu publicación (sin transacción, sin costo) |
-| **2** | Elegí qué acción bloquear | El inquilino bloquea sus acciones |
-| **3** | Bloqueá y compartí el comprobante | Verificá la garantía; reclamá solo si hace falta |
+El corredor genera un **link de reserva** desde la propiedad (con login, sin transacción) y lo comparte por WhatsApp. Si la persona llega a la meta sin ese link, la app le arma el mensaje para pedírselo.
 
-Si la propiedad no está en Smarlin, los términos se cargan a mano y el resto del flujo es igual.
+### Cero fricción
 
-### Un mismo contrato, dos usos
+Login con email, cuenta invisible, gas pago, una sola llamada para aprobar y actuar. En la app no hay wallets, firmas ni vocabulario cripto: "tu cuenta", "dólares digitales", "acciones".
 
-| | Alquiler: garantía | Compra: depósito de opción **[decidir si entra en esta etapa]** |
-|---|---|---|
-| Quién bloquea acciones | Inquilino | Comprador |
-| A favor de quién | Propietario | Vendedor |
-| Árbitro natural | Administrador o inmobiliaria | Corredor de la operación |
-| Duración | Meses o años | Semanas, hasta el cierre |
-| Ticket | 1 a 3 meses de alquiler | Un porcentaje del precio de la propiedad |
+### Qué pasa si el comprador se arrepiente
 
-El contrato ya construido cubre ambos: es una obligación en dólares, con beneficiario, fecha de fin, reclamo, disputa y árbitro. La compra tiene además dos ventajas: el plazo corto reduce el riesgo de precio y el ticket más alto mejora el ingreso por operación.
+- El corredor presenta un reclamo por un monto en dólares.
+- El comprador puede aceptarlo o disputarlo dentro de una ventana fija.
+- Si lo disputa, decide un **árbitro neutral** acordado de antemano.
+- El contrato vende las acciones necesarias, verifica que lo recibido en USDC no se aparte del precio del oráculo más que un tope fijo (slippage máximo inmutable), paga al corredor y **devuelve el resto al comprador**.
 
-### Qué pasa si algo sale mal
+### El mismo ahorro, tres formas de llegar a la seña (ejemplo ilustrativo)
 
-- El propietario presenta un reclamo por un monto en dólares.
-- El inquilino puede aceptarlo o disputarlo dentro de una ventana fija.
-- Si lo disputa, decide un **árbitro neutral** acordado de antemano (el administrador, la inmobiliaria, el broker).
-- El pago sale de las acciones al precio de mercado del oráculo; lo que sobra vuelve al inquilino.
+Casa de USD 100.000, seña de 5% (USD 5.000), ahorro de USD 300 por mes (unos 17 meses).
 
-### El mismo alquiler, tres formas de garantizarlo
-
-Ejemplo con un 2 ambientes promedio en CABA: USD 574 por mes, contrato de 24 meses, garantía de 2 meses (USD 1.148).
-
-| | Seguro de caución | Depósito en pesos | **Garante** |
+| | Billetes | Pesos en un plazo fijo | **Seña** |
 |---|---|---|---|
-| Costo de entrada | USD 689 (5% del contrato) | USD 1.148 | Acciones por ~USD 1.435 (125%) que ya tenés |
-| ¿Vuelve? | **No** | Sí, a valor nominal | **Sí, las mismas acciones** |
-| Qué pasa con esa plata en 24 meses | Se perdió | Pierde ~44% de valor real | Sigue invertida, con la suba o baja del mercado |
-| Costo real para el inquilino | USD 689 | ~USD 500 de poder de compra | Fee único: USD 11 al 1% (tope on-chain 3% = USD 34) **[decidir]** |
-| Requiere un tercero con propiedad | No | No | No |
+| Qué hace tu plata mientras ahorrás | Nada | Pierde valor real contra el dólar si el peso se devalúa **[confirmar con datos]** | Sigue el mercado de las acciones que elegiste |
+| Meta visible | No | No | Sí: casa, monto y progreso |
+| Al llegar, para reservar | Entregás los billetes | Cambiás a dólares | Bloqueás las acciones, sin venderlas |
+| Si te arrepentís | Perdés la seña | Perdés la seña | El corredor cobra la seña en USDC desde tus acciones; lo que sobra vuelve a vos |
+| Riesgo | Robo, inflación en dólares | Devaluación | Las acciones también bajan. Por eso la seña es un porcentaje, no el precio entero |
 
-Aritmética: caución = 24 × 574 × 5%. Pérdida del depósito = 1.148 × (1 − 1/1,331²). El 125% es ilustrativo: el ratio real se fija por acción según su riesgo.
+Las acciones pueden bajar. Lo decimos en la landing y en el contrato: el contrato se protege con un colchón de colateral por acción según su volatilidad histórica.
 
 ## 3. Por qué ahora
 
 Hasta 2026 esto no se podía construir. Cuatro cosas cambiaron:
 
-1. **Las acciones ya son programables.** El 24 de agosto de 2026 Coinbase lanzó acciones tokenizadas nativas en Base (estándar B20), respaldadas 1:1, con precio de Chainlink y sin lista blanca de wallets. Por primera vez un contrato puede custodiar una acción real.
-2. **El mercado está creciendo rápido.** Las acciones tokenizadas pasaron de USD 2.480M a **USD 3.770M** en menos de tres meses.
-3. **La regulación de alquileres se abrió.** En Argentina, el DNU 70/2023 dejó librado al acuerdo entre partes el monto y la moneda de la garantía.
-4. **La gente ya invierte.** En Argentina hay **12,3 millones de personas con cuenta comitente** (55% de la población activa) y **más de 1 millón tiene CEDEARs**: acciones de EE.UU. que hoy no sirven para nada a la hora de alquilar.
+1. **Las acciones ya son programables.** El 24 de agosto de 2026 Coinbase lanzó acciones tokenizadas nativas en Base (estándar B20), respaldadas 1:1, con precio de Chainlink y sin lista blanca de wallets. Por primera vez un contrato puede custodiar una acción real y venderla para saldar una deuda.
+2. **El mercado crece rápido.** Las acciones tokenizadas pasaron de USD 2.480M a **USD 3.770M** en menos de tres meses. Fuente: [rwa.xyz](https://app.rwa.xyz/stocks).
+3. **El crédito no llega.** Con 14,4% a 17,5% de las escrituras porteñas con hipoteca, el ahorro propio sigue siendo la forma de comprar.
+4. **La gente ya invierte.** En Argentina hay **12,3 millones de personas con cuenta comitente** (55% de la población activa) y **más de 1 millón tiene CEDEARs**: acciones de EE.UU. que hoy no sirven para nada a la hora de reservar una casa. Fuente: [iProfesional/BYMA, may 2026](https://www.iprofesional.com/finanzas/460259-la-mitad-de-los-argentinos-que-trabajan-ya-tiene-una-cuenta-para-invertir). Además el Gobierno pidió públicamente instrumentos en dólares para atraer lo que está fuera del sistema (nota de iProfesional, 2026).
 
-## 4. Dónde lanzamos, y por qué el uso real no empieza en Puerto Rico
+## 4. Dónde lanzamos, y por qué el uso real empieza en Argentina aunque la portada sea Puerto Rico
 
-Puerto Rico es el mercado que conocemos y donde ya tenemos producto y distribución. Pero hay una restricción que no depende de nosotros:
+Hay una restricción que no depende de nosotros:
 
 - Las acciones tokenizadas de Coinbase solo están disponibles para **personas fuera de Estados Unidos**. A efectos regulatorios, un residente de Puerto Rico cuenta como persona de EE.UU. **[confirmar con asesor legal]**
 - Las reglas del hackathon excluyen los proyectos que habiliten trading a usuarios de EE.UU.
 
-Por eso la estrategia separa dónde aprendemos y distribuimos de dónde se mueve valor real hoy:
+Por eso la estrategia separa dos cosas:
 
-| Mercado | Qué papel cumple | Qué hacemos ahora |
+| | Qué es | Qué hacemos |
 |---|---|---|
-| **Propiedades de Puerto Rico, usuarios de fuera de EE.UU.** | El producto insignia: publicación real de Smarlin, corredor real (Kelvin) y quien bloquea las acciones es una persona elegible. Fernando, desde Argentina, es el primer caso | Flujo completo sobre publicaciones de Smarlin. **Hipótesis a validar con Kelvin:** cuántos de sus compradores e inquilinos son extranjeros no estadounidenses **[completar]** |
-| **Latinoamérica, alquiler local (Argentina primero)** | Volumen: el problema del garante es masivo y los usuarios son elegibles | Primeras garantías reales en mainnet entre inquilinos y propietarios locales: de acá sale la tracción on-chain que pesa en el puntaje |
-| **Residentes de Puerto Rico** | El mercado más grande para Smarlin, hoy no habilitado | Modo demostración en testnet; queda listo para activarse el día que las acciones tokenizadas se abran a EE.UU. |
+| **Portada y demo: Puerto Rico** | Propiedades reales de Smarlin, corredor real (Kelvin). La historia es "guardá tus dólares en una propiedad en territorio de EE.UU." | Flujo completo sobre publicaciones de Smarlin. Quien ahorra es una persona fuera de EE.UU. (Fernando, desde Argentina, es el primer caso). El corredor cobra en USDC, nunca recibe acciones |
+| **Uso real: Argentina** | El que ahorra para comprar una casa en Argentina tiene el problema todos los meses y es usuario elegible **[confirmar elegibilidad por país]** | Cualquier persona entra pegando el link de un portal argentino y empieza con USD 5. De acá sale la tracción on-chain que pesa en el puntaje |
+| **Residentes de Puerto Rico** | El mercado grande de Smarlin, hoy no habilitado | La app los bloquea en mainnet. Queda listo para el día que las acciones tokenizadas se abran a EE.UU. |
 
-**Un punto de diseño pendiente:** cuando el beneficiario está en Puerto Rico, un reclamo debería pagarse en dólares digitales (USDC) y no en acciones, para que nadie en EE.UU. reciba acciones tokenizadas.
+**Puerto Rico y compradores extranjeros.** No encontramos datos específicos de Puerto Rico sobre compradores no estadounidenses. El dato nacional de NAR dice que el 47% de los compradores internacionales pagó al contado, contra 28% del total ([RISMedia, jul 2025](https://www.rismedia.com/2025/07/15/foreign-buyers-up-pre-tariffs-future-uncertain/)). Es un dato de EE.UU. entero, no de la isla. **[completar con Kelvin y Smarlin]:** cuántos de sus compradores son de fuera de EE.UU., de qué países y cuántos pagan al contado.
 
-Esta sección es la respuesta a la pregunta que va a hacer cualquier jurado: "si son de Puerto Rico, ¿por qué no lanzan ahí?".
+Esta sección es la respuesta a la pregunta de cualquier jurado: "si la portada es Puerto Rico, ¿por qué el uso es en Argentina?". Porque ahí está la gente que ahorra para una casa en dólares, y porque la reserva se cobra en USDC y el producto igual sirve a quien quiere una propiedad en la isla.
 
 ## 5. Mercado
 
-**A quién le hablamos primero:** inquilinos que ya ahorran en acciones o cripto y no tienen garante propietario — profesionales jóvenes del interior, trabajadores remotos que cobran en dólares, extranjeros no estadounidenses. Y del otro lado, propietarios e inmobiliarias que ya aceptan dólares o cripto.
+**A quién le hablamos primero:** argentinos que ahorran en dólares para comprar una propiedad, que ya usan una cuenta de inversión o cripto, o cobran en dólares (trabajo remoto). Del otro lado, corredores e inmobiliarias que cobran seña.
 
 | Nivel | Qué es | Tamaño |
 |---|---|---|
-| **TAM** | Hogares inquilinos en Argentina, Brasil, México, Colombia y Chile | **36,1 millones** de hogares; hasta USD 46.900M inmovilizados en depósitos (cota superior, con alquileres de capitales) |
-| **Gasto a desplazar** | Lo que los inquilinos pagan hoy y no recuperan | Solo en Brasil: **R$ 2.000M por año** en primas de *seguro-fiança* (+19,7% en 2025), unos USD 353M |
-| **SAM** | Inquilinos que ya tienen acciones | Argentina: ~210.000 hogares (1M de cuentas con CEDEARs × 21% que alquila) ≈ USD 241M de cobertura. Brasil: ~1,3M de hogares (5,7M de inversores de B3 × 23%) |
-| **SOM (12 meses)** | Lo alcanzable con el equipo actual | 1.000 contratos en CABA ≈ USD 1,15M en custodia **[decidir meta]** |
+| **TAM** | Dólares del sector privado argentino fuera del sistema bancario | **USD 254.898M** (INDEC, cierre 2025). No todo es para vivienda: es el techo |
+| **Flujo anual de compras** | Escrituras sin crédito en CABA | ~**5.000 por mes** (6.055 compraventas, 1.059 con hipoteca, ago 2026). **[completar]** monto promedio de la operación |
+| **SAM** | Argentinos que ya tienen acciones o CEDEARs | **Más de 1 millón** con CEDEARs; 12,3M con cuenta comitente. **[completar]** qué parte quiere comprar casa en los próximos 3 años |
+| **SOM (12 meses)** | Lo alcanzable con el equipo actual | **[decidir meta]**: metas activas, USD en acciones, reservas. Hipótesis de partida: 500 metas activas y 20 reservas reales |
 
-**Puerto Rico, con datos propios de Smarlin:** 11.925 propiedades publicadas, de las cuales 5.282 son alquileres, y 120.002 ventas cerradas analizadas. Es un dato que casi ningún otro equipo puede mostrar: sale de cierres reales, no de estimaciones. **[completar]:** monto típico de opción y de depósito, y cuántas de esas operaciones involucran a compradores o inquilinos de fuera de EE.UU.
+**Puerto Rico, con datos propios de Smarlin:** 11.925 propiedades publicadas y 120.002 ventas cerradas analizadas. Es un dato que casi ningún otro equipo puede mostrar: sale de cierres reales, no de estimaciones. **[completar]:** monto típico de opción, % de seña habitual, días hasta el cierre y cuántas operaciones involucran a compradores de fuera de EE.UU.
 
-Dos advertencias que hay que decir antes de que las pregunte un jurado:
+Advertencias que hay que decir antes de que las pregunte un jurado:
 
 - **La oferta de colateral todavía es chica:** hay unos USD 47,5M de acciones de Coinbase emitidas. Crecemos con ese mercado, no por delante.
-- **Colombia probablemente quede afuera:** la Ley 820/2003 prohíbe depósitos y cauciones reales en alquileres de vivienda.
+- **El tamaño del TAM es el techo, no el pronóstico.** La cifra incluye cuentas en el exterior y billetes sin destino definido.
+- **Los datos de escrituras son de CABA**, no del país.
 
 ## 6. Competencia
 
 | Alternativa | Qué hace | Por qué no resuelve el problema |
 |---|---|---|
-| Garante propietario | Un familiar responde con su propiedad | La mayoría no tiene uno; se ejecuta en tribunales |
-| Seguro de caución / *seguro-fiança* (Finaer, Hoggax, Porto, Loft/CredPago) | Un tercero garantiza a cambio de una prima | La prima se pierde; exige demostrar ingresos |
-| Depósito en efectivo | Plata en manos del propietario | Plata muerta que la inflación licúa |
-| Sustitutos de depósito de EE.UU. (Rhino+Jetty, TheGuarantors, Obligo) | Seguro o autorización de cobro | Fee hundido; dependen del sistema bancario y crediticio de EE.UU. |
-| "Garantia Investe" de Loft, TD Garantia (Brasil) | Prenda de bonos del Tesoro como garantía | **El análogo más cercano y la validación del modelo**: solo bonos, solo Brasil, sin acciones |
-| Escrows con stablecoins (RentLock, Trustless Work) | Depósito en USDC | Sigue siendo plata quieta, sin rendimiento |
-| Aave / Morpho sobre acciones tokenizadas | Préstamos con acciones de colateral | Es crédito, no garantía de alquiler |
+| Dólares en billete o en cuenta | Guardar y esperar | Plata quieta, sin meta, sin forma de usarla como reserva sin cambiarla |
+| Plazo fijo en pesos, fondos comunes | Rinden algo | Pesos contra una casa en dólares; sin meta ni reserva |
+| Brokers y apps de inversión con CEDEARs o acciones tokenizadas | Dejan comprar acciones | Ni meta de propiedad ni reserva: para reservar hay que vender |
+| Crédito hipotecario (UVA) | Financia hasta una parte | Llega a pocos: 14% a 18% de las escrituras en CABA |
+| Planes de ahorro y fideicomisos de obra | Ahorro con una unidad futura | Atados a un proyecto y sin liquidez **[completar con ejemplos]** |
+| Plataformas de propiedades tokenizadas | Venden fracciones de inmuebles | Invierten en el inmueble; no sirven para reservar una casa que elegís vos |
+| Préstamos con acciones de colateral (Aave, Morpho) | Crédito contra acciones | Es deuda, no seña |
 
-El research no encontró **ningún producto que use acciones tokenizadas como garantía de alquiler**, ni entre unos 40 repositorios públicos del hackathon (no se pudieron revisar los proyectos que solo publican en X).
+El research previo (para la garantía de alquiler) no encontró ningún producto que use acciones tokenizadas como garantía, ni entre unos 40 repositorios públicos del hackathon. **[confirmar]** con una búsqueda nueva específica de "ahorro para propiedad con acciones" antes del Loom.
 
 ## 7. Diferenciador
 
-**Garante es la única garantía en la que la plata del inquilino sigue siendo suya y sigue invertida.** Todo lo demás es un costo hundido o capital muerto.
+**Seña es la única forma de ahorrar para una casa en la que tu plata sigue siendo tuya, sigue invertida y se convierte en la seña sin venderla.**
 
-Tres cosas lo sostienen:
+Cuatro cosas lo sostienen:
 
-1. **Lo construye un equipo que ya opera en real estate.** Smarlin es nuestro producto y está en producción en Puerto Rico; Kelvin cierra operaciones allá. Garante habla el idioma del negocio (garantía, opción, contrato, reclamo, árbitro) porque sale de ahí, no de DeFi. El árbitro natural es quien ya administra la propiedad o corre la operación. Las propiedades son reales: el producto consume las publicaciones de Smarlin por API, no un catálogo de muestra. Y la distribución ya existe: cada propiedad publicada puede mostrar "garantizá o reservá con X acciones" con una sola llamada a la API de cotización.
-2. **Cero fricción para el propietario.** No firma transacciones ni paga gas para aceptar: comparte un link y verifica en una página pública. Solo necesita una wallet si algún día reclama.
-3. **Diseñado para acciones reales, no para tokens genéricos.** El ratio de colateral se calcula por acción según su caída histórica; y el contrato distingue entre precio para *entrar* colateral y precio para *pagar*, porque los mercados cierran los fines de semana y los feeds se congelan.
+1. **Lo construye un equipo que ya opera en real estate.** Smarlin es nuestro producto y está en producción; Kelvin cierra operaciones allá. El producto habla el idioma del negocio (seña, reserva, corredor, árbitro). Las propiedades de la portada son reales, no un catálogo de muestra.
+2. **Datos que nadie más tiene.** Cada casa de Puerto Rico viene con precio justo, renta de corto plazo, renta de mercado y comparables, a partir de cierres reales.
+3. **Cualquiera lo usa mañana, con USD 5.** Pegás el link de un portal argentino y tenés una meta. Cada aporte es uso real on-chain.
+4. **La reserva es una acción programada que no existe en otro lado.** Bloquear, soltar o vender para cobrar en USDC según lo que pase con la operación. Es lo que pide el track Programmable Stock Markets.
 
-**Por qué es difícil de copiar:** la tecnología se puede clonar; la red de propietarios, inmobiliarias y árbitros que aceptan la garantía, no. Cada inmobiliaria que la adopta la vuelve aceptable para todos sus inquilinos.
+**Por qué es difícil de copiar:** la tecnología se puede clonar. La red de corredores que aceptan la reserva y los datos de Smarlin, no. Cada corredor que la adopta la vuelve aceptable para todos sus compradores.
 
 ## 8. Modelo de negocio
 
-**Hoy (en el contrato):** un fee único sobre el monto garantizado, cobrado al crear la garantía. El tope on-chain es 3%.
+**Dos comisiones, siempre visibles:**
 
-| | Seguro de caución | Garante al 1% | Garante al 3% |
-|---|---|---|---|
-| Costo para garantizar USD 1.148 | USD 689 | USD 11 | USD 34 |
-| Como % de lo garantizado | 60% | 1% | 3% |
+1. **Comisión en cada aporte.** Se cobra al convertir los dólares o pesos digitales en acciones y va a la tesorería. **[decidir %]**.
+2. **Comisión al reservar.** Sobre el monto bloqueado, al crear la reserva. En el contrato es `feeBps` con tope de 3%. **[decidir %]**.
 
-Hay que decirlo sin maquillaje: **el fee por contrato residencial es chico.** A 3%, 100.000 contratos son unos USD 3–4M. El alquiler residencial es la cuña de entrada, no todo el negocio. El ingreso crece por cuatro vías **[decidir prioridad]**:
+Las dos se muestran en pantalla antes de confirmar. Ilustración con números supuestos **[decidir]**: aportar USD 20 con comisión de 1% son USD 0,20. Reservar USD 5.000 con comisión de 1% son USD 50.
 
-1. **Compra integrada:** el inquilino que no tiene acciones las compra con dólares digitales dentro del flujo; comisión sobre ese swap.
-2. **Plan para inmobiliarias y portales:** panel, API e integración por un abono mensual.
-3. **Tickets más grandes:** alquileres comerciales (garantías de 3 a 6 meses), alquiler temporario, y **señas y reservas de compra de propiedades**, donde el monto es un porcentaje del valor del inmueble.
-4. **Servicios sobre el colateral:** por ejemplo, crédito contra las acciones bloqueadas.
+Hay que decirlo sin maquillaje: **el ingreso por persona es chico al principio.** Crece por cuatro vías **[decidir prioridad]**:
 
-La primitiva que queda construida es más general que el alquiler: **cualquier obligación en dólares garantizada con acciones.**
+1. **Plan para corredores e inmobiliarias sobre Smarlin:** panel, links de reserva, API y datos de mercado por un abono mensual.
+2. **Tickets más grandes:** seña de propiedades más caras, boleto con entrega a cuenta de 30%, y alquiler temporario.
+3. **Otros portales:** la entrada por link ya sirve para cualquier portal; la integración directa lo vuelve un botón "ahorrá para esta casa" en cada publicación.
+4. **Servicios sobre el colateral:** por ejemplo, crédito contra las acciones bloqueadas, y la garantía de alquiler (el contrato ya la soporta).
 
 ## 9. De 0 a 1
 
 | Etapa | Cuándo | Objetivo | Cómo se mide |
 |---|---|---|---|
-| **0. Terminar el producto** | Hasta ~20 nov | Flujo completo andando; demo pública en testnet **integrada a propiedades reales de Smarlin**; registro en el hackathon; Builder Code | Demo recorrible de punta a punta desde una publicación de Smarlin |
-| **1. Primeras garantías reales** | 20 nov – 5 dic | Mainnet con topes de monto; 10 garantías con gente conocida y 2–3 inmobiliarias de Buenos Aires; entrega | Garantías activas, wallets únicas, cobertura en USD (contadores on-chain) |
-| **2. Probar que el propietario la acepta** | Meses 1–3 | 100 garantías; 5 inmobiliarias; dictamen legal en Argentina y en Puerto Rico; auditoría del contrato; pilotos en modo demostración con operaciones de Kelvin | Tasa de aceptación de propietarios y vendedores; % de usuarios que completan el flujo |
-| **3. Repetible** | Meses 3–12 | 1.000 garantías; apertura de Brasil; depósitos de opción de compra; activación en Puerto Rico si la regulación lo permite | Costo de adquisición por contrato; ingreso por contrato; tasa de reclamos |
+| **0. Terminar el producto** | Hasta ~20 nov | Flujo completo andando en testnet, con propiedades reales de Smarlin; registro en el hackathon; Builder Code | Demo recorrible de punta a punta: casa, sumar, reservar, reclamar |
+| **1. Primeros aportes reales** | 20 nov a 5 dic | Mainnet con topes de monto; metas reales con gente conocida; al menos una reserva real con un corredor; entrega | Metas activas, cuentas únicas, aportes, USD en acciones, reservas (contadores on-chain) |
+| **2. Probar que el corredor la acepta** | Meses 1 a 3 | 100 metas; 5 corredores o inmobiliarias; dictamen legal en Argentina y en Puerto Rico; auditoría del contrato | Aceptación de corredores; % de metas que llegan a reservar |
+| **3. Repetible** | Meses 3 a 12 | 1.000 metas; plan para corredores; integración con otros portales; activación en Puerto Rico si la regulación lo permite | Costo de adquisición por meta; ingreso por aporte y por reserva; tasa de arrepentimiento |
 
-**Por dónde entrar:** las inmobiliarias son el canal que ya vende garantías (Finaer trabaja con más de 12.000). Un "sí" de una inmobiliaria habilita a todos sus inquilinos. En paralelo, las comunidades cripto de Argentina aportan los primeros inquilinos con saldo.
-
-**La hipótesis más riesgosa** no es técnica: es que un propietario acepte acciones como garantía. La etapa 1 existe para probar eso con 10 casos reales antes de gastar en crecer.
+**La hipótesis más riesgosa** no es técnica: es que un corredor o vendedor acepte acciones bloqueadas como seña. La etapa 1 existe para probar eso con casos reales antes de gastar en crecer.
 
 ## 10. Riesgos y cómo se responden
 
 | Riesgo | Respuesta |
 |---|---|
-| La acción cae y la garantía queda corta | Sobrecolateral por acción según su volatilidad; el inquilino (o cualquiera) puede reforzar; el propietario ve la salud en vivo |
-| El propietario no confía | Página pública de verificación; árbitro acordado; reclamo cobrable sin juicio |
-| Regulación | Es custodia de una garantía, no un préstamo ni una oferta de valores; igual hace falta dictamen legal local antes de escalar |
-| Elegibilidad | Las acciones de Coinbase son solo para no residentes de EE.UU. y no hay lista pública de países: hay que confirmarla. La app bloquea EE.UU. y sus territorios |
-| Poder del emisor | El emisor puede pausar o incautar tokens; se documenta como supuesto de confianza |
-| Dependencia de un solo emisor | El oráculo admite cualquier acción tokenizada con feed de precio; se pueden sumar emisores |
+| La acción cae y la reserva queda corta | Colchón de colateral por acción según su volatilidad; se puede reforzar; el corredor ve la salud en vivo |
+| El corredor no confía | Página pública de la reserva; árbitro acordado; reclamo cobrable en USDC sin juicio |
+| La venta en la liquidación sale mal | El contrato verifica un slippage máximo inmutable y solo usa routers de una lista blanca del owner |
+| Regulación | Es custodia de una reserva, no un préstamo ni una oferta de valores; hace falta dictamen legal local antes de escalar **[confirmar]** |
+| Elegibilidad | Las acciones de Coinbase son solo para no residentes de EE.UU. y no hay lista pública de países. La app bloquea EE.UU. y territorios (incluido Puerto Rico) en mainnet |
+| Poder del emisor | El emisor puede pausar o incautar tokens; es un supuesto de confianza documentado |
+| Un solo emisor | El oráculo admite cualquier acción tokenizada con feed de precio |
+| Datos viejos del feed | Dos cotas de frescura: una laxa para entrar colateral y una estricta para sacar valor |
 
 ## 11. Equipo
 
-- **Kelvin Garcia Vale — real estate y producto.** Vende propiedades en Puerto Rico (Kelvin Garcia Realty) y es la voz del negocio: conoce de primera mano cómo se reservan, garantizan y cierran las operaciones. Sus publicaciones son las primeras habilitadas en Garante. **[completar: licencia, años en el rubro, operaciones cerradas; confirmar cómo quiere figurar]**
-- **Fernando Lopez — ingeniería.** Full-stack (Node, React, Next.js, Elixir, Python) y builder web3 (Tuneport, Elei Protocol). Vive en Buenos Aires, donde el problema del garante se sufre todos los días y donde el producto puede operar hoy.
+- **Kelvin Garcia Vale: real estate y producto.** Vende propiedades en Puerto Rico (Kelvin Garcia Realty) y es la voz del negocio: sabe cómo se reservan y cierran las operaciones. Sus publicaciones son las primeras de la portada. **[completar: licencia, años en el rubro, operaciones cerradas; confirmar cómo quiere figurar; confirmar el % de seña habitual en PR y si acepta figurar como corredor de la demo]**
+- **Fernando Lopez: ingeniería.** Full-stack (Node, React, Next.js, Elixir, Python) y builder web3 (Tuneport, Elei Protocol). Vive en Buenos Aires, donde el problema de ahorrar para una casa se sufre todos los días y donde el producto puede operar hoy.
 
 **Ya construimos juntos un producto que funciona:** Smarlin, en producción en Puerto Rico, con 11.925 propiedades publicadas y 120.002 ventas cerradas analizadas. **[completar: usuarios y corredores activos]**
 
-**Por qué este equipo:** ya probó que puede llevar un producto inmobiliario a producción, tiene a alguien que cierra operaciones reales y a alguien que construye on-chain, y está parado en los dos mercados que el plan necesita.
+**Por qué este equipo:** ya llevó un producto inmobiliario a producción, tiene a alguien que cierra operaciones reales y a alguien que construye on-chain, y está parado en los dos mercados que el plan necesita.
 
 ## 12. El ask
 
-**Al hackathon:** el premio del track Programmable Stock Markets (pool de USD 20.000). Uso propuesto **[decidir]**: auditoría del contrato, dictamen legal en Argentina y subsidio del fee de las primeras 100 garantías.
+**Al hackathon:** el premio del track Programmable Stock Markets (pool de USD 20.000). Uso propuesto **[decidir]**: auditoría del contrato, dictamen legal en Argentina y Puerto Rico, y primeras reservas reales con corredores.
 
 **A Base y Coinbase:**
-- Claridad sobre los países elegibles para las acciones tokenizadas, y sobre el camino para Puerto Rico y EE.UU.
-- Que el contrato de custodia quede exento de incautación a nivel de política del token, para que la garantía sea sólida para el propietario.
-- Difusión del caso de uso: es "lo próximo que pueden hacer las acciones" con un usuario que no es trader.
+- Claridad sobre los países elegibles para las acciones tokenizadas y el camino para Puerto Rico y EE.UU.
+- Que el contrato de custodia quede exento de incautación a nivel de política del token.
+- Difusión del caso de uso: "lo próximo que pueden hacer las acciones" con un usuario que no es trader.
 
 **A los partners (Bankr):** mentoría, apoyo de incorporación y primeras presentaciones.
 
-**A inmobiliarias y propietarios:** 3 pilotos en Buenos Aires que acepten la garantía en un contrato real.
+**A corredores e inmobiliarias:** 3 pilotos que acepten una reserva con acciones en una operación real.
 
-**A inversores (después de la etapa 2) [decidir monto]:** una ronda pre-seed para 18 meses, destinada a auditoría y legales, dos contrataciones (crecimiento con inmobiliarias e ingeniería) y la apertura de Brasil.
+**A inversores (después de la etapa 2) [decidir monto]:** una ronda pre-seed para 18 meses, destinada a auditoría y legales, dos contrataciones (corredores e ingeniería) y la integración con otros portales.
 
 ---
 
@@ -240,35 +219,35 @@ La primitiva que queda construida es más general que el alquiler: **cualquier o
 
 **Tagline**
 
-> Your stocks are your guarantor.
+> Seña: your next home, in stocks.
 
 **One-liner**
 
-> Garante lets people lock tokenized stocks on Base as the deposit for a real property, instead of cash, a property-owning guarantor or a non-refundable insurance fee. Listings come live from Smarlin, our real estate platform. They keep the upside and get the stocks back when the deal ends.
+> Seña lets people outside the US save in tokenized stocks on Base toward a specific property, and lock those stocks as the reservation deposit when they get there, without selling them. If the buyer backs out, the broker is paid in USDC. Listings come live from Smarlin, our real estate platform in Puerto Rico, or from any Argentine portal by pasting a link.
 
-**Form — project description (1–2 sentences)**
+**Form: project description (1 to 2 sentences)**
 
-> Garante turns tokenized stocks into real estate deposits. Pick a real listing from Smarlin, lock Coinbase tokenized stocks in an onchain escrow, and the owner gets a USD-denominated, over-collateralized, claimable guarantee. The stocks return when the lease or the purchase closes.
+> Seña is a savings account in tokenized stocks with a real property as the goal. Add USDC or digital pesos, pick a home from Smarlin or paste any portal link, and when you reach the deposit your stocks are locked in an onchain escrow as the reservation, never sold. If the buyer backs out, the contract sells just enough stock to pay the broker in USDC.
 
-**Form — "Why should we select you?"**
+**Form: "Why should we select you?"**
 
-> Renters in Latin America pay for guarantees they never get back: in Argentina a rental insurance policy costs 4–7% of the whole lease, and Brazilians paid R$2.0B in rental-guarantee premiums in 2025. Meanwhile over a million Argentines hold US stocks that are useless when they sign a lease. Garante makes those stocks the guarantee. It is a new primitive, USD-denominated obligations secured by tokenized stocks, aimed at people who are not traders. We are the team behind Smarlin, a live AI real estate platform in Puerto Rico with 11,925 active listings and 120,002 closed sales analyzed. Garante plugs into those real listings. One of us sells properties there; the other builds onchain from Buenos Aires, where the product can operate today.
+> In Argentina, homes are bought in dollars and in cash: in Buenos Aires, 17.5% of August 2026 deeds used a mortgage, so the rest came from years of saved dollars sitting idle (INDEC puts USD 254.9B of private dollars outside the banking system). Meanwhile over a million Argentines already hold US stocks that are useless the day they must reserve a home. Seña turns that saving into a goal and the goal into a deposit, without selling. Every contribution is real onchain usage, from USD 5, and the final reservation is a programmed stock action that does not exist anywhere else: lock, release, or sell to pay a broker in USDC with a slippage cap enforced by the contract. We are the team behind Smarlin, a live AI real estate platform in Puerto Rico with 11,925 active listings and 120,002 closed sales analyzed. One of us sells properties there; the other builds onchain from Buenos Aires, where the product can be used today. US persons are blocked on mainnet and no US person ever receives stocks.
 
 **Loom, 3 minutos**
 
 | Tiempo | Qué se muestra | Qué se dice |
 |---|---|---|
-| 0:00–0:20 | Una pantalla con el costo de entrar a un alquiler | "To rent in Buenos Aires you need a property-owning guarantor or an insurance fee you never get back. If you hold stocks, you sell them to pay for it." |
-| 0:20–0:40 | Landing con el 1-2-3 | "Garante makes your stocks the guarantee. Three steps." |
-| 0:40–1:30 | Flujo en vivo: elegir una propiedad real de Smarlin, elegir acción, bloquear | "Pick a real listing, pick a stock, lock it. One transaction." |
-| 1:30–2:00 | Página pública de la garantía, vista del propietario | "The landlord verifies it here. No transaction, no gas." |
-| 2:00–2:30 | Reclamo, disputa y liberación | "If something goes wrong: claim, dispute window, neutral arbiter. Otherwise the stocks go home." |
-| 2:30–3:00 | Stats on-chain y roadmap | "Built during Stocks Maxxing. Next: first agencies in Buenos Aires, then Brazil." |
+| 0:00 a 0:20 | Una cuenta con dólares quietos y un portal con una casa | "In Argentina you buy a home with dollars you saved for years. That money sits still. And when you find the home, you must sell what you invested to reserve it." |
+| 0:20 a 0:40 | Landing con el 1-2-3 | "Seña: your next home, in stocks. Three steps." |
+| 0:40 a 1:10 | Elegir una casa de Puerto Rico en Smarlin (datos de precio justo y renta) y pegar un link de un portal argentino | "Pick a real listing from Smarlin, or paste any link. We compute the deposit." |
+| 1:10 a 1:50 | Sumar con USDC y con pesos digitales; pantalla de meta con "la casa +x %, tus acciones +y %" | "Add dollars or pesos. They become the stock you chose. Fee always visible. Every step is onchain." |
+| 1:50 a 2:30 | Reservar: link del corredor, un toque, página pública de la reserva; luego reclamo y cobro en USDC | "You reached the goal. One tap locks your stocks as the deposit. If you back out, the broker claims and is paid in USDC, with a slippage cap enforced onchain. If the deal closes, your stocks come home." |
+| 2:30 a 3:00 | Stats on-chain y roadmap | "Built during Stocks Maxxing. Next: first brokers, a plan for agencies on Smarlin, other portals." |
 
 **Post de lanzamiento en X**
 
-> Renting in LatAm means finding a guarantor or paying for insurance you never get back.
+> In Argentina you buy a home with dollars you saved for years. That money sits still.
 >
-> We built Garante: lock tokenized stocks on Base as your rental guarantee. Keep the upside. Get them back when you move out.
+> We built Seña: save in tokenized stocks toward a real home. When you get there, your stocks become the deposit. You never sell them.
 >
-> Your stocks are your guarantor. @buildonbase
+> Seña: your next home, in stocks. @buildonbase
