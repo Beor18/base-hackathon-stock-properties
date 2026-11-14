@@ -16,11 +16,11 @@ import { detailToGoalProperty, toGoal, toStockOption, wadToNumber } from "@/lib/
 import { useAccount } from "@/lib/wallet/context";
 
 import { GoalScreen, type GoalScreenState } from "../goal-screen";
-import { parseGoalDraft } from "../routes";
+import { parseGoalDraft, vaquitaHref } from "../routes";
 import type { GoalDraft } from "../types";
 import { AccountUnavailable, useRefreshAccount, type AccountLabels } from "./shared";
 
-type Labels = Pick<Dictionary, "goal" | "signIn" | "common"> & AccountLabels;
+type Labels = Pick<Dictionary, "goal" | "signIn" | "common" | "vaquita"> & AccountLabels;
 
 /** USD in `stock` needed to reserve `senaUsd`, mirroring the reservation planner's math. */
 function needUsdFor(stock: { priceUsd: string; decimals: number; collateralRatioBps: number }, senaUsd: number): number {
@@ -117,7 +117,8 @@ export function ConnectedGoalScreen({ lang, labels }: { lang: Locale; labels: La
       },
     };
   } else if (account.data.goal) {
-    state = { kind: "active", goal: toGoal(account.data.goal), justSaved };
+    const origin = typeof window === "undefined" ? "" : window.location.origin;
+    state = { kind: "active", goal: toGoal(account.data.goal), shareUrl: vaquitaHref(lang, session.address, origin), justSaved };
   } else {
     state = { kind: "empty" };
   }

@@ -11,6 +11,7 @@ import { RequestLinkScreen } from "@/components/account/request-link-screen";
 import { ReservationScreen, type ReservationView } from "@/components/account/reservation-screen";
 import { ReserveScreen } from "@/components/account/reserve-screen";
 import type { Goal, GoalDraft, SignInProps, StockOption } from "@/components/account/types";
+import { VaquitaScreen } from "@/components/account/vaquita-screen";
 import { LiveStats } from "@/components/landing/live-stats";
 import { WaitBar } from "@/components/ui/wait-bar";
 import type { Locale } from "@/i18n/config";
@@ -83,9 +84,15 @@ function signIn(overrides: Partial<SignInProps> = {}): SignInProps {
   };
 }
 
-/* ---------- Interactive contribute sample ---------- */
+const VAQUITA_URL = "https://sena.example/es/vaquita/0x5a1e0c8b9e3f4d2a7c6b1e0f9d8c7b6a5e4d3c2b";
+const FUND_FROM_VAQUITA = "/es/cargar?vaquita=0x5a1e0c8b9e3f4d2a7c6b1e0f9d8c7b6a5e4d3c2b";
 
-function ContributeSample({ lang, dict, tx, txError }: { lang: Locale; dict: Dictionary; tx?: boolean; txError?: boolean }) {
+/* ---------- Interactive contribute samples ---------- */
+
+type SampleFlags = { tx?: boolean; txError?: boolean };
+
+/** The amount form's state with a made-up quote that answers like the planner does. */
+function useSampleForm({ tx, txError }: SampleFlags) {
   const [quote, setQuote] = useState<ContributionQuote | "loading" | null>(null);
   const onDraftChange = useCallback((value: ContributionDraft | null) => {
     if (!value) return setQuote(null);
@@ -96,26 +103,28 @@ function ContributeSample({ lang, dict, tx, txError }: { lang: Locale; dict: Dic
       setQuote({ ...value, feeAmount: fee, sharePriceUsd: 231.2, sharesOut: (usd * 0.995) / 231.2, valueUsd: usd * 0.995 });
     }, 700);
   }, []);
-  return (
-    <ContributeScreen
-      lang={lang}
-      labels={dict}
-      state={{
-        kind: "ready",
-        goal: goal(7_400),
-        balances: { usd: 120, ars: 85_000 },
-        currencies: ["usd", "ars"],
-        minUsd: 5,
-        feeBps: 50,
-        arsPerUsd: 1_180,
-        quote,
-        onDraftChange,
-        onSubmit: noop,
-        tx: tx ? { step: 1 } : null,
-        txError: Boolean(txError),
-      }}
-    />
-  );
+  return {
+    kind: "ready" as const,
+    goal: goal(7_400),
+    balances: { usd: 120, ars: 85_000 },
+    currencies: ["usd" as const, "ars" as const],
+    minUsd: 5,
+    feeBps: 50,
+    arsPerUsd: 1_180,
+    quote,
+    onDraftChange,
+    onSubmit: noop,
+    tx: tx ? { step: 1 } : null,
+    txError: Boolean(txError),
+  };
+}
+
+function ContributeSample({ lang, dict, ...flags }: { lang: Locale; dict: Dictionary } & SampleFlags) {
+  return <ContributeScreen lang={lang} labels={dict} state={useSampleForm(flags)} />;
+}
+
+function VaquitaSample({ lang, dict, ...flags }: { lang: Locale; dict: Dictionary } & SampleFlags) {
+  return <VaquitaScreen lang={lang} labels={dict} state={{ ...useSampleForm(flags), fundHref: FUND_FROM_VAQUITA }} />;
 }
 
 /* ---------- Catalogue ---------- */
@@ -138,9 +147,11 @@ const screens: Record<string, Entry> = {
   "goal.setup-error": (lang, dict) => (
     <GoalScreen lang={lang} labels={dict} state={{ kind: "setup", draft, stocks, selectedStockId: "aapl", onSelectStock: noop, onSave: noop, saving: null, saveError: true }} />
   ),
-  "goal.active": (lang, dict) => <GoalScreen lang={lang} labels={dict} state={{ kind: "active", goal: goal(7_400), justSaved: false }} />,
-  "goal.active-new": (lang, dict) => <GoalScreen lang={lang} labels={dict} state={{ kind: "active", goal: { ...goal(0), houseChangePct: null, stocksChangePct: null }, justSaved: true }} />,
-  "goal.reached": (lang, dict) => <GoalScreen lang={lang} labels={dict} state={{ kind: "active", goal: goal(19_930) }} />,
+  "goal.active": (lang, dict) => <GoalScreen lang={lang} labels={dict} state={{ kind: "active", goal: goal(7_400), shareUrl: VAQUITA_URL, justSaved: false }} />,
+  "goal.active-new": (lang, dict) => (
+    <GoalScreen lang={lang} labels={dict} state={{ kind: "active", goal: { ...goal(0), houseChangePct: null, stocksChangePct: null }, shareUrl: VAQUITA_URL, justSaved: true }} />
+  ),
+  "goal.reached": (lang, dict) => <GoalScreen lang={lang} labels={dict} state={{ kind: "active", goal: goal(19_930), shareUrl: VAQUITA_URL }} />,
 
   "contribute.signed-out": (lang, dict) => <ContributeScreen lang={lang} labels={dict} state={{ kind: "signed-out", signIn: signIn({ email: "" }) }} />,
   "contribute.loading": (lang, dict) => <ContributeScreen lang={lang} labels={dict} state={{ kind: "loading" }} />,
@@ -158,6 +169,31 @@ const screens: Record<string, Entry> = {
   "contribute.tx-error": (lang, dict) => <ContributeSample lang={lang} dict={dict} txError />,
   "contribute.success": (lang, dict) => <ContributeScreen lang={lang} labels={dict} state={{ kind: "success", amount: 20, currency: "usd", goal: goal(7_420) }} />,
 
+  "vaquita.loading": (lang, dict) => <VaquitaScreen lang={lang} labels={dict} state={{ kind: "loading", goal: null }} />,
+  "vaquita.loading-account": (lang, dict) => <VaquitaScreen lang={lang} labels={dict} state={{ kind: "loading", goal: goal(7_400) }} />,
+  "vaquita.error": (lang, dict) => <VaquitaScreen lang={lang} labels={dict} state={{ kind: "error", onRetry: noop }} />,
+  "vaquita.no-goal": (lang, dict) => <VaquitaScreen lang={lang} labels={dict} state={{ kind: "no-goal" }} />,
+  "vaquita.signed-out": (lang, dict) => (
+    <VaquitaScreen lang={lang} labels={dict} state={{ kind: "signed-out", goal: goal(7_400), feeBps: 50, signIn: signIn({ email: "" }) }} />
+  ),
+  "vaquita.sign-in-code": (lang, dict) => (
+    <VaquitaScreen lang={lang} labels={dict} state={{ kind: "signed-out", goal: goal(7_400), feeBps: 50, signIn: signIn({ step: "code" }) }} />
+  ),
+  "vaquita.empty-balance": (lang, dict) => (
+    <VaquitaScreen
+      lang={lang}
+      labels={dict}
+      state={{ kind: "ready", goal: goal(7_400), balances: { usd: 0, ars: 0 }, currencies: ["usd", "ars"], minUsd: 5, feeBps: 50, arsPerUsd: 1_180, quote: null, onDraftChange: noop, onSubmit: noop, tx: null, txError: false, fundHref: FUND_FROM_VAQUITA }}
+    />
+  ),
+  "vaquita.ready": (lang, dict) => <VaquitaSample lang={lang} dict={dict} />,
+  "vaquita.tx": (lang, dict) => <VaquitaSample lang={lang} dict={dict} tx />,
+  "vaquita.tx-error": (lang, dict) => <VaquitaSample lang={lang} dict={dict} txError />,
+  "vaquita.success": (lang, dict) => <VaquitaScreen lang={lang} labels={dict} state={{ kind: "success", amount: 20, currency: "usd", goal: goal(7_420) }} />,
+  "vaquita.owner": (lang, dict) => <VaquitaScreen lang={lang} labels={dict} state={{ kind: "owner", goal: goal(7_400), shareUrl: VAQUITA_URL }} />,
+  "vaquita.reached": (lang, dict) => <VaquitaScreen lang={lang} labels={dict} state={{ kind: "reached", goal: goal(22_880), isOwner: false }} />,
+  "vaquita.reached-owner": (lang, dict) => <VaquitaScreen lang={lang} labels={dict} state={{ kind: "reached", goal: goal(22_880), isOwner: true }} />,
+
   "fund.signed-out": (lang, dict) => <FundScreen lang={lang} labels={dict} state={{ kind: "signed-out", signIn: signIn({ email: "" }) }} />,
   "fund.test": (lang, dict) => (
     <FundScreen lang={lang} labels={dict} state={{ kind: "ready", address: reservation.buyer, balances: { usd: 0, ars: 0 }, testMode: true, faucetAmountUsd: 100, onFaucet: noop, faucet: null, rampUrl: null }} />
@@ -167,6 +203,14 @@ const screens: Record<string, Entry> = {
   ),
   "fund.test-success": (lang, dict) => (
     <FundScreen lang={lang} labels={dict} state={{ kind: "ready", address: reservation.buyer, balances: { usd: 100, ars: 0 }, testMode: true, faucetAmountUsd: 100, onFaucet: noop, faucet: "success", rampUrl: null }} />
+  ),
+  "fund.test-success-vaquita": (lang, dict) => (
+    <FundScreen
+      lang={lang}
+      labels={dict}
+      returnTo={{ href: VAQUITA_URL, label: dict.vaquita.backCta }}
+      state={{ kind: "ready", address: reservation.buyer, balances: { usd: 100, ars: 0 }, testMode: true, faucetAmountUsd: 100, onFaucet: noop, faucet: "success", rampUrl: null }}
+    />
   ),
   "fund.mainnet": (lang, dict) => (
     <FundScreen lang={lang} labels={dict} state={{ kind: "ready", address: reservation.buyer, balances: { usd: 12.5, ars: 30_000 }, testMode: false, faucetAmountUsd: 0, onFaucet: noop, faucet: null, rampUrl: "https://example.com" }} />

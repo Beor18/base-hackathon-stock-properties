@@ -20,7 +20,14 @@ export default async function MetaPage() {
     <Suspense>
       <ConnectedGoalScreen
         lang={lang}
-        labels={{ goal: dict.goal, signIn: dict.signIn, common: dict.common, account: dict.account, txErrors: dict.txErrors }}
+        labels={{
+          goal: dict.goal,
+          signIn: dict.signIn,
+          common: dict.common,
+          vaquita: dict.vaquita,
+          account: dict.account,
+          txErrors: dict.txErrors,
+        }}
       />
     </Suspense>
   );

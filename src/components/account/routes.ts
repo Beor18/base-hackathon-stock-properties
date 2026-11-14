@@ -75,6 +75,25 @@ export function parseReservationOffer(params: SearchParamsLike): ReservationOffe
   };
 }
 
+/**
+ * A vaquita: the public page where anyone adds to `owner`'s goal. Pass `origin` for the absolute
+ * link the owner shares.
+ */
+export function vaquitaHref(lang: Locale, owner: string, origin = ""): string {
+  return `${origin}/${lang}/vaquita/${owner}`;
+}
+
+/** `/cargar`, remembering the vaquita the person came from so they can go back and add to it. */
+export function fundHref(lang: Locale, vaquitaOwner?: string | null): string {
+  return vaquitaOwner ? `/${lang}/cargar?${new URLSearchParams({ vaquita: vaquitaOwner })}` : `/${lang}/cargar`;
+}
+
+/** The vaquita owner `/cargar` should lead back to, when the link carries a well-formed one. */
+export function parseFundReturn(params: SearchParamsLike): string | null {
+  const owner = params.get("vaquita");
+  return owner && /^0x[0-9a-fA-F]{40}$/.test(owner) ? owner : null;
+}
+
 /** WhatsApp share link with a prefilled message (no phone number: the person picks the chat). */
 export function whatsappHref(message: string, phone?: string | null): string {
   const digits = phone?.replace(/[^\d]/g, "");

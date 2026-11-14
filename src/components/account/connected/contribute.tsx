@@ -1,6 +1,5 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { deployment } from "@/config/deployment";
@@ -10,26 +9,20 @@ import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/es";
 import { plans } from "@/lib/api";
 import { MIN_CONTRIBUTION_USD } from "@/lib/product";
-import { toBalances, toGoal, unitsToNumber, wadToNumber } from "@/lib/view-models";
+import { toBalances, toGoal } from "@/lib/view-models";
 import { useAccount } from "@/lib/wallet/context";
 
-import {
-  ContributeScreen,
-  type ContributeScreenState,
-  type ContributionDraft,
-  type ContributionQuote,
-} from "../contribute-screen";
+import { ContributeScreen, type ContributeScreenState, type ContributionDraft } from "../contribute-screen";
 import type { Goal } from "../types";
-import { AccountUnavailable, useRefreshAccount, type AccountLabels } from "./shared";
+import {
+  AccountUnavailable,
+  contributionRequest,
+  useContributionQuote,
+  useRefreshAccount,
+  type AccountLabels,
+} from "./shared";
 
 type Labels = Pick<Dictionary, "contribute" | "signIn" | "common" | "goal"> & AccountLabels;
-
-const payTokenOf = (currency: ContributionDraft["currency"]) => deployment.payTokens[currency === "usd" ? "usdc" : "wars"];
-
-/** "20.5" for the planner: plain decimal text, never exponent notation. */
-function amountText(amount: number, decimals: number): string {
-  return amount.toFixed(Math.min(decimals, 6)).replace(/\.?0+$/, "");
-}
 
 export function ConnectedContributeScreen({ lang, labels }: { lang: Locale; labels: Labels }) {
   const session = useAccount();
@@ -42,29 +35,11 @@ export function ConnectedContributeScreen({ lang, labels }: { lang: Locale; labe
   const [draft, setDraft] = useState<ContributionDraft | null>(null);
   const [success, setSuccess] = useState<{ amount: number; currency: ContributionDraft["currency"]; goal: Goal } | null>(null);
 
-  const quoteQuery = useQuery({
-    queryKey: ["contribute-quote", address, draft?.currency, draft?.amount],
-    queryFn: async (): Promise<ContributionQuote> => {
-      if (!address || !draft) throw new Error("No draft");
-      const payToken = payTokenOf(draft.currency);
-      const { quote } = await plans.contribute({
-        account: address,
-        currency: draft.currency,
-        amount: amountText(draft.amount, payToken.decimals),
-      });
-      const stockDecimals = account.data?.goal?.stock.decimals ?? 18;
-      return {
-        amount: draft.amount,
-        currency: draft.currency,
-        sharesOut: unitsToNumber(quote.sharesOut, stockDecimals),
-        sharePriceUsd: wadToNumber(quote.sharePriceUsd),
-        feeAmount: unitsToNumber(quote.fee, payToken.decimals),
-        valueUsd: wadToNumber(quote.valueUsd),
-      };
-    },
-    enabled: Boolean(address && draft && account.data?.goal && success === null),
-    staleTime: 15_000,
-    retry: false,
+  const quoteQuery = useContributionQuote({
+    payer: address,
+    draft,
+    stockDecimals: account.data?.goal?.stock.decimals,
+    enabled: success === null,
   });
 
   if (session.status === "unconfigured" || session.status === "failed") {
@@ -103,12 +78,7 @@ export function ConnectedContributeScreen({ lang, labels }: { lang: Locale; labe
         void tx.run({
           wallet,
           planStep: true,
-          plan: () =>
-            plans.contribute({
-              account: wallet.address,
-              currency: submitted.currency,
-              amount: amountText(submitted.amount, payTokenOf(submitted.currency).decimals),
-            }),
+          plan: () => plans.contribute(contributionRequest(wallet.address, submitted)),
           onSuccess: async () => {
             const fresh = await refresh(wallet.address);
             if (fresh.goal) setSuccess({ amount: submitted.amount, currency: submitted.currency, goal: toGoal(fresh.goal) });

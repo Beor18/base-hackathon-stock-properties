@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/es";
@@ -69,6 +69,23 @@ type ContributeScreenProps = {
   labels: Pick<Dictionary, "contribute" | "signIn" | "common" | "goal">;
 };
 
+export type ContributeFormState = Extract<ContributeScreenState, { kind: "ready" }>;
+
+/** What surrounds the amount form. `/sumar` and the vaquita page share the form and differ here. */
+export type ContributeFormFrame = {
+  back?: { href: string; label: string };
+  title: ReactNode;
+  /** The home the money goes to, shown above the fields. */
+  intro: ReactNode;
+  /** Where "Cargar saldo" leads when the amount is over the balance. */
+  fundHref: string;
+  /**
+   * Repeats the fee under the button. On a phone the receipt sits below the docked action, and
+   * someone adding to another person's home should not have to scroll to see what it costs.
+   */
+  feeBesideAction?: boolean;
+};
+
 const PRESETS: Record<PayCurrency, number[]> = {
   usd: [10, 20, 50, 100],
   ars: [10_000, 25_000, 50_000, 100_000],
@@ -133,18 +150,42 @@ export function ContributeScreen({ lang, state, labels }: ContributeScreenProps)
           </Screen>
         );
       }
-      return <ContributeForm lang={lang} state={state} labels={labels} />;
+      return (
+        <ContributeForm
+          lang={lang}
+          state={state}
+          labels={labels}
+          frame={{
+            back,
+            title: t.title,
+            intro: (
+              <GoalPropertyRow
+                property={state.goal.property}
+                lang={lang}
+                detail={fill(labels.goal.progress, {
+                  saved: formatMoney(state.goal.savedUsd, lang),
+                  target: formatMoney(state.goal.targetUsd, lang),
+                })}
+              />
+            ),
+            fundHref: `/${lang}/cargar`,
+          }}
+        />
+      );
   }
 }
 
-function ContributeForm({
+/** The amount form: currency, amount, the receipt with the fee, and the one action that sends it. */
+export function ContributeForm({
   lang,
   state,
   labels,
+  frame,
 }: {
   lang: Locale;
-  state: Extract<ContributeScreenState, { kind: "ready" }>;
-  labels: ContributeScreenProps["labels"];
+  state: ContributeFormState;
+  labels: Pick<Dictionary, "contribute" | "common">;
+  frame: ContributeFormFrame;
 }) {
   const { contribute: t, common } = labels;
   const amountId = useId();
@@ -179,8 +220,8 @@ function ContributeForm({
 
   return (
     <Screen
-      back={{ href: `/${lang}/meta`, label: common.back }}
-      title={t.title}
+      back={frame.back}
+      title={frame.title}
       dock={
         state.tx ? (
           <WaitBar
@@ -198,7 +239,7 @@ function ContributeForm({
               </Notice>
             )}
             {tooBig ? (
-              <ButtonLink href={`/${lang}/cargar`} block>
+              <ButtonLink href={frame.fundHref} block>
                 {t.fundCta}
               </ButtonLink>
             ) : (
@@ -206,18 +247,17 @@ function ContributeForm({
                 {amount ? fill(t.cta, { amount: amountLabel }) : t.ctaEmpty}
               </Button>
             )}
+            {frame.feeBesideAction && (
+              <p className="text-center text-label text-ink-2 tabular">
+                {fill(common.feeLine, { pct: formatBps(state.feeBps, lang) })}
+                {amount !== null && !tooSmall && !tooBig && `: ${formatMoney(fee, lang, code)}`}
+              </p>
+            )}
           </>
         )
       }
     >
-      <GoalPropertyRow
-        property={state.goal.property}
-        lang={lang}
-        detail={fill(labels.goal.progress, {
-          saved: formatMoney(state.goal.savedUsd, lang),
-          target: formatMoney(state.goal.targetUsd, lang),
-        })}
-      />
+      {frame.intro}
 
       <fieldset className="mt-6" disabled={state.tx !== null}>
         {state.currencies.length > 1 && (

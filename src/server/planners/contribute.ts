@@ -23,6 +23,8 @@ export const contributePlanSchema = z.object({
   currency: z.enum(["usd", "ars"]),
   /** Amount in the pay currency, as typed: "20", "25000.5". */
   amount: decimalAmountParam,
+  /** Vaquita: the account whose goal receives the stock. `account` still pays. Omitted: `account` itself. */
+  beneficiary: addressParam.optional(),
 });
 
 type Input = z.infer<typeof contributePlanSchema>;
@@ -32,9 +34,13 @@ type Priced = { calls: PlannedCall[]; sharesOut: bigint; fee: bigint };
  * A contribution: dollars or pesos in, the goal's stock out, in one batch (approve + buy).
  * Local and testnet buy from the DemoExchange; mainnet routes through the aggregator, which sends
  * the contribution fee to the treasury.
+ *
+ * With `beneficiary` (a vaquita) the goal is the beneficiary's and the stock lands in their account;
+ * the balance check and the simulation stay on `account`, who pays and signs.
  */
 export async function planContribution(input: Input): Promise<Plan<ContributionPlanQuote>> {
-  const goal = await readGoal(input.account);
+  const recipient = input.beneficiary ?? input.account;
+  const goal = await readGoal(recipient);
   if (!goal) throw new ConflictError("no_goal", "The account has no goal yet");
 
   const payToken = deployment.payTokens[input.currency === "usd" ? "usdc" : "wars"];
@@ -51,8 +57,8 @@ export async function planContribution(input: Input): Promise<Plan<ContributionP
   if (balance < amountIn) throw new ConflictError("insufficient_balance", "Not enough balance for this contribution");
 
   const priced = exchangeContract
-    ? await viaDemoExchange(input.account, stock, payToken.address, amountIn)
-    : await viaAggregator(input.account, stock, payToken.address, amountIn);
+    ? await viaDemoExchange(recipient, stock, payToken.address, amountIn)
+    : await viaAggregator(input.account, recipient, stock, payToken.address, amountIn);
 
   await simulatePlan(input.account, priced.calls);
 
@@ -80,7 +86,7 @@ async function payTokenToUsd(token: Address, decimals: number, currency: Input["
   return (amount * 10n ** BigInt(18 - decimals) * 1_000_000n) / BigInt(Math.round(arsPerUsd * 1_000_000));
 }
 
-async function viaDemoExchange(account: Address, stock: Stock, payToken: Address, amountIn: bigint): Promise<Priced> {
+async function viaDemoExchange(recipient: Address, stock: Stock, payToken: Address, amountIn: bigint): Promise<Priced> {
   if (!exchangeContract) throw new Error("No demo exchange on this network");
 
   const [sharesOut, fee] = await publicClient.readContract({
@@ -101,14 +107,20 @@ async function viaDemoExchange(account: Address, stock: Stock, payToken: Address
         encodeFunctionData({
           abi: demoExchangeAbi,
           functionName: "buy",
-          args: [stock.address, payToken, amountIn, minOut, account],
+          args: [stock.address, payToken, amountIn, minOut, recipient],
         }),
       ),
     ],
   };
 }
 
-async function viaAggregator(account: Address, stock: Stock, payToken: Address, amountIn: bigint): Promise<Priced> {
+async function viaAggregator(
+  account: Address,
+  recipient: Address,
+  stock: Stock,
+  payToken: Address,
+  amountIn: bigint,
+): Promise<Priced> {
   const feeBps = deployment.params.contributionFeeBps;
   const route = await getSwapRoute({
     tokenIn: payToken,
@@ -120,7 +132,7 @@ async function viaAggregator(account: Address, stock: Stock, payToken: Address, 
   const built = await buildSwap({
     route,
     sender: account,
-    recipient: account,
+    recipient,
     slippageBps: CONTRIBUTION_SLIPPAGE_BPS,
   });
 

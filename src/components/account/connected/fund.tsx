@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import { deployment } from "@/config/deployment";
@@ -14,9 +15,10 @@ import { toBalances, unitsToNumber } from "@/lib/view-models";
 import { useAccount } from "@/lib/wallet/context";
 
 import { FundScreen, type FundScreenState } from "../fund-screen";
+import { parseFundReturn, vaquitaHref } from "../routes";
 import { AccountUnavailable, useRefreshAccount, type AccountLabels } from "./shared";
 
-type Labels = Pick<Dictionary, "fund" | "signIn" | "common" | "contribute"> & AccountLabels;
+type Labels = Pick<Dictionary, "fund" | "signIn" | "common" | "contribute" | "vaquita"> & AccountLabels;
 
 const { usdc } = deployment.payTokens;
 /** The test balance button tops dollars up to the faucet cap (pesos are topped up too, silently). */
@@ -29,6 +31,10 @@ export function ConnectedFundScreen({ lang, labels }: { lang: Locale; labels: La
   const refresh = useRefreshAccount();
   const tx = useTransaction(labels.txErrors);
   const [result, setResult] = useState<"success" | null>(null);
+
+  // Someone adding to a vaquita came here for balance: send them back to it, not to their own goal.
+  const vaquitaOwner = parseFundReturn(useSearchParams());
+  const returnTo = vaquitaOwner ? { href: vaquitaHref(lang, vaquitaOwner), label: labels.vaquita.backCta } : undefined;
 
   if (session.status === "unconfigured" || session.status === "failed") {
     return <AccountUnavailable lang={lang} labels={labels} reason={session.status} />;
@@ -66,5 +72,5 @@ export function ConnectedFundScreen({ lang, labels }: { lang: Locale; labels: La
     };
   }
 
-  return <FundScreen lang={lang} state={state} labels={labels} />;
+  return <FundScreen lang={lang} state={state} labels={labels} returnTo={returnTo} />;
 }

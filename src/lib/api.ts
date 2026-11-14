@@ -77,7 +77,8 @@ export const plans = {
     manualPriceUsd: number | null;
     stock: Address;
   }) => post<Plan<GoalPlanQuote>>("/api/plan/goal", body),
-  contribute: (body: { account: Address; currency: "usd" | "ars"; amount: string }) =>
+  /** `beneficiary`: the account whose goal receives the stock when someone else pays (a vaquita). */
+  contribute: (body: { account: Address; currency: "usd" | "ars"; amount: string; beneficiary?: Address }) =>
     post<Plan<ContributionPlanQuote>>("/api/plan/contribute", body),
   reserve: (body: { account: Address; ref: string; url: string | null; pct: number; broker: Address }) =>
     post<Plan<ReservePlanQuote>>("/api/plan/reserve", body),

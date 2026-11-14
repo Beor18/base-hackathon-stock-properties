@@ -20,6 +20,8 @@ import type { Balances, SignInProps, TxProgress } from "./types";
  *
  * - `ready.faucet`: `null` idle, `{ step }` while minting, `"success"` or `"error"` after.
  * - `rampUrl`: external service to buy digital dollars (opens in a new tab). Null hides it.
+ * - `returnTo`: set when the person came from a vaquita. Back and the next step lead there instead
+ *   of to their own goal, which they may not have.
  */
 export type FundScreenState =
   | { kind: "signed-out"; signIn: SignInProps }
@@ -42,11 +44,12 @@ type FundScreenProps = {
   lang: Locale;
   state: FundScreenState;
   labels: Pick<Dictionary, "fund" | "signIn" | "common" | "contribute">;
+  returnTo?: { href: string; label: string };
 };
 
-export function FundScreen({ lang, state, labels }: FundScreenProps) {
+export function FundScreen({ lang, state, labels, returnTo }: FundScreenProps) {
   const { fund: t, common } = labels;
-  const back = { href: `/${lang}/meta`, label: common.back };
+  const back = { href: returnTo?.href ?? `/${lang}/meta`, label: common.back };
 
   if (state.kind === "signed-out") {
     return (
@@ -77,8 +80,8 @@ export function FundScreen({ lang, state, labels }: FundScreenProps) {
     faucetRunning ? (
       <WaitBar steps={t.testSteps} current={(state.faucet as TxProgress).step} typicalSeconds={t.testSeconds} labels={common} />
     ) : state.faucet === "success" ? (
-      <ButtonLink href={`/${lang}/sumar`} block>
-        {t.nextCta}
+      <ButtonLink href={returnTo?.href ?? `/${lang}/sumar`} block>
+        {returnTo?.label ?? t.nextCta}
       </ButtonLink>
     ) : (
       <Button block onClick={state.onFaucet}>

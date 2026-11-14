@@ -7,6 +7,7 @@ import { Screen, StateMessage } from "@/components/layout/screen";
 import { HouseFill } from "@/components/property/house-fill";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Notice } from "@/components/ui/notice";
+import { ShareButton } from "@/components/ui/share-button";
 import { WaitBar } from "@/components/ui/wait-bar";
 
 import { Change, formatDepositPct, GoalPropertyRow, StockIcon } from "./parts";
@@ -22,6 +23,7 @@ import type { Goal, GoalDraft, SignInProps, StockOption, TxProgress } from "./ty
  * - `setup`: signed in with a draft (from `?casa=&sena=`): pick the stock, then save.
  *   `saving` is set while `setGoal` runs; `saveError` after it failed.
  * - `active`: the saved goal. Reaching the target turns the action into "Reservar la casa".
+ *   `shareUrl` is the absolute link of the goal's vaquita page, where others add to it.
  */
 export type GoalScreenState =
   | { kind: "signed-out"; signIn: SignInProps; draft: GoalDraft | null }
@@ -41,12 +43,12 @@ export type GoalScreenState =
       /** Plain-words reason of the failure, when known. */
       saveErrorDetail?: string | null;
     }
-  | { kind: "active"; goal: Goal; justSaved?: boolean };
+  | { kind: "active"; goal: Goal; shareUrl: string; justSaved?: boolean };
 
 type GoalScreenProps = {
   lang: Locale;
   state: GoalScreenState;
-  labels: Pick<Dictionary, "goal" | "signIn" | "common">;
+  labels: Pick<Dictionary, "goal" | "signIn" | "common" | "vaquita">;
 };
 
 export function GoalScreen({ lang, state, labels }: GoalScreenProps) {
@@ -105,7 +107,9 @@ export function GoalScreen({ lang, state, labels }: GoalScreenProps) {
       return <GoalSetup lang={lang} state={state} labels={labels} />;
 
     case "active":
-      return <GoalProgress lang={lang} goal={state.goal} justSaved={state.justSaved} labels={labels} />;
+      return (
+        <GoalProgress lang={lang} goal={state.goal} shareUrl={state.shareUrl} justSaved={state.justSaved} labels={labels} />
+      );
   }
 }
 
@@ -211,15 +215,18 @@ function GoalSetup({
 function GoalProgress({
   lang,
   goal,
+  shareUrl,
   justSaved,
   labels,
 }: {
   lang: Locale;
   goal: Goal;
+  shareUrl: string;
   justSaved?: boolean;
   labels: GoalScreenProps["labels"];
 }) {
   const { goal: t } = labels;
+  const { share } = labels.vaquita;
   const progress = goal.targetUsd > 0 ? goal.savedUsd / goal.targetUsd : 0;
   const reached = progress >= 1;
   const remaining = Math.max(goal.targetUsd - goal.savedUsd, 0);
@@ -278,6 +285,19 @@ function GoalProgress({
           {fill(t.holdings, { shares: formatShares(goal.shares, lang), stock: goal.stock.name })}
         </p>
       </div>
+
+      {/* Secondary on purpose: the dock keeps the screen's one primary action. */}
+      {!reached && (
+        <section aria-labelledby="vaquita-heading" className="mt-6 rounded-[var(--radius-sheet)] bg-mango-soft p-5">
+          <h2 id="vaquita-heading" className="font-semibold text-ink">
+            {share.title}
+          </h2>
+          <p className="mt-1 text-ink-2 text-pretty">{share.body}</p>
+          <div className="mt-4">
+            <ShareButton url={shareUrl} text={share.message} label={share.cta} copiedLabel={share.copied} size="md" block />
+          </div>
+        </section>
+      )}
 
       {(goal.houseChangePct !== null || goal.stocksChangePct !== null) && (
         <section aria-labelledby="since-heading" className="mt-6">
