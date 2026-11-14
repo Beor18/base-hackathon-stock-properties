@@ -1,26 +1,346 @@
 @import "tailwindcss";
 
+/*
+ * Seña design tokens.
+ *
+ * Palette comes from the two places the product lives in: the blue cobblestones (adoquines) and
+ * whitewash (cal) of Old San Juan, and the bougainvillea that climbs walls in Buenos Aires and
+ * Puerto Rico alike. Mango marks money that is already saved; palm marks growth.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  color-scheme: light;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --paper: #f3f4ef; /* cal: page background */
+  --surface: #ffffff; /* raised sheets and inputs */
+  --surface-2: #e8ebe6; /* sunken wells, skeletons */
+  --ink: #15232b; /* adoquín: primary text */
+  --ink-2: #4a5b64; /* secondary text, 6.4:1 on paper */
+  --ink-3: #5f6f77; /* tertiary text, 4.7:1 on paper */
+  --line: #d5dbd8; /* hairlines */
+  --line-strong: #aab5b4;
+
+  --accent: #b3165a; /* buganvilla: the one action per screen */
+  --accent-hover: #950f4a;
+  --accent-ink: #ffffff; /* text on accent, 6.1:1 */
+  --accent-soft: #f7e3ec;
+
+  --mango: #f5b83d; /* saved money, the seña line */
+  --mango-ink: #15232b;
+  --mango-soft: #fcefd2;
+  --palm: #1d7556; /* gains, 5.5:1 on paper */
+  --palm-soft: #ddefe6;
+  --danger: #b42318;
+  --danger-soft: #fbe5e2;
+
+  --focus: #b3165a;
+  --scrim: rgb(21 35 43 / 0.55);
+
+  --shadow-raise: 0 1px 0 rgb(21 35 43 / 0.04), 0 18px 40px -24px rgb(21 35 43 / 0.45);
+  --shadow-dock: 0 -1px 0 rgb(21 35 43 / 0.06), 0 -18px 32px -24px rgb(21 35 43 / 0.35);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #0e1c24;
+    --surface: #152731;
+    --surface-2: #1c313c;
+    --ink: #eef2ee;
+    --ink-2: #a9b8bd;
+    --ink-3: #8a9ba1;
+    --line: #273c47;
+    --line-strong: #3d5562;
+    --accent: #f2679f;
+    --accent-hover: #f78bb6;
+    --accent-ink: #24030f;
+    --accent-soft: #3a1626;
+    --mango: #f7c35a;
+    --mango-ink: #15232b;
+    --mango-soft: #3a2f16;
+    --palm: #5fcfa3;
+    --palm-soft: #143329;
+    --danger: #ff8a7a;
+    --danger-soft: #3b1714;
+    --focus: #f2679f;
+    --scrim: rgb(5 12 16 / 0.65);
+    --shadow-raise: 0 1px 0 rgb(0 0 0 / 0.2), 0 18px 40px -24px rgb(0 0 0 / 0.8);
+    --shadow-dock: 0 -1px 0 rgb(255 255 255 / 0.04), 0 -18px 32px -24px rgb(0 0 0 / 0.8);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0e1c24;
+  --surface: #152731;
+  --surface-2: #1c313c;
+  --ink: #eef2ee;
+  --ink-2: #a9b8bd;
+  --ink-3: #8a9ba1;
+  --line: #273c47;
+  --line-strong: #3d5562;
+  --accent: #f2679f;
+  --accent-hover: #f78bb6;
+  --accent-ink: #24030f;
+  --accent-soft: #3a1626;
+  --mango: #f7c35a;
+  --mango-ink: #15232b;
+  --mango-soft: #3a2f16;
+  --palm: #5fcfa3;
+  --palm-soft: #143329;
+  --danger: #ff8a7a;
+  --danger-soft: #3b1714;
+  --focus: #f2679f;
+  --scrim: rgb(5 12 16 / 0.65);
+  --shadow-raise: 0 1px 0 rgb(0 0 0 / 0.2), 0 18px 40px -24px rgb(0 0 0 / 0.8);
+  --shadow-dock: 0 -1px 0 rgb(255 255 255 / 0.04), 0 -18px 32px -24px rgb(0 0 0 / 0.8);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-mango: var(--mango);
+  --color-mango-ink: var(--mango-ink);
+  --color-mango-soft: var(--mango-soft);
+  --color-palm: var(--palm);
+  --color-palm-soft: var(--palm-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+
+  /*
+   * Type scale after Bringhurst's classic progression (14, 16, 18, 21, 24, 36, 48, 60, 72).
+   * Display sizes are set expanded and heavy; everything else stays at normal width.
+   */
+  --text-label: 0.875rem;
+  --text-label--line-height: 1.25rem;
+  --text-body: 1rem;
+  --text-body--line-height: 1.5rem;
+  --text-lead: 1.125rem;
+  --text-lead--line-height: 1.6rem;
+  --text-h3: 1.3125rem;
+  --text-h3--line-height: 1.2;
+  --text-h2: 1.5rem;
+  --text-h2--line-height: 1.1;
+  --text-h1: 2.25rem;
+  --text-h1--line-height: 1;
+  --text-display: 3rem;
+  --text-display--line-height: 0.95;
+  --text-display-lg: 4.5rem;
+  --text-display-lg--line-height: 0.92;
+
+  /* Radii follow hierarchy: photos are the softest, controls tighter, tags round. */
+  --radius-photo: 1.75rem;
+  --radius-sheet: 1.25rem;
+  --radius-control: 0.875rem;
+  --radius-tag: 999px;
+
+  --shadow-raise: var(--shadow-raise);
+  --shadow-dock: var(--shadow-dock);
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-paint: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.5;
+    font-feature-settings: "kern", "liga";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--mango);
+    color: var(--mango-ink);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  input[type="range"]:focus-visible {
+    outline-offset: 6px;
+  }
+
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+@layer components {
+  /* Expanded, heavy setting used for headlines and money. Archivo has a 62–125 width axis. */
+  .type-wide {
+    font-stretch: 125%;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .type-semiwide {
+    font-stretch: 112%;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .type-narrow {
+    font-stretch: 88%;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Range input styled as a seña slider: mango track up to the value, bougainvillea thumb. */
+  .sena-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 44px;
+    background: transparent;
+    --fill: 50%;
+  }
+
+  .sena-range::-webkit-slider-runnable-track {
+    height: 10px;
+    border-radius: 999px;
+    background: linear-gradient(to right, var(--mango) var(--fill), var(--surface-2) var(--fill));
+  }
+
+  .sena-range::-moz-range-track {
+    height: 10px;
+    border-radius: 999px;
+    background: var(--surface-2);
+  }
+
+  .sena-range::-moz-range-progress {
+    height: 10px;
+    border-radius: 999px;
+    background: var(--mango);
+  }
+
+  .sena-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 30px;
+    margin-top: -10px;
+    border-radius: 999px;
+    background: var(--accent);
+    border: 4px solid var(--surface);
+    box-shadow: 0 2px 10px rgb(21 35 43 / 0.35);
+  }
+
+  .sena-range::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    background: var(--accent);
+    border: 4px solid var(--surface);
+    box-shadow: 0 2px 10px rgb(21 35 43 / 0.35);
+  }
+
+  /* Horizontal photo strip that snaps one photo at a time. */
+  .snap-strip {
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .snap-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .snap-strip > * {
+    scroll-snap-align: center;
+  }
+}
+
+/* The one orchestrated motion: a house photo filling with color from the ground up. */
+@property --paint {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 0%;
+}
+
+@keyframes paint-up {
+  from {
+    --paint: 0%;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+.animate-paint {
+  animation: paint-up 2.4s var(--ease-paint) 0.35s both;
+}
+
+.animate-rise {
+  animation: rise-in 0.36s var(--ease-out) both;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 0%, var(--surface) 50%, var(--surface-2) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
