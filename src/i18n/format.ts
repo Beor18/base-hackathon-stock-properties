@@ -58,6 +58,16 @@ export function formatPercent(value: number, locale: Locale, { signed = false, d
   return percentSpacing(formatted, locale);
 }
 
+/**
+ * Progress toward the goal (0..1). Small steps still read as progress: "0,3 %" rather than "0 %",
+ * and it never rounds up to "100 %" before the goal is actually met.
+ */
+export function formatProgress(value: number, locale: Locale): string {
+  const clamped = Math.min(Math.max(value, 0), 1);
+  const digits = clamped === 0 || clamped >= 0.01 ? 0 : clamped < 0.001 ? 2 : 1;
+  return formatPercent(clamped < 1 ? Math.min(clamped, 0.99) : 1, locale, { digits });
+}
+
 /** Basis points to a readable percent, keeping up to two decimals ("0,5 %"). */
 export function formatBps(bps: number, locale: Locale): string {
   const formatted = numberFormat(locale, {

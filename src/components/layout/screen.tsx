@@ -10,7 +10,8 @@ type ScreenProps = {
   children?: ReactNode;
   /**
    * The screen's one primary action. On phones it docks to the bottom, in the thumb zone; from
-   * tablet up it sits inline after the content.
+   * tablet up it sits inline after the content and sticks to the bottom edge when the content is
+   * taller than the window, so the action is never below the fold.
    */
   dock?: ReactNode;
   width?: "narrow" | "wide";
@@ -40,7 +41,7 @@ export function Screen({ title, lead, back, media, children, dock, width = "narr
       )}
       {children && <div className="mt-6">{children}</div>}
       {dock && (
-        <div className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-paper/95 px-5 pb-[max(env(safe-area-inset-bottom),0.875rem)] pt-3 shadow-dock backdrop-blur-md md:static md:z-auto md:mt-8 md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
+        <div className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-paper/95 px-5 pb-[max(env(safe-area-inset-bottom),0.875rem)] pt-3 shadow-dock backdrop-blur-md md:sticky md:mt-6 md:border-0 md:bg-paper md:px-0 md:py-4 md:shadow-none md:backdrop-blur-none">
           <div className="mx-auto flex w-full max-w-xl flex-col gap-2 md:mx-0">{dock}</div>
         </div>
       )}

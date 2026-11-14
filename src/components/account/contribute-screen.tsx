@@ -4,7 +4,7 @@ import { useEffect, useId, useState } from "react";
 
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/es";
-import { fill, formatAmount, formatBps, formatMoney, formatPercent, formatShares } from "@/i18n/format";
+import { fill, formatAmount, formatBps, formatMoney, formatProgress, formatShares } from "@/i18n/format";
 import { Screen, StateMessage } from "@/components/layout/screen";
 import { HouseFill } from "@/components/property/house-fill";
 import { Button, ButtonLink } from "@/components/ui/button";
@@ -282,11 +282,13 @@ function ContributeForm({
               key={preset}
               type="button"
               onClick={() => setRaw(formatAmount(preset, lang))}
+              aria-label={formatMoney(preset, lang, code)}
               className={`min-h-11 rounded-full border px-1 text-label font-semibold tabular transition-colors ${
                 amount === preset ? "border-ink bg-ink text-paper" : "border-line-strong bg-surface text-ink hover:border-ink"
               }`}
             >
-              {formatMoney(preset, lang, code)}
+              {/* The currency already sits next to the amount field; repeating it does not fit at 360 px. */}
+              {formatAmount(preset, lang)}
             </button>
           ))}
         </div>
@@ -321,7 +323,10 @@ function ContributeForm({
       )}
 
       {amount !== null && !tooSmall && !tooBig && (
-        <p className="mt-3 text-ink-2 tabular">{fill(t.after, { pct: formatPercent(afterPct, lang) })}</p>
+        <p className="mt-3 text-ink-2 tabular">
+          {/* Small contributions still show progress: "0,3 %" instead of "0 %". */}
+          {fill(t.after, { pct: formatProgress(afterPct, lang) })}
+        </p>
       )}
     </Screen>
   );
@@ -349,7 +354,7 @@ function ContributeSuccess({
           animate
           priority
           sizes="(min-width: 640px) 560px, 100vw"
-          label={fill(labels.goal.progressPct, { pct: formatPercent(pct, lang) })}
+          label={fill(labels.goal.progressPct, { pct: formatProgress(pct, lang) })}
           className="aspect-[4/3]"
         />
       }
@@ -357,7 +362,7 @@ function ContributeSuccess({
       lead={fill(t.successBody, {
         shares: formatShares(state.goal.shares, lang),
         stock: state.goal.stock.name,
-        pct: formatPercent(pct, lang),
+        pct: formatProgress(pct, lang),
       })}
       dock={
         <ButtonLink href={`/${lang}/meta`} block>

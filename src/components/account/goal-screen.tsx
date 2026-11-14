@@ -2,7 +2,7 @@
 
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/es";
-import { fill, formatMoney, formatPercent, formatShares } from "@/i18n/format";
+import { fill, formatMoney, formatProgress, formatShares } from "@/i18n/format";
 import { Screen, StateMessage } from "@/components/layout/screen";
 import { HouseFill } from "@/components/property/house-fill";
 import { Button, ButtonLink } from "@/components/ui/button";
@@ -223,7 +223,7 @@ function GoalProgress({
   const progress = goal.targetUsd > 0 ? goal.savedUsd / goal.targetUsd : 0;
   const reached = progress >= 1;
   const remaining = Math.max(goal.targetUsd - goal.savedUsd, 0);
-  const pctLabel = formatPercent(Math.min(progress, 1), lang);
+  const pctLabel = formatProgress(progress, lang);
 
   return (
     <Screen
