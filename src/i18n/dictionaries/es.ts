@@ -370,6 +370,9 @@ const es = {
     offerNoGoalBody:
       "Para reservar esta casa con acciones, primero juntá la seña: {pct} del precio, más un margen por si las acciones bajan. Cuando llegues, abrí este link de nuevo y reservás.",
     offerNoGoalCta: "Ahorrar para esta casa",
+    offerOwnTitle: "Este link lo generaste vos",
+    offerOwnBody: "Mandáselo a quien quiere reservar. Cuando reserve, lo ves en tu cuenta.",
+    offerOwnCta: "Ir a tu cuenta",
     noLinkTitle: "Pedile el link al corredor",
     noLinkBody: "Para reservar necesitás el link de reserva del corredor de esta casa. Te armamos el mensaje.",
     noLinkCta: "Pedir el link por WhatsApp",

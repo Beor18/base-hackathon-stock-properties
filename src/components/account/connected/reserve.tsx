@@ -60,7 +60,11 @@ export function ConnectedReserveScreen({ lang, labels }: { lang: Locale; labels:
     staleTime: Infinity,
     retry: (count, error) => !(error instanceof ApiClientError && error.status === 404) && count < 2,
   });
-  const offer = offerQuery.data ?? null;
+  const fetchedOffer = offerQuery.data ?? null;
+  // The broker opening their own link: the contract refuses a broker reserving for themselves, so
+  // the offer is set aside (and not remembered for the broker's own goal).
+  const ownOffer = fetchedOffer !== null && address !== undefined && fetchedOffer.broker.toLowerCase() === address.toLowerCase();
+  const offer = ownOffer ? null : fetchedOffer;
   useEffect(() => {
     if (linkOfferId && offer) rememberOfferId(offer.ref, linkOfferId);
   }, [linkOfferId, offer]);
@@ -104,6 +108,8 @@ export function ConnectedReserveScreen({ lang, labels }: { lang: Locale; labels:
       offerQuery.error instanceof ApiClientError && offerQuery.error.status === 404
         ? { kind: "offer-missing" }
         : { kind: "error", onRetry: () => void offerQuery.refetch() };
+  } else if (linkOfferId && ownOffer) {
+    state = { kind: "offer-own" };
   } else if (!goalView && offer) {
     // Opened the broker's link before saving: start a goal for that house with the link's seña.
     state = {

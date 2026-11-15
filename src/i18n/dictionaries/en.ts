@@ -367,6 +367,9 @@ const en: Dictionary = {
     offerNoGoalBody:
       "To reserve this home with stocks, first save the deposit: {pct} of the price, plus a margin in case the stocks drop. When you get there, open this link again to reserve.",
     offerNoGoalCta: "Save for this home",
+    offerOwnTitle: "You made this link",
+    offerOwnBody: "Send it to the person who wants to reserve. When they do, you'll see it in your account.",
+    offerOwnCta: "Go to your account",
     noLinkTitle: "Ask the broker for the link",
     noLinkBody: "To reserve you need the reservation link from this home's broker. We'll write the message for you.",
     noLinkCta: "Ask for the link on WhatsApp",

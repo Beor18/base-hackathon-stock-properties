@@ -260,6 +260,7 @@ const screens: Record<string, Entry> = {
   ),
 
   "reserve.signed-out": (lang, dict) => <ReserveScreen lang={lang} labels={dict} state={{ kind: "signed-out", signIn: signIn({ email: "" }) }} />,
+  "reserve.offer-own": (lang, dict) => <ReserveScreen lang={lang} labels={dict} state={{ kind: "offer-own" }} />,
   "reserve.offer-no-goal": (lang, dict) => (
     <ReserveScreen
       lang={lang}

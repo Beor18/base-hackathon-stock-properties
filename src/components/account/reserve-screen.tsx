@@ -29,6 +29,8 @@ export type ReservationOffer = {
  * `/reservar`: lock the goal's stocks as the seña.
  *
  * - `offer-missing`: the short link points at no offer (mistyped or made up).
+ * - `offer-own`: the broker opened their own link. Nobody can reserve with their own link, so the
+ *   one action leads to their account, where the reservation shows up once the buyer makes it.
  * - `offer-no-goal`: the broker's link was opened by an account with no goal yet. The one action
  *   starts a goal for that house with the link's seña (`setupHref`).
  * - `no-link`: the goal is reached but there is no broker link in the URL. The one action opens
@@ -45,6 +47,7 @@ export type ReserveScreenState =
   | { kind: "error"; onRetry: () => void }
   | { kind: "no-goal" }
   | { kind: "offer-missing" }
+  | { kind: "offer-own" }
   | { kind: "offer-no-goal"; offer: ReservationOffer; setupHref: string }
   | { kind: "not-reached"; goal: Goal }
   | { kind: "no-link"; goal: Goal; agent: { name: string; phone: string | null } | null; listingUrl: string }
@@ -110,6 +113,16 @@ export function ReserveScreen({ lang, state, labels }: ReserveScreenProps) {
           <StateMessage icon={<EmptyHouse />} title={t.offerMissingTitle} body={t.offerMissingBody}>
             <ButtonLink href={`/${lang}/casa`} block className="sm:w-auto sm:min-w-64">
               {labels.contribute.noGoalCta}
+            </ButtonLink>
+          </StateMessage>
+        </Screen>
+      );
+    case "offer-own":
+      return (
+        <Screen back={{ href: `/${lang}`, label: common.back }}>
+          <StateMessage icon={<EmptyHouse />} title={t.offerOwnTitle} body={t.offerOwnBody}>
+            <ButtonLink href={`/${lang}/cuenta`} block className="sm:w-auto sm:min-w-64">
+              {t.offerOwnCta}
             </ButtonLink>
           </StateMessage>
         </Screen>
