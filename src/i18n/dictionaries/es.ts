@@ -456,7 +456,7 @@ const es = {
     signingOut: "Cerrando sesión",
     signInContext: "Para ver tu cuenta, entrá con tu email.",
     loading: "Leyendo tu cuenta",
-    loadingSeconds: 2,
+    loadingSeconds: 5,
     error: "No pudimos leer tu cuenta.",
   },
   account: {

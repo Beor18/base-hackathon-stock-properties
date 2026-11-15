@@ -33,14 +33,18 @@ export function ConnectedProfileScreen({ lang, labels }: { lang: Locale; labels:
     state = { kind: "signed-out", signIn: session.signIn };
   } else if (account.isError) {
     state = { kind: "error", onRetry: () => void account.refetch() };
+  } else if (!account.data) {
+    // Wait for the whole account: rendering early showed "no goal" and grew the cards, which slid
+    // "Cerrar sesión" under the finger that was about to press the main button.
+    state = { kind: "loading" };
   } else {
     const { signOut } = session;
     state = {
       kind: "ready",
       address: session.address,
       email: session.email,
-      balances: account.data ? toBalances(account.data) : null,
-      goal: account.data?.goal ? toGoal(account.data.goal) : null,
+      balances: toBalances(account.data),
+      goal: account.data.goal ? toGoal(account.data.goal) : null,
       activityUrl: deployment.explorerUrl ? `${deployment.explorerUrl}/address/${session.address}` : null,
       signingOut,
       onSignOut: () => {

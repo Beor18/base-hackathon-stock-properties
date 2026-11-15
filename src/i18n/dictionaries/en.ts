@@ -452,7 +452,7 @@ const en: Dictionary = {
     signingOut: "Signing out",
     signInContext: "To see your account, sign in with your email.",
     loading: "Reading your account",
-    loadingSeconds: 2,
+    loadingSeconds: 5,
     error: "We could not read your account.",
   },
   account: {

@@ -27,7 +27,7 @@ export type ProfileScreenState =
       kind: "ready";
       address: string;
       email: string | null;
-      balances: Balances | null;
+      balances: Balances;
       goal: Goal | null;
       activityUrl: string | null;
       onSignOut: () => void;
@@ -90,20 +90,16 @@ export function ProfileScreen({ lang, state, labels }: { lang: Locale; state: Pr
             {t.fundCta}
           </ButtonLink>
         </div>
-        {balances ? (
-          <dl className="mt-1 grid gap-3">
-            <div>
-              <dt className="sr-only">{t.dollars}</dt>
-              <dd className="type-display text-h1 text-ink tabular">{formatMoney(balances.usd, lang)}</dd>
-            </div>
-            <div className="flex items-baseline justify-between gap-4 border-t border-line pt-3">
-              <dt className="text-ink-2">{t.pesos}</dt>
-              <dd className="font-semibold text-ink tabular">{formatMoney(balances.ars, lang, "ARS")}</dd>
-            </div>
-          </dl>
-        ) : (
-          <div className="mt-3 h-9 w-40 animate-pulse rounded-lg bg-surface-2" aria-hidden />
-        )}
+        <dl className="mt-1 grid gap-3">
+          <div>
+            <dt className="sr-only">{t.dollars}</dt>
+            <dd className="type-display text-h1 text-ink tabular">{formatMoney(balances.usd, lang)}</dd>
+          </div>
+          <div className="flex items-baseline justify-between gap-4 border-t border-line pt-3">
+            <dt className="text-ink-2">{t.pesos}</dt>
+            <dd className="font-semibold text-ink tabular">{formatMoney(balances.ars, lang, "ARS")}</dd>
+          </div>
+        </dl>
       </section>
 
       <section aria-labelledby="perfil-meta" className="mt-4 rounded-[var(--radius-sheet)] border border-line bg-surface p-5">
