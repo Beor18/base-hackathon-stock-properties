@@ -9,9 +9,17 @@ import { demoExchangeAbi, goalRegistryAbi, reservationEscrowAbi, stockOracleAbi 
 
 export const chain = getChain(deployment.chainId);
 
-/** Read-only client. Calls made in the same tick are grouped into one JSON-RPC batch. */
+/** Calldata bytes one multicall may carry: enough for every listed stock in a single request. */
+const MULTICALL_BATCH_BYTES = 16_384;
+
+/**
+ * Read-only client. Contract reads made in the same tick travel as one multicall, and anything
+ * else as one JSON-RPC batch: public nodes cap requests per second, and listing the stocks alone
+ * takes dozens of reads. Chains without a multicall contract (local Anvil) read one by one.
+ */
 export const publicClient = createPublicClient({
   chain,
+  batch: { multicall: { batchSize: MULTICALL_BATCH_BYTES } },
   transport: http(serverEnv.RPC_URL ?? deployment.rpcUrl, { batch: true }),
 });
 
