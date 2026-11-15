@@ -26,6 +26,8 @@ export type ReservationOffer = {
 /**
  * `/reservar`: lock the goal's stocks as the seña.
  *
+ * - `offer-no-goal`: the broker's link was opened by an account with no goal yet. The one action
+ *   starts a goal for that house with the link's seña (`setupHref`).
  * - `no-link`: the goal is reached but there is no broker link in the URL. The one action opens
  *   WhatsApp with a message asking the broker for it. `agent` comes from the listing.
  * - `not-reached`: the goal is not covered yet.
@@ -39,6 +41,7 @@ export type ReserveScreenState =
   | { kind: "loading" }
   | { kind: "error"; onRetry: () => void }
   | { kind: "no-goal" }
+  | { kind: "offer-no-goal"; offer: ReservationOffer; setupHref: string }
   | { kind: "not-reached"; goal: Goal }
   | { kind: "no-link"; goal: Goal; agent: { name: string; phone: string | null } | null; listingUrl: string }
   | {
@@ -93,6 +96,20 @@ export function ReserveScreen({ lang, state, labels }: ReserveScreenProps) {
           <StateMessage icon={<EmptyHouse />} title={labels.contribute.noGoalTitle} body={labels.contribute.noGoalBody}>
             <ButtonLink href={`/${lang}/casa`} block className="sm:w-auto sm:min-w-64">
               {labels.contribute.noGoalCta}
+            </ButtonLink>
+          </StateMessage>
+        </Screen>
+      );
+    case "offer-no-goal":
+      return (
+        <Screen back={{ href: `/${lang}`, label: common.back }}>
+          <StateMessage
+            icon={<EmptyHouse />}
+            title={fill(t.offerNoGoalTitle, { broker: state.offer.brokerName })}
+            body={fill(t.offerNoGoalBody, { pct: formatDepositPct(state.offer.depositPct, lang) })}
+          >
+            <ButtonLink href={state.setupHref} block className="sm:w-auto sm:min-w-64">
+              {t.offerNoGoalCta}
             </ButtonLink>
           </StateMessage>
         </Screen>

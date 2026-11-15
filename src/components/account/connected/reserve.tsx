@@ -2,7 +2,7 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getAddress, isAddress } from "viem";
 
 import { keys, useAccountSnapshot, useReservation } from "@/hooks/queries";
@@ -14,22 +14,56 @@ import { toGoal, unitsToNumber, wadToNumber } from "@/lib/view-models";
 import { useAccount } from "@/lib/wallet/context";
 
 import { ReserveScreen, type ReserveScreenState } from "../reserve-screen";
-import { parseReservationOffer } from "../routes";
+import { goalDraftHref, parseReservationOffer } from "../routes";
 import { AccountUnavailable, useRefreshAccount, type AccountLabels } from "./shared";
 
 type Labels = Pick<Dictionary, "reserve" | "signIn" | "common" | "goal" | "contribute"> & AccountLabels;
 
+type Params = { get(name: string): string | null };
+
+function toOffer(params: Params) {
+  const parsed = parseReservationOffer(params);
+  return parsed && isAddress(parsed.broker) ? { ...parsed, broker: getAddress(parsed.broker) } : null;
+}
+
+/**
+ * The broker's link, remembered per house in this browser: someone who opens it before saving can
+ * reserve later from their goal without asking for it again. A convenience only; the link itself is
+ * what the copy tells people to keep.
+ */
+const offerKey = (ref: string) => `accasa-offer:${ref}`;
+
+function rememberOffer(ref: string, search: string) {
+  try {
+    window.localStorage.setItem(offerKey(ref), search);
+  } catch {
+    // Private mode or blocked storage: the link still works when opened again.
+  }
+}
+
+function recallOffer(ref: string) {
+  try {
+    const search = window.localStorage.getItem(offerKey(ref));
+    return search ? toOffer(new URLSearchParams(search)) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function ConnectedReserveScreen({ lang, labels }: { lang: Locale; labels: Labels }) {
   const searchParams = useSearchParams();
-  const offer = useMemo(() => {
-    const parsed = parseReservationOffer(searchParams);
-    return parsed && isAddress(parsed.broker) ? { ...parsed, broker: getAddress(parsed.broker) } : null;
-  }, [searchParams]);
+  const linkOffer = useMemo(() => toOffer(searchParams), [searchParams]);
+  useEffect(() => {
+    if (linkOffer) rememberOffer(linkOffer.ref, searchParams.toString());
+  }, [linkOffer, searchParams]);
 
   const session = useAccount();
   const address = session.status === "ready" ? session.address : undefined;
   const account = useAccountSnapshot(address);
   const goalView = account.data?.goal ?? null;
+  // Without a link in the URL, fall back to one this browser saw for the goal's house.
+  const goalRef = goalView?.property.ref ?? null;
+  const offer = useMemo(() => linkOffer ?? (goalRef ? recallOffer(goalRef) : null), [linkOffer, goalRef]);
   const queryClient = useQueryClient();
   const refresh = useRefreshAccount();
   const tx = useTransaction(labels.txErrors);
@@ -62,6 +96,13 @@ export function ConnectedReserveScreen({ lang, labels }: { lang: Locale; labels:
     state = { kind: "loading" };
   } else if (account.isError) {
     state = { kind: "error", onRetry: () => void account.refetch() };
+  } else if (!goalView && offer) {
+    // Opened the broker's link before saving: start a goal for that house with the link's seña.
+    state = {
+      kind: "offer-no-goal",
+      offer: { brokerName: offer.brokerName, brokerCompany: offer.brokerCompany, depositPct: offer.pct },
+      setupHref: goalDraftHref(lang, { ref: offer.ref, pct: offer.pct, manualPriceUsd: null, sourceUrl: null }),
+    };
   } else if (!goalView) {
     state = { kind: "no-goal" };
   } else if (reservationId) {

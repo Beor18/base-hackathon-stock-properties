@@ -248,6 +248,13 @@ const screens: Record<string, Entry> = {
   ),
 
   "reserve.signed-out": (lang, dict) => <ReserveScreen lang={lang} labels={dict} state={{ kind: "signed-out", signIn: signIn({ email: "" }) }} />,
+  "reserve.offer-no-goal": (lang, dict) => (
+    <ReserveScreen
+      lang={lang}
+      labels={dict}
+      state={{ kind: "offer-no-goal", offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 1.5 }, setupHref: `/${lang}/meta?casa=smarlin%3A0fba73b0-92eb-48a5-8c96-2bb31dddd75d&sena=1.5` }}
+    />
+  ),
   "reserve.not-reached": (lang, dict) => <ReserveScreen lang={lang} labels={dict} state={{ kind: "not-reached", goal: goal(7_400) }} />,
   "reserve.no-link": (lang, dict) => (
     <ReserveScreen lang={lang} labels={dict} state={{ kind: "no-link", goal: goal(19_930), agent: { name: "Kelvin", phone: "1-787-546-1557" }, listingUrl: "https://www.smarlin.com" }} />
