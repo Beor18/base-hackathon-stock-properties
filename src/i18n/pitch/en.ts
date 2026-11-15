@@ -26,14 +26,14 @@ const en: PitchDeck = {
     {
       id: "problem",
       label: "The problem",
-      title: "In Argentina, homes are paid in dollars, in cash.",
+      title: "In Latin America, buying a home starts with saving the down payment.",
       points: [
+        { title: "11% or less", body: "of GDP is mortgage credit in Brazil, Mexico, Colombia and Peru. In the US, 44%." },
         { title: "84.6%", body: "of home purchases in Buenos Aires city closed without a mortgage." },
-        { title: "USD 120,106", body: "is what each one costs on average." },
-        { title: "6+ years", body: "of saving USD 500 a month for the cheapest apartment." },
+        { title: "Seña, enganche, pie", body: "cuota inicial, entrada, pronto. Every country has its own word for it." },
       ],
       numbers: true,
-      foot: "Those savings sleep in a drawer. And whoever invested them sells everything at once the day the home shows up. Sources: Buenos Aires Notaries' Association (January to September 2026) and Propio (2026).",
+      foot: "Those savings sleep in a drawer. And whoever invested them sells everything at once the day the home shows up. Sources: Deloitte and US Federal Reserve (2025), Buenos Aires Notaries' Association (2026).",
       tone: "ink",
       layout: "points",
     },
