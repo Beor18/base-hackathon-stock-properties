@@ -34,7 +34,7 @@ export function SiteHeader({ lang, common }: SiteHeaderProps) {
         >
           <LangSwitch current={lang} label={common.language} switchTo={common.switchTo} />
         </Suspense>
-        <HeaderAccount lang={lang} label={common.account} />
+        <HeaderAccount lang={lang} label={common.account} newsLabel={common.accountNews} />
       </div>
     </header>
   );

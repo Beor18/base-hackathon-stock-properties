@@ -1,6 +1,15 @@
 "use client";
 
-import { dataSuffix, PrivyProvider, useCreateWallet, useLoginWithEmail, usePrivy, useWallets } from "@privy-io/react-auth";
+import {
+  dataSuffix,
+  getIdentityToken,
+  PrivyProvider,
+  useCreateWallet,
+  useLoginWithEmail,
+  usePrivy,
+  useUser,
+  useWallets,
+} from "@privy-io/react-auth";
 import { SmartWalletsProvider, useSmartWallets } from "@privy-io/react-auth/smart-wallets";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { getAddress } from "viem";
@@ -44,6 +53,7 @@ export function PrivyAccountProvider({ appId, children }: { appId: string; child
 
 function PrivySession({ children }: { children: ReactNode }) {
   const { ready, authenticated, user, logout } = usePrivy();
+  const { refreshUser } = useUser();
   const { client, getClientForChain } = useSmartWallets();
   const { sendCode, loginWithCode } = useLoginWithEmail();
   const { createWallet } = useCreateWallet();
@@ -152,8 +162,10 @@ function PrivySession({ children }: { children: ReactNode }) {
         );
       },
     };
-    return { status: "ready", address: wallet.address, wallet, email: user?.email?.address ?? null, signOut: logout };
-  }, [ready, authenticated, signIn, address, stalledUserId, userId, client, getClientForChain, user, logout]);
+    // Sessions from before identity tokens were enabled have none until the user is refreshed.
+    const identityToken = async () => (await getIdentityToken()) ?? (await refreshUser().then(getIdentityToken, () => null));
+    return { status: "ready", address: wallet.address, wallet, email: user?.email?.address ?? null, signOut: logout, identityToken };
+  }, [ready, authenticated, signIn, address, stalledUserId, userId, client, getClientForChain, user, logout, refreshUser]);
 
   return <AccountContext.Provider value={session}>{children}</AccountContext.Provider>;
 }

@@ -21,11 +21,14 @@ export type ReservationOffer = {
   brokerName: string;
   brokerCompany: string | null;
   depositPct: number;
+  /** The broker is the listing's agent on Smarlin (checked by email when the link was made). */
+  verified: boolean;
 };
 
 /**
  * `/reservar`: lock the goal's stocks as the seña.
  *
+ * - `offer-missing`: the short link points at no offer (mistyped or made up).
  * - `offer-no-goal`: the broker's link was opened by an account with no goal yet. The one action
  *   starts a goal for that house with the link's seña (`setupHref`).
  * - `no-link`: the goal is reached but there is no broker link in the URL. The one action opens
@@ -41,6 +44,7 @@ export type ReserveScreenState =
   | { kind: "loading" }
   | { kind: "error"; onRetry: () => void }
   | { kind: "no-goal" }
+  | { kind: "offer-missing" }
   | { kind: "offer-no-goal"; offer: ReservationOffer; setupHref: string }
   | { kind: "not-reached"; goal: Goal }
   | { kind: "no-link"; goal: Goal; agent: { name: string; phone: string | null } | null; listingUrl: string }
@@ -100,6 +104,16 @@ export function ReserveScreen({ lang, state, labels }: ReserveScreenProps) {
           </StateMessage>
         </Screen>
       );
+    case "offer-missing":
+      return (
+        <Screen back={{ href: `/${lang}`, label: common.back }}>
+          <StateMessage icon={<EmptyHouse />} title={t.offerMissingTitle} body={t.offerMissingBody}>
+            <ButtonLink href={`/${lang}/casa`} block className="sm:w-auto sm:min-w-64">
+              {labels.contribute.noGoalCta}
+            </ButtonLink>
+          </StateMessage>
+        </Screen>
+      );
     case "offer-no-goal":
       return (
         <Screen back={{ href: `/${lang}`, label: common.back }}>
@@ -108,6 +122,7 @@ export function ReserveScreen({ lang, state, labels }: ReserveScreenProps) {
             title={fill(t.offerNoGoalTitle, { broker: state.offer.brokerName })}
             body={fill(t.offerNoGoalBody, { pct: formatDepositPct(state.offer.depositPct, lang) })}
           >
+            {state.offer.verified && <VerifiedBroker label={t.verifiedBroker} />}
             <ButtonLink href={state.setupHref} block className="sm:w-auto sm:min-w-64">
               {t.offerNoGoalCta}
             </ButtonLink>
@@ -227,7 +242,7 @@ function ReserveReady({
           <Row
             label={t.beneficiary}
             value={state.offer.brokerName}
-            hint={state.offer.brokerCompany ?? undefined}
+            hint={[state.offer.brokerCompany, state.offer.verified ? t.verifiedBroker : null].filter(Boolean).join(" · ") || undefined}
           />
           <Row label={t.until} value={formatDate(state.endsAt, lang)} />
           <Row label={fill(common.feeLine, { pct: formatBps(state.feeBps, lang) })} value={formatMoney(state.feeUsd, lang)} />
@@ -294,5 +309,17 @@ export function ChatGlyph() {
     <svg viewBox="0 0 20 20" className="size-5" aria-hidden fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round">
       <path d="M10 3a7 7 0 0 0-6.1 10.4L3 17l3.7-.9A7 7 0 1 0 10 3z" />
     </svg>
+  );
+}
+
+/** "Corredor verificado": the broker is the agent who publishes this house on Smarlin. */
+function VerifiedBroker({ label }: { label: string }) {
+  return (
+    <p className="mb-5 flex items-center gap-1.5 text-label font-semibold text-palm">
+      <svg viewBox="0 0 16 16" aria-hidden className="size-4 shrink-0">
+        <path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      {label}
+    </p>
   );
 }

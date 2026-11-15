@@ -16,6 +16,7 @@ export default async function CuentaPage() {
       lang={lang}
       labels={{
         profile: dict.profile,
+          reservation: dict.reservation,
         fund: dict.fund,
         signIn: dict.signIn,
         common: dict.common,

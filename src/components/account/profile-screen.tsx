@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { HouseAvatar } from "@/components/brand/house-avatar";
 import { Screen } from "@/components/layout/screen";
 import { Button, ButtonLink } from "@/components/ui/button";
@@ -7,7 +9,8 @@ import { CopyButton } from "@/components/ui/copy-button";
 import { WaitBar } from "@/components/ui/wait-bar";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/es";
-import { fill, formatMoney, formatProgress, shortAddress } from "@/i18n/format";
+import { fill, formatDate, formatMoney, formatProgress, shortAddress } from "@/i18n/format";
+import type { InboxItem } from "@/lib/view-models";
 
 import { LoadError, SignInPanel } from "./sign-in-panel";
 import type { Balances, Goal, SignInProps } from "./types";
@@ -18,6 +21,7 @@ import type { Balances, Goal, SignInProps } from "./types";
  *
  * - `ready.email`: null for local dev accounts.
  * - `ready.activityUrl`: the account's page on the block explorer. Null hides the link.
+ * - `ready.inbox`: reservations in this account's favor (brokers). Empty hides the section.
  */
 export type ProfileScreenState =
   | { kind: "signed-out"; signIn: SignInProps }
@@ -28,13 +32,14 @@ export type ProfileScreenState =
       address: string;
       email: string | null;
       balances: Balances;
+      inbox: InboxItem[];
       goal: Goal | null;
       activityUrl: string | null;
       onSignOut: () => void;
       signingOut: boolean;
     };
 
-type Labels = Pick<Dictionary, "profile" | "fund" | "signIn" | "common">;
+type Labels = Pick<Dictionary, "profile" | "fund" | "signIn" | "common" | "reservation">;
 
 export function ProfileScreen({ lang, state, labels }: { lang: Locale; state: ProfileScreenState; labels: Labels }) {
   const { profile: t, common } = labels;
@@ -80,6 +85,38 @@ export function ProfileScreen({ lang, state, labels }: { lang: Locale; state: Pr
         <h1 className="type-display mt-5 max-w-full break-words text-h2 text-ink">{state.email ?? t.devEmail}</h1>
         <p className="mt-2 max-w-xs text-label text-ink-2 text-pretty">{t.avatarNote}</p>
       </div>
+
+      {state.inbox.length > 0 && (
+        <section aria-labelledby="perfil-reservas" className="mt-8 rounded-[var(--radius-sheet)] border border-line bg-surface p-5">
+          <h2 id="perfil-reservas" className="font-semibold text-ink">
+            {t.inboxTitle}
+          </h2>
+          <ul className="mt-2 divide-y divide-line">
+            {state.inbox.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={`/${lang}/r/${item.id}`}
+                  className="-mx-2 flex min-h-14 items-center justify-between gap-3 rounded-lg px-2 py-3 hover:bg-surface-2"
+                >
+                  <span className="min-w-0">
+                    <span className="block font-semibold text-ink tabular">
+                      {fill(t.inboxItem, { amount: formatMoney(item.senaUsd, lang) })}
+                    </span>
+                    <span className="block text-label text-ink-2">
+                      {labels.reservation.status[item.status]} · {fill(t.inboxEnds, { date: formatDate(item.endsAt, lang) })}
+                    </span>
+                  </span>
+                  {(item.payable || item.isNew) && (
+                    <span className="shrink-0 rounded-full bg-accent px-2.5 py-1 text-label font-semibold text-white">
+                      {item.payable ? t.inboxPayable : t.inboxNew}
+                    </span>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <section aria-labelledby="perfil-saldo" className="mt-8 rounded-[var(--radius-sheet)] border border-line bg-surface p-5">
         <div className="flex items-start justify-between gap-4">

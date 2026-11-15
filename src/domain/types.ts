@@ -212,3 +212,21 @@ export type ReservePlanQuote = {
 export type FaucetPlanQuote = { usdc: string; wars: string };
 
 export type ApiError = { error: { code: string; message: string; contractError?: string } };
+
+/** A broker's reservation offer, behind the short link `/o/<id>`. */
+export type ReservationOfferDto = {
+  id: string;
+  ref: string;
+  /** Listing URL, only for pasted links. */
+  sourceUrl: string | null;
+  /** Seña as a percentage of the price. */
+  pct: number;
+  broker: Address;
+  brokerName: string;
+  brokerCompany: string | null;
+  /** The broker's sign-in email matched the listing agent's on Smarlin when the link was made. */
+  verified: boolean;
+};
+
+/** When the broker last opened their inbox (unix seconds), or null if never. */
+export type InboxSeen = { seenAt: number | null };

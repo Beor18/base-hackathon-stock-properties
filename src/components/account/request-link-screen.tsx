@@ -17,19 +17,23 @@ import { WaitBar } from "@/components/ui/wait-bar";
 
 import { GoalPropertyRow } from "./parts";
 import { ChatGlyph } from "./reserve-screen";
-import { reservationOfferHref, whatsappHref } from "./routes";
+import { whatsappHref } from "./routes";
 import { SignInPanel } from "./sign-in-panel";
 import type { SignInProps } from "./types";
 
 /**
- * `/pedir?casa=<ref>`: the broker creates the reservation link. No transaction: the link carries
- * the property, the seña % and the broker's account, and the buyer reserves from it.
- * The screen reads the property itself; integration only provides the session.
+ * `/pedir?casa=<ref>`: the broker creates the reservation link. No transaction: the server keeps
+ * the offer (property, seña %, the broker's own account) and the link only carries its id, so it
+ * cannot be edited. The screen reads the property itself; integration provides the session and
+ * `createOffer`, which saves the offer and returns the short link and whether the broker is
+ * verified as the listing's agent.
  */
+export type OfferInput = { ref: string; url: string | null; pct: number; brokerName: string; brokerCompany: string | null };
+
 export type RequestLinkScreenState =
   | { kind: "loading" }
   | { kind: "signed-out"; signIn: SignInProps }
-  | { kind: "ready"; brokerAddress: string };
+  | { kind: "ready"; createOffer: (input: OfferInput) => Promise<{ url: string; verified: boolean }> };
 
 type RequestLinkScreenProps = {
   lang: Locale;
@@ -111,19 +115,19 @@ export function RequestLinkScreen({ lang, propertyRef, sourceUrl, state, labels 
     );
   }
 
-  return <RequestForm key={property.ref} lang={lang} property={property} brokerAddress={state.brokerAddress} labels={labels} row={row} />;
+  return <RequestForm key={property.ref} lang={lang} property={property} createOffer={state.createOffer} labels={labels} row={row} />;
 }
 
 function RequestForm({
   lang,
   property,
-  brokerAddress,
+  createOffer,
   labels,
   row,
 }: {
   lang: Locale;
   property: PropertyDetail;
-  brokerAddress: string;
+  createOffer: Extract<RequestLinkScreenState, { kind: "ready" }>["createOffer"];
   labels: RequestLinkScreenProps["labels"];
   row: Parameters<typeof GoalPropertyRow>[0]["property"];
 }) {
@@ -136,24 +140,31 @@ function RequestForm({
   const [manualPrice, setManualPrice] = useState("");
   const [phase, setPhase] = useState<"form" | "creating" | "ready">("form");
   const [link, setLink] = useState("");
+  const [verified, setVerified] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   function create(event: FormEvent) {
     event.preventDefault();
     if (!name.trim()) return;
     setPhase("creating");
-    // Building the link is instant; the short wait keeps the step legible and matches the other screens.
-    window.setTimeout(() => {
-      setLink(
-        reservationOfferHref(window.location.origin, lang, {
-          ref: property.ref,
-          pct,
-          broker: brokerAddress,
-          brokerName: name.trim(),
-          brokerCompany: company.trim() || null,
-        }),
-      );
-      setPhase("ready");
-    }, 600);
+    setFailed(false);
+    createOffer({
+      ref: property.ref,
+      url: property.provider === "link" ? property.sourceUrl : null,
+      pct,
+      brokerName: name.trim(),
+      brokerCompany: company.trim() || null,
+    })
+      .then((offer) => {
+        setLink(offer.url);
+        setVerified(offer.verified);
+        setPhase("ready");
+      })
+      .catch((error: unknown) => {
+        console.error("[request] could not create the offer", error);
+        setFailed(true);
+        setPhase("form");
+      });
   }
 
   if (phase === "ready") {
@@ -178,6 +189,9 @@ function RequestForm({
           detail={property.priceUsd ? `${common.sena} ${formatMoney(depositUsd(property.priceUsd, pct), lang)}` : undefined}
         />
         <p className="mt-5 break-all rounded-[var(--radius-control)] bg-surface-2 px-4 py-3 text-label text-ink">{link}</p>
+        <p className="mt-3 text-label text-ink-2 text-pretty">
+          {verified ? <span className="font-semibold text-palm">{t.verifiedNote}</span> : t.unverifiedNote}
+        </p>
       </Screen>
     );
   }
@@ -198,6 +212,11 @@ function RequestForm({
         }
       >
         <GoalPropertyRow property={row} lang={lang} />
+        {failed && (
+          <div className="mt-5">
+            <Notice tone="error">{t.error}</Notice>
+          </div>
+        )}
 
         <label htmlFor={nameId} className="mt-6 block text-label font-semibold text-ink">
           {t.nameLabel}

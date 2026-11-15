@@ -2,7 +2,7 @@ import { formatUnits } from "viem";
 
 import { deployment } from "@/config/deployment";
 import type { PropertyDetail } from "@/domain/property";
-import type { AccountSnapshot, GoalPropertyDto, GoalView, ReservationDetail, Stock } from "@/domain/types";
+import type { AccountSnapshot, GoalPropertyDto, GoalView, Reservation, ReservationDetail, Stock } from "@/domain/types";
 import type { ReservationStatus, ReservationView } from "@/components/account/reservation-screen";
 import type { Balances, Goal, GoalProperty, StockOption } from "@/components/account/types";
 
@@ -62,7 +62,7 @@ export function toBalances(snapshot: AccountSnapshot): Balances {
   };
 }
 
-function reservationStatus(reservation: ReservationDetail): ReservationStatus {
+export function reservationStatus(reservation: Reservation): ReservationStatus {
   if (reservation.status === "closed") {
     return reservation.paidUsdc !== null && BigInt(reservation.paidUsdc) > 0n ? "paid" : "released";
   }
@@ -101,3 +101,44 @@ export function toReservationView(reservation: ReservationDetail, fallbackTitle:
     paidUsd,
   };
 }
+
+/** One reservation in a broker's inbox ("Reservas a tu favor"). */
+export type InboxItem = {
+  id: string;
+  status: ReservationStatus;
+  senaUsd: number;
+  endsAt: number;
+  /** Created, or disputed by the buyer, since the broker last opened the inbox. */
+  isNew: boolean;
+  /** The claim is firm and the broker can get paid. */
+  payable: boolean;
+};
+
+/** The reservations in the account's favor, newest first, marked against when it last looked. */
+export function toInbox(reservations: Reservation[], account: string, seenAt: number | null): InboxItem[] {
+  const me = account.toLowerCase();
+  const usdcDecimals = deployment.payTokens.usdc.decimals;
+  return reservations
+    .filter((reservation) => reservation.beneficiary.toLowerCase() === me)
+    .map((reservation) => {
+      const status = reservationStatus(reservation);
+      const paidUsd = reservation.paidUsdc !== null ? unitsToNumber(reservation.paidUsdc, usdcDecimals) : 0;
+      const { claim } = reservation;
+      // The chain keeps no dispute time, only when the fallback arbiter may step in.
+      const disputedAt =
+        claim?.status === "disputed" && claim.arbitrationFallbackAt !== null
+          ? claim.arbitrationFallbackAt - deployment.params.arbitrationTimeoutSeconds
+          : 0;
+      const lastEvent = Math.max(reservation.createdAt, disputedAt);
+      return {
+        id: reservation.id,
+        status,
+        senaUsd: Math.round(wadToNumber(reservation.coverageUsd) + paidUsd),
+        endsAt: reservation.endsAt,
+        isNew: seenAt === null || lastEvent > seenAt,
+        payable: status === "payable",
+      };
+    });
+}
+
+export const inboxHasNews = (items: InboxItem[]) => items.some((item) => item.isNew || item.payable);

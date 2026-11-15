@@ -15,6 +15,12 @@ const schema = z.object({
   SMARLIN_API_URL: z.preprocess(emptyToUndefined, z.url().default("https://www.smarlin.com")),
   /** Base mainnet RPC for the USD/ARS reference rate, read on mainnet whatever chain the app runs on. */
   BASE_MAINNET_RPC_URL: z.preprocess(emptyToUndefined, z.url().default("https://mainnet.base.org")),
+  /** Accasa's database (Supabase): broker offers and inbox state. The URL is public. */
+  SUPABASE_URL: z.preprocess(emptyToUndefined, z.url().default("https://egidprkmchknhklpfdpf.supabase.co")),
+  /** Supabase secret key (service role). Without it, broker links and the inbox answer 503. */
+  SUPABASE_SECRET_KEY: z.preprocess(emptyToUndefined, z.string().min(20).optional()),
+  /** Privy app the identity tokens must be issued for (the same public id the browser uses). */
+  PRIVY_APP_ID: z.preprocess(emptyToUndefined, z.string().optional()),
 });
 
 export const serverEnv = schema.parse({
@@ -23,4 +29,7 @@ export const serverEnv = schema.parse({
   SWAP_CLIENT_ID: process.env.SWAP_CLIENT_ID,
   SMARLIN_API_URL: process.env.SMARLIN_API_URL,
   BASE_MAINNET_RPC_URL: process.env.BASE_MAINNET_RPC_URL,
+  SUPABASE_URL: process.env.SUPABASE_URL,
+  SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY,
+  PRIVY_APP_ID: process.env.NEXT_PUBLIC_PRIVY_APP_ID?.trim(),
 });

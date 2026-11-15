@@ -36,3 +36,33 @@ export class UnavailableRegionError extends Error {
     this.name = "UnavailableRegionError";
   }
 }
+
+/** The request needs a signed-in session and came without a valid one (401). */
+export class UnauthorizedError extends Error {
+  constructor(message = "Sign in again") {
+    super(message);
+    this.name = "UnauthorizedError";
+  }
+}
+
+/** Signed in, but this session cannot act on that resource (403). */
+export class ForbiddenError extends Error {
+  constructor(
+    readonly code: string,
+    message: string,
+  ) {
+    super(message);
+    this.name = "ForbiddenError";
+  }
+}
+
+/** Something the route depends on is not configured or not answering (503). */
+export class ServiceUnavailableError extends Error {
+  constructor(
+    readonly code: string,
+    message: string,
+  ) {
+    super(message);
+    this.name = "ServiceUnavailableError";
+  }
+}

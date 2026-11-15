@@ -119,6 +119,8 @@ export function DevAccountProvider({ children, labels }: { children: ReactNode; 
       wallet: devWallet(selected),
       email: null,
       signOut: async () => select(null),
+      // The local chain has no Privy: the server accepts this stand-in only on chain 31337.
+      identityToken: async () => `dev:${selected}`,
     };
   }, [accounts, selected, signIn, select]);
 

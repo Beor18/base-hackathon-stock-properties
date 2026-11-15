@@ -18,6 +18,7 @@ import { LiveStats } from "@/components/landing/live-stats";
 import { WaitBar } from "@/components/ui/wait-bar";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/es";
+import type { InboxItem } from "@/lib/view-models";
 
 /* ---------- Sample data (dev preview only) ---------- */
 
@@ -69,12 +70,23 @@ const PROFILE_ADDRESSES = [
   "0x39a7c5e3f1b9d7a5c3e1f9b7d5a3c1e9f7b5d3a1",
 ];
 
-function profile({ goal: sampleGoal, address = PROFILE_ADDRESSES[0], signingOut = false }: { goal: Goal | null; address?: string; signingOut?: boolean }) {
+function profile({
+  goal: sampleGoal,
+  address = PROFILE_ADDRESSES[0],
+  signingOut = false,
+  inbox = [],
+}: {
+  goal: Goal | null;
+  address?: string;
+  signingOut?: boolean;
+  inbox?: InboxItem[];
+}) {
   return {
     kind: "ready" as const,
     address,
     email: "vos@ejemplo.com",
     balances: { usd: 980.1, ars: 1_680_000 },
+    inbox,
     goal: sampleGoal,
     activityUrl: "https://sepolia.basescan.org/address/" + address,
     onSignOut: noop,
@@ -252,7 +264,7 @@ const screens: Record<string, Entry> = {
     <ReserveScreen
       lang={lang}
       labels={dict}
-      state={{ kind: "offer-no-goal", offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 1.5 }, setupHref: `/${lang}/meta?casa=smarlin%3A0fba73b0-92eb-48a5-8c96-2bb31dddd75d&sena=1.5` }}
+      state={{ kind: "offer-no-goal", offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 1.5, verified: true }, setupHref: `/${lang}/meta?casa=smarlin%3A0fba73b0-92eb-48a5-8c96-2bb31dddd75d&sena=1.5` }}
     />
   ),
   "reserve.not-reached": (lang, dict) => <ReserveScreen lang={lang} labels={dict} state={{ kind: "not-reached", goal: goal(7_400) }} />,
@@ -263,14 +275,14 @@ const screens: Record<string, Entry> = {
     <ReserveScreen
       lang={lang}
       labels={dict}
-      state={{ kind: "ready", goal: goal(19_930), offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 5 }, senaUsd: 19_700, lock: { shares: 86.2, valueUsd: 19_930 }, feeBps: 100, feeUsd: 197, endsAt: 1_797_000_000, onReserve: noop, tx: null, txError: false }}
+      state={{ kind: "ready", goal: goal(19_930), offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 5, verified: true }, senaUsd: 19_700, lock: { shares: 86.2, valueUsd: 19_930 }, feeBps: 100, feeUsd: 197, endsAt: 1_797_000_000, onReserve: noop, tx: null, txError: false }}
     />
   ),
   "reserve.tx": (lang, dict) => (
     <ReserveScreen
       lang={lang}
       labels={dict}
-      state={{ kind: "ready", goal: goal(19_930), offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 5 }, senaUsd: 19_700, lock: { shares: 86.2, valueUsd: 19_930 }, feeBps: 100, feeUsd: 197, endsAt: 1_797_000_000, onReserve: noop, tx: { step: 1 }, txError: false }}
+      state={{ kind: "ready", goal: goal(19_930), offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 5, verified: true }, senaUsd: 19_700, lock: { shares: 86.2, valueUsd: 19_930 }, feeBps: 100, feeUsd: 197, endsAt: 1_797_000_000, onReserve: noop, tx: { step: 1 }, txError: false }}
     />
   ),
   "reserve.success": (lang, dict) => (
@@ -318,10 +330,10 @@ const screens: Record<string, Entry> = {
     <RequestLinkScreen lang={lang} labels={dict} propertyRef={property.ref} sourceUrl={null} state={{ kind: "signed-out", signIn: signIn({ email: "" }) }} />
   ),
   "request.ready": (lang, dict) => (
-    <RequestLinkScreen lang={lang} labels={dict} propertyRef={property.ref} sourceUrl={null} state={{ kind: "ready", brokerAddress: reservation.broker.address }} />
+    <RequestLinkScreen lang={lang} labels={dict} propertyRef={property.ref} sourceUrl={null} state={{ kind: "ready", createOffer: async () => ({ url: "https://accasa.vercel.app/es/o/k3J9xQ2aB7", verified: true }) }} />
   ),
   "request.no-property": (lang, dict) => (
-    <RequestLinkScreen lang={lang} labels={dict} propertyRef={null} sourceUrl={null} state={{ kind: "ready", brokerAddress: reservation.broker.address }} />
+    <RequestLinkScreen lang={lang} labels={dict} propertyRef={null} sourceUrl={null} state={{ kind: "ready", createOffer: async () => ({ url: "https://accasa.vercel.app/es/o/k3J9xQ2aB7", verified: true }) }} />
   ),
 
   "profile.signed-out": (lang, dict) => <ProfileScreen lang={lang} labels={dict} state={{ kind: "signed-out", signIn: signIn({ email: "" }) }} />,
@@ -329,6 +341,21 @@ const screens: Record<string, Entry> = {
   "profile.error": (lang, dict) => <ProfileScreen lang={lang} labels={dict} state={{ kind: "error", onRetry: noop }} />,
   "profile.ready": (lang, dict) => <ProfileScreen lang={lang} labels={dict} state={profile({ goal: goal(7_400) })} />,
   "profile.no-goal": (lang, dict) => <ProfileScreen lang={lang} labels={dict} state={profile({ goal: null, address: PROFILE_ADDRESSES[1] })} />,
+  "profile.broker-inbox": (lang, dict) => (
+    <ProfileScreen
+      lang={lang}
+      labels={dict}
+      state={profile({
+        goal: null,
+        address: PROFILE_ADDRESSES[2],
+        inbox: [
+          { id: "12", status: "active", senaUsd: 4_250, endsAt: 1_799_600_000, isNew: true, payable: false },
+          { id: "9", status: "payable", senaUsd: 1_275, endsAt: 1_797_000_000, isNew: false, payable: true },
+          { id: "4", status: "released", senaUsd: 2_100, endsAt: 1_790_000_000, isNew: false, payable: false },
+        ],
+      })}
+    />
+  ),
   "profile.signing-out": (lang, dict) => <ProfileScreen lang={lang} labels={dict} state={profile({ goal: goal(7_400), signingOut: true })} />,
   "profile.houses": () => (
     <div className="mx-auto grid max-w-xl grid-cols-4 gap-4 p-5 sm:grid-cols-6">

@@ -3,6 +3,8 @@
 Documento de traspaso para continuar el trabajo desde otra cuenta de Claude.
 Estado al **14 nov 2026**. Repo: `https://github.com/Beor18/base-hackathon-stock-properties` (rama `main`).
 
+> **Base de datos (15 nov 2026):** Supabase, proyecto `accasa` (`egidprkmchknhklpfdpf`) en la organización gratuita "Proyecta" de Fernando (no la de Smarlin). Guarda solo lo que no puede vivir en la red: las ofertas de reserva de los corredores (link corto `/o/<id>`, que no se puede editar) y cuándo cada corredor miró su bandeja. Esquema en `supabase/schema.sql` (tablas cerradas al público; las lee el servidor con la clave secreta). Variables: `SUPABASE_SECRET_KEY` (secreta, la carga Fernando en Vercel y en `.env.local`) y `SUPABASE_URL` (opcional, ya tiene el valor por defecto). Quien genera un link se identifica con el token de identidad de Privy (activado en Authentication → Advanced); si su email coincide con el del agente de la publicación en Smarlin, el link sale con "Corredor verificado". El email del agente solo se compara en el servidor: no se guarda ni se muestra.
+
 > **Nombre (15 nov 2026):** el producto se llamaba **Seña** y pasó a llamarse **Accasa** (acción + casa, se lee "a casa"). "Seña" sin la ñ queda "sena", que no sirve como dirección web. La palabra "seña" sigue siendo el depósito que se deja para reservar. Dirección: https://accasa.vercel.app (la anterior, sena-app-blond.vercel.app, sigue andando).
 
 > **La fuente de verdad del producto es [`docs/superpowers/specs/2026-11-14-sena-design.md`](docs/superpowers/specs/2026-11-14-sena-design.md).** Si algo de este documento la contradice, gana el spec. El enfoque anterior ("Garante", garantía de alquiler) quedó reemplazado: sus datos técnicos y de mercado siguen valiendo y están acá abajo.

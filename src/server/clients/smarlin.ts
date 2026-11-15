@@ -362,3 +362,17 @@ export async function getSmarlinComparables(id: string): Promise<SmarlinComparab
   const body = await getJson(`/api/properties/${encodeURIComponent(id)}/comparables`);
   return body === null ? null : comparablesSchema.parse(body).data;
 }
+
+const agentEmailSchema = z.object({
+  property: z.object({ agent: z.object({ email: z.string().nullish() }).nullish() }),
+});
+
+/**
+ * The listing agent's email, only to check on the server that a broker is the one who publishes
+ * the listing. It never leaves this process: not returned by any route, logged or stored.
+ */
+export async function getListingAgentEmail(id: string): Promise<string | null> {
+  const parsed = agentEmailSchema.safeParse(await getJson(`/api/properties/${encodeURIComponent(id)}`));
+  const email = parsed.success ? parsed.data.property.agent?.email?.trim().toLowerCase() : null;
+  return email || null;
+}

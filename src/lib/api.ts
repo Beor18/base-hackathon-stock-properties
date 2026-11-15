@@ -6,9 +6,11 @@ import type {
   FaucetPlanQuote,
   GoalPlanQuote,
   Plan,
+  InboxSeen,
   ProtocolStats,
   Reservation,
   ReservationDetail,
+  ReservationOfferDto,
   ReservePlanQuote,
   Stock,
 } from "@/domain/types";
@@ -50,9 +52,12 @@ async function request<T>(input: string, init?: RequestInit): Promise<T> {
   return (await response.json()) as T;
 }
 
-function post<T>(input: string, body: unknown): Promise<T> {
-  return request<T>(input, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+function post<T>(input: string, body: unknown, headers: Record<string, string> = {}): Promise<T> {
+  return request<T>(input, { method: "POST", headers: { "content-type": "application/json", ...headers }, body: JSON.stringify(body) });
 }
+
+/** Routes that act for the signed-in person send their Privy identity token. */
+const signedIn = (identityToken: string) => ({ "privy-id-token": identityToken });
 
 export const api = {
   stocks: () => request<Stock[]>("/api/stocks"),
@@ -61,6 +66,13 @@ export const api = {
   account: (address: Address) => request<AccountSnapshot>(`/api/account/${address}`),
   reservation: (id: string) => request<ReservationDetail>(`/api/reservations/${encodeURIComponent(id)}`),
   reservationsOf: (address: Address) => request<Reservation[]>(`/api/reservations?account=${address}`),
+  offer: (id: string) => request<ReservationOfferDto>(`/api/offers/${encodeURIComponent(id)}`),
+  createOffer: (
+    body: { ref: string; url: string | null; pct: number; broker: Address; brokerName: string; brokerCompany: string | null },
+    identityToken: string,
+  ) => post<ReservationOfferDto>("/api/offers", body, signedIn(identityToken)),
+  inboxSeen: (account: Address) => request<InboxSeen>(`/api/inbox?account=${account}`),
+  markInboxSeen: (account: Address, identityToken: string) => post<InboxSeen>("/api/inbox", { account }, signedIn(identityToken)),
 };
 
 export type ReservationActionBody =

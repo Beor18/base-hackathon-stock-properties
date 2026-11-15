@@ -4,7 +4,7 @@ import { clampPct } from "../property/deposit";
 
 /**
  * URL contracts between screens. The detail screen hands a draft goal to `/meta` through the
- * query string; the broker's link hands a reservation offer to `/reservar`. Integration reads
+ * query string; the broker's short link hands an offer id to `/reservar`. Integration reads
  * them with the parsers below instead of re-implementing the format.
  */
 
@@ -40,39 +40,15 @@ export function parseGoalDraft(params: SearchParamsLike): GoalDraftParams | null
   };
 }
 
-export type ReservationOfferParams = {
-  ref: string;
-  pct: number;
-  /** Broker account address that will be the reservation's beneficiary. */
-  broker: string;
-  brokerName: string;
-  brokerCompany: string | null;
-};
-
-/** Link the broker shares on WhatsApp. INTEGRATION: sign it server side if tampering matters. */
-export function reservationOfferHref(origin: string, lang: Locale, offer: ReservationOfferParams): string {
-  const params = new URLSearchParams({
-    casa: offer.ref,
-    sena: String(offer.pct),
-    corredor: offer.broker,
-    nombre: offer.brokerName,
-  });
-  if (offer.brokerCompany) params.set("inmobiliaria", offer.brokerCompany);
-  return `${origin}/${lang}/reservar?${params}`;
+/** The broker's short reservation link. The offer itself lives on the server (`/api/offers/:id`). */
+export function offerHref(origin: string, lang: Locale, id: string): string {
+  return `${origin}/${lang}/o/${id}`;
 }
 
-export function parseReservationOffer(params: SearchParamsLike): ReservationOfferParams | null {
-  const ref = params.get("casa");
-  const broker = params.get("corredor");
-  const brokerName = params.get("nombre");
-  if (!ref || !broker || !brokerName) return null;
-  return {
-    ref,
-    pct: clampPct(Number(params.get("sena"))),
-    broker,
-    brokerName,
-    brokerCompany: params.get("inmobiliaria"),
-  };
+/** `/reservar?oferta=<id>`, where the short link lands. */
+export function parseOfferId(params: SearchParamsLike): string | null {
+  const id = params.get("oferta");
+  return id && /^[A-Za-z0-9]{10}$/.test(id) ? id : null;
 }
 
 /**

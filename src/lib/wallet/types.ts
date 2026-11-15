@@ -32,4 +32,9 @@ export type AccountSession =
       /** The email the person signed in with. Null for local dev accounts. */
       email: string | null;
       signOut: () => Promise<void>;
+      /**
+       * Proof of who is signed in, for the few API routes that need it (`privy-id-token` header).
+       * Null when the provider cannot issue one.
+       */
+      identityToken: () => Promise<string | null>;
     };

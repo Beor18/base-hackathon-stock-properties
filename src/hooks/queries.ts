@@ -11,6 +11,7 @@ export const keys = {
   account: (address?: Address) => ["account", address] as const,
   reservation: (id: string) => ["reservation", id] as const,
   reservations: (address?: Address) => ["reservations", address] as const,
+  inboxSeen: (address?: Address) => ["inbox-seen", address] as const,
   stocks: ["stocks"] as const,
   stats: ["stats"] as const,
   rates: ["rates"] as const,
@@ -52,5 +53,26 @@ export function useReservation(id: string | null) {
     queryFn: () => api.reservation(id as string),
     enabled: Boolean(id),
     retry: (count, error) => !(error instanceof Error && "status" in error && error.status === 404) && count < 1,
+  });
+}
+
+/** Reservations where the account is the buyer or the broker. */
+export function useReservationsOf(address: Address | undefined) {
+  return useQuery({
+    queryKey: keys.reservations(address),
+    queryFn: () => api.reservationsOf(address as Address),
+    enabled: Boolean(address),
+    staleTime: 60_000,
+  });
+}
+
+/** When the broker last opened their inbox. Shared by the header dot and the profile. */
+export function useInboxSeen(address: Address | undefined) {
+  return useQuery({
+    queryKey: keys.inboxSeen(address),
+    queryFn: () => api.inboxSeen(address as Address),
+    enabled: Boolean(address),
+    staleTime: 60_000,
+    retry: false,
   });
 }
