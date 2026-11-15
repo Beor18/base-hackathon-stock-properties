@@ -1,6 +1,6 @@
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/es";
-import { formatAmount, formatMoney } from "@/i18n/format";
+import { formatAmount, formatMoney, plural } from "@/i18n/format";
 
 /**
  * Live usage counters on the landing.
@@ -25,9 +25,9 @@ export function LiveStats({ stats, lang, labels }: LiveStatsProps) {
   if (!stats) return null;
 
   const items = [
-    { value: formatAmount(stats.activeGoals, lang), label: labels.stats.goals },
+    { value: formatAmount(stats.activeGoals, lang), label: plural(labels.stats.goals, stats.activeGoals) },
     { value: formatMoney(stats.savedUsd, lang), label: labels.stats.saved },
-    { value: formatAmount(stats.reservations, lang), label: labels.stats.reservations },
+    { value: formatAmount(stats.reservations, lang), label: plural(labels.stats.reservations, stats.reservations) },
   ];
 
   return (

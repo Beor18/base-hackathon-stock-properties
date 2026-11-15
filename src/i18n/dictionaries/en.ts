@@ -61,14 +61,38 @@ const en: Dictionary = {
         body: "When you get there, your stocks become the home's deposit. If the purchase goes through, they come back to you.",
       },
     ],
-    promiseTitle: "What if I change my mind?",
-    promiseBody:
-      "The broker collects the deposit in dollars from your stocks and the rest stays yours. If there's a disagreement, a neutral arbiter decides.",
+    faqTitle: "Questions",
+    faq: [
+      {
+        q: "What if the stocks go down?",
+        a: "While you save, your goal goes down with them and you can keep adding. To reserve, your stocks must be worth more than the deposit: between {minMargin} and {maxMargin} more, depending on how much that stock moved over the last year. That margin covers a drop during the reservation. Nobody sells your stocks because they went down.",
+      },
+      {
+        q: "What if I change my mind?",
+        a: "The broker collects the deposit in dollars from your stocks and the rest stays yours. If there's a disagreement, a neutral arbiter decides.",
+      },
+      {
+        q: "How much does it cost?",
+        a: "{contributionFee} of each contribution and {reservationFee} of the deposit when you reserve. You always see it before you confirm. We pay the network costs.",
+      },
+      {
+        q: "Who holds my stocks?",
+        a: "You do. They stay in your account, in your name, and nobody else can move them. When you reserve, they go into a contract that holds them as the deposit until the reservation ends.",
+      },
+      {
+        q: "Which stocks can I choose?",
+        a: "Those of {stockCount} US companies, like Apple, Amazon or Nvidia. You add from {min}.",
+      },
+      {
+        q: "Where can I use it?",
+        a: "From outside the United States. The home can be in Puerto Rico, but the person saving has to live outside the United States and its territories.",
+      },
+    ],
     statsTitle: "Accasa today",
     stats: {
-      goals: "active goals",
+      goals: "active goal|active goals",
       saved: "in stock-backed deposits",
-      reservations: "homes reserved",
+      reservations: "home reserved|homes reserved",
     },
     closingTitle: "Which one is your next home?",
     closingCta: "Pick your home",

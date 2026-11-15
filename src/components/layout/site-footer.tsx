@@ -4,11 +4,16 @@ import { Wordmark } from "@/components/brand/wordmark";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/es";
 
-type SiteFooterProps = { lang: Locale; footer: Dictionary["footer"] };
+type SiteFooterProps = {
+  lang: Locale;
+  footer: Dictionary["footer"];
+  /** The page docks its main button to the bottom on phones: leave room so it never covers the footer. */
+  dockSpace?: boolean;
+};
 
-export function SiteFooter({ lang, footer }: SiteFooterProps) {
+export function SiteFooter({ lang, footer, dockSpace = false }: SiteFooterProps) {
   return (
-    <footer className="mx-auto mt-auto w-full max-w-6xl px-5 pb-10 pt-16 md:px-8">
+    <footer className={`mx-auto mt-auto w-full max-w-6xl px-5 pt-16 md:px-8 ${dockSpace ? "pb-32 lg:pb-10" : "pb-10"}`}>
       <div className="flex flex-col gap-6 border-t border-line pt-8 md:flex-row md:items-end md:justify-between">
         <div className="max-w-md">
           <Wordmark title="" className="h-6 w-auto text-ink" />

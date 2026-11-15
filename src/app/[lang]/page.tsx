@@ -2,19 +2,30 @@ import { HeroHouse } from "@/components/landing/hero-house";
 import { LiveStatsLive } from "@/components/landing/live-stats-live";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { ButtonLink } from "@/components/ui/button";
-import { fill, formatMoney } from "@/i18n/format";
+import { deployment } from "@/config/deployment";
+import { fill, formatBps, formatMoney } from "@/i18n/format";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { MIN_CONTRIBUTION_USD } from "@/lib/product";
 
 /**
  * Landing, "sell me this pen": the need first (years of saving, idle dollars), then the product
- * in three steps, then the same single action again.
+ * in three steps, the doubts it raises, then the same single action again.
  */
 export default async function LandingPage() {
   const lang = await getLocale();
   const dict = await getDictionary(lang);
   const t = dict.landing;
   const casa = `/${lang}/casa`;
+  // FAQ figures come from the deployment, so the answers never disagree with the contracts.
+  const ratios = deployment.stocks.map((stock) => stock.collateralRatioBps);
+  const faqValues = {
+    minMargin: formatBps(Math.min(...ratios) - 10_000, lang),
+    maxMargin: formatBps(Math.max(...ratios) - 10_000, lang),
+    contributionFee: formatBps(deployment.params.contributionFeeBps, lang),
+    reservationFee: formatBps(deployment.params.reservationFeeBps, lang),
+    stockCount: deployment.stocks.length,
+    min: formatMoney(MIN_CONTRIBUTION_USD, lang),
+  };
 
   return (
     <>
@@ -55,12 +66,25 @@ export default async function LandingPage() {
         </ol>
       </section>
 
-      <section aria-labelledby="promise-heading" className="mx-auto mt-20 w-full max-w-6xl px-5 md:px-8">
-        <div className="grid gap-4 rounded-[var(--radius-sheet)] bg-surface p-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:gap-10 md:p-10">
-          <h2 id="promise-heading" className="type-heading text-h2 text-ink">
-            {t.promiseTitle}
+      <section aria-labelledby="faq-heading" className="mx-auto mt-20 w-full max-w-6xl px-5 md:mt-28 md:px-8">
+        <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:gap-10">
+          <h2 id="faq-heading" className="type-display text-h1 text-balance text-ink md:text-display">
+            {t.faqTitle}
           </h2>
-          <p className="text-lead text-ink-2 text-pretty">{t.promiseBody}</p>
+          <div className="border-b border-line">
+            {t.faq.map((item) => (
+              <details key={item.q} className="group border-t border-line">
+                <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 text-left [&::-webkit-details-marker]:hidden">
+                  <span className="type-heading text-h3 text-ink">{item.q}</span>
+                  <span aria-hidden className="relative size-5 shrink-0 text-accent transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none">
+                    <span className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 rounded-full bg-current" />
+                    <span className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 rounded-full bg-current" />
+                  </span>
+                </summary>
+                <p className="max-w-2xl pb-6 text-ink-2 text-pretty">{fill(item.a, faqValues)}</p>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 

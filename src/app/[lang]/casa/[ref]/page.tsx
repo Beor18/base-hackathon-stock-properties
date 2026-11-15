@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
+import { SiteFooter } from "@/components/layout/site-footer";
 import { PropertyDetailView } from "@/components/property/property-detail-view";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 
@@ -22,16 +23,20 @@ async function Detail({ params, searchParams }: Pick<PageProps<"/[lang]/casa/[re
   const dict = await getDictionary(lang);
   const url = typeof query.url === "string" ? query.url : null;
   return (
-    <PropertyDetailView
-      lang={lang}
-      propertyRef={decodeRef(ref)}
-      sourceUrl={url}
-      labels={{ detail: dict.detail, common: dict.common }}
-    />
+    <>
+      <PropertyDetailView
+        lang={lang}
+        propertyRef={decodeRef(ref)}
+        sourceUrl={url}
+        labels={{ detail: dict.detail, common: dict.common }}
+      />
+      {/* The view docks "Esta es mi meta" to the bottom on phones; the footer leaves room for it. */}
+      <SiteFooter lang={lang} footer={dict.footer} dockSpace />
+    </>
   );
 }
 
-/** Property detail: gallery, Smarlin data, the seña calculator and "Esta es mi meta". */
+/** Property detail: gallery, Smarlin data, the seña calculator, "Esta es mi meta" and the footer. */
 export default function CasaDetailPage({ params, searchParams }: PageProps<"/[lang]/casa/[ref]">) {
   return (
     <Suspense

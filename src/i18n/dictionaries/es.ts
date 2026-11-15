@@ -64,14 +64,38 @@ const es = {
         body: "Cuando llegás, tus acciones quedan como seña de la casa. Si la compra se hace, vuelven a vos.",
       },
     ],
-    promiseTitle: "¿Y si me arrepiento?",
-    promiseBody:
-      "El corredor cobra la seña en dólares desde tus acciones y el resto sigue siendo tuyo. Si hay desacuerdo, decide un árbitro neutral.",
+    faqTitle: "Preguntas frecuentes",
+    faq: [
+      {
+        q: "¿Qué pasa si las acciones bajan?",
+        a: "Mientras ahorrás, tu meta baja con ellas y podés seguir sumando. Para reservar, tus acciones tienen que valer más que la seña: entre {minMargin} y {maxMargin} más, según cuánto se movió esa acción en el último año. Ese margen cubre una baja durante la reserva. Nadie vende tus acciones porque bajen.",
+      },
+      {
+        q: "¿Y si me arrepiento?",
+        a: "El corredor cobra la seña en dólares desde tus acciones y el resto sigue siendo tuyo. Si hay desacuerdo, decide un árbitro neutral.",
+      },
+      {
+        q: "¿Cuánto cuesta?",
+        a: "{contributionFee} de cada aporte y {reservationFee} de la seña cuando reservás. Siempre lo ves antes de confirmar. Los costos de la red los pagamos nosotros.",
+      },
+      {
+        q: "¿Quién tiene mis acciones?",
+        a: "Vos. Quedan en tu cuenta, a tu nombre, y nadie más puede moverlas. Cuando reservás, pasan a un contrato que las guarda como seña hasta que termina la reserva.",
+      },
+      {
+        q: "¿Qué acciones puedo elegir?",
+        a: "Las de {stockCount} empresas de Estados Unidos, como Apple, Amazon o Nvidia. Sumás desde {min}.",
+      },
+      {
+        q: "¿Desde dónde lo puedo usar?",
+        a: "Desde fuera de Estados Unidos. La casa puede estar en Puerto Rico, pero quien ahorra tiene que vivir fuera de Estados Unidos y sus territorios.",
+      },
+    ],
     statsTitle: "Accasa hoy",
     stats: {
-      goals: "metas activas",
+      goals: "meta activa|metas activas",
       saved: "en señas con acciones",
-      reservations: "casas reservadas",
+      reservations: "casa reservada|casas reservadas",
     },
     closingTitle: "¿Cuál es tu próxima casa?",
     closingCta: "Elegí tu casa",

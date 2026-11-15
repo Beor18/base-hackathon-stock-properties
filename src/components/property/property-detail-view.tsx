@@ -133,7 +133,7 @@ export function PropertyDetailView({ lang, propertyRef, sourceUrl, labels }: Pro
   );
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-5 pb-32 md:px-8 lg:pb-0">
+    <div className="mx-auto w-full max-w-6xl px-5 md:px-8">
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_24rem] lg:gap-10">
         <div className="min-w-0">
           <Link
