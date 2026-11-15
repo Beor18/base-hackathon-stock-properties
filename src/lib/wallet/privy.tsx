@@ -43,7 +43,7 @@ export function PrivyAccountProvider({ appId, children }: { appId: string; child
 }
 
 function PrivySession({ children }: { children: ReactNode }) {
-  const { ready, authenticated, user } = usePrivy();
+  const { ready, authenticated, user, logout } = usePrivy();
   const { client, getClientForChain } = useSmartWallets();
   const { sendCode, loginWithCode } = useLoginWithEmail();
   const { createWallet } = useCreateWallet();
@@ -152,8 +152,8 @@ function PrivySession({ children }: { children: ReactNode }) {
         );
       },
     };
-    return { status: "ready", address: wallet.address, wallet };
-  }, [ready, authenticated, signIn, address, stalledUserId, userId, client, getClientForChain]);
+    return { status: "ready", address: wallet.address, wallet, email: user?.email?.address ?? null, signOut: logout };
+  }, [ready, authenticated, signIn, address, stalledUserId, userId, client, getClientForChain, user, logout]);
 
   return <AccountContext.Provider value={session}>{children}</AccountContext.Provider>;
 }

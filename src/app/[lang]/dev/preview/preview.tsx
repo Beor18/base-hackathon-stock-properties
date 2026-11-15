@@ -7,11 +7,13 @@ import { useCallback, useState, type ReactNode } from "react";
 import { ContributeScreen, type ContributionDraft, type ContributionQuote } from "@/components/account/contribute-screen";
 import { FundScreen } from "@/components/account/fund-screen";
 import { GoalScreen } from "@/components/account/goal-screen";
+import { ProfileScreen } from "@/components/account/profile-screen";
 import { RequestLinkScreen } from "@/components/account/request-link-screen";
 import { ReservationScreen, type ReservationView } from "@/components/account/reservation-screen";
 import { ReserveScreen } from "@/components/account/reserve-screen";
 import type { Goal, GoalDraft, SignInProps, StockOption } from "@/components/account/types";
 import { VaquitaScreen } from "@/components/account/vaquita-screen";
+import { HouseAvatar } from "@/components/brand/house-avatar";
 import { LiveStats } from "@/components/landing/live-stats";
 import { WaitBar } from "@/components/ui/wait-bar";
 import type { Locale } from "@/i18n/config";
@@ -51,6 +53,35 @@ function goal(savedUsd: number): Goal {
   };
 }
 
+/** Sample accounts: each one draws a different house. */
+const PROFILE_ADDRESSES = [
+  "0x5a1e0c8b9e3f4d2a7c6b1e0f9d8c7b6a5e4d3c2b",
+  "0x9f2c4e1a7b3d5c6e8f0a1b2c3d4e5f6a7b8c9d0e",
+  "0x1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c",
+  "0xae0f63d5bce6dce7f8593f2073f3eef5614a877a",
+  "0x2d7e91c04ab3f65e8d1290c7b4ae3f6d5c8b7a90",
+  "0xc3a8f1027e6d4b9a5f0e2d1c8b7a6f5e4d3c2b1a",
+  "0x7f00d2e4c6a8b0f1e3d5c7a9b1d3f5e7c9a0b2d4",
+  "0x04b9e6c3a1f8d7e2b5c0a9f4e3d6b1c8a7f2e5d0",
+  "0x8e1d4c7b0a3f6e9d2c5b8a1f4e7d0c3b6a9f2e58",
+  "0x61c3e5a7b9d1f3e5c7a9b1d3f5e7c9a1b3d5f7e9",
+  "0xd4e6f8a0b2c4d6e8f0a2b4c6d8e0f2a4b6c8d0e2",
+  "0x39a7c5e3f1b9d7a5c3e1f9b7d5a3c1e9f7b5d3a1",
+];
+
+function profile({ goal: sampleGoal, address = PROFILE_ADDRESSES[0], signingOut = false }: { goal: Goal | null; address?: string; signingOut?: boolean }) {
+  return {
+    kind: "ready" as const,
+    address,
+    email: "vos@ejemplo.com",
+    balances: { usd: 980.1, ars: 1_680_000 },
+    goal: sampleGoal,
+    activityUrl: "https://sepolia.basescan.org/address/" + address,
+    onSignOut: noop,
+    signingOut,
+  };
+}
+
 const reservation: ReservationView = {
   id: "12",
   status: "active",
@@ -63,7 +94,7 @@ const reservation: ReservationView = {
   broker: { address: "0x9f2c4e1a7b3d5c6e8f0a1b2c3d4e5f6a7b8c9d0e", name: "Kelvin Garcia Vale", company: "Kelvin Garcia Realty" },
   arbiter: { address: "0x1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c", name: null },
   endsAt: 1_797_000_000,
-  feePaidUsd: 98.5,
+  feePaidUsd: 197,
   claim: null,
   paidUsd: null,
 };
@@ -225,14 +256,14 @@ const screens: Record<string, Entry> = {
     <ReserveScreen
       lang={lang}
       labels={dict}
-      state={{ kind: "ready", goal: goal(19_930), offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 5 }, senaUsd: 19_700, lock: { shares: 86.2, valueUsd: 19_930 }, feeBps: 50, feeUsd: 98.5, endsAt: 1_797_000_000, onReserve: noop, tx: null, txError: false }}
+      state={{ kind: "ready", goal: goal(19_930), offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 5 }, senaUsd: 19_700, lock: { shares: 86.2, valueUsd: 19_930 }, feeBps: 100, feeUsd: 197, endsAt: 1_797_000_000, onReserve: noop, tx: null, txError: false }}
     />
   ),
   "reserve.tx": (lang, dict) => (
     <ReserveScreen
       lang={lang}
       labels={dict}
-      state={{ kind: "ready", goal: goal(19_930), offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 5 }, senaUsd: 19_700, lock: { shares: 86.2, valueUsd: 19_930 }, feeBps: 50, feeUsd: 98.5, endsAt: 1_797_000_000, onReserve: noop, tx: { step: 1 }, txError: false }}
+      state={{ kind: "ready", goal: goal(19_930), offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 5 }, senaUsd: 19_700, lock: { shares: 86.2, valueUsd: 19_930 }, feeBps: 100, feeUsd: 197, endsAt: 1_797_000_000, onReserve: noop, tx: { step: 1 }, txError: false }}
     />
   ),
   "reserve.success": (lang, dict) => (
@@ -286,6 +317,20 @@ const screens: Record<string, Entry> = {
     <RequestLinkScreen lang={lang} labels={dict} propertyRef={null} sourceUrl={null} state={{ kind: "ready", brokerAddress: reservation.broker.address }} />
   ),
 
+  "profile.signed-out": (lang, dict) => <ProfileScreen lang={lang} labels={dict} state={{ kind: "signed-out", signIn: signIn({ email: "" }) }} />,
+  "profile.loading": (lang, dict) => <ProfileScreen lang={lang} labels={dict} state={{ kind: "loading" }} />,
+  "profile.error": (lang, dict) => <ProfileScreen lang={lang} labels={dict} state={{ kind: "error", onRetry: noop }} />,
+  "profile.ready": (lang, dict) => <ProfileScreen lang={lang} labels={dict} state={profile({ goal: goal(7_400) })} />,
+  "profile.no-goal": (lang, dict) => <ProfileScreen lang={lang} labels={dict} state={profile({ goal: null, address: PROFILE_ADDRESSES[1] })} />,
+  "profile.signing-out": (lang, dict) => <ProfileScreen lang={lang} labels={dict} state={profile({ goal: goal(7_400), signingOut: true })} />,
+  "profile.houses": () => (
+    <div className="mx-auto grid max-w-xl grid-cols-4 gap-4 p-5 sm:grid-cols-6">
+      {PROFILE_ADDRESSES.map((address) => (
+        <HouseAvatar key={address} seed={address} label={address} className="aspect-square w-full rounded-[1.5rem]" />
+      ))}
+    </div>
+  ),
+
   "landing.stats": (lang, dict) => (
     <div className="py-10">
       <LiveStats lang={lang} labels={dict.landing} stats={{ activeGoals: 128, savedUsd: 41_250, reservations: 3 }} />
@@ -317,7 +362,7 @@ export function Preview({ lang, dict }: { lang: Locale; dict: Dictionary }) {
 
   return (
     <div className="mx-auto w-full max-w-xl px-5 py-8">
-      <h1 className="type-wide text-h1">Preview</h1>
+      <h1 className="type-display text-h1">Preview</h1>
       <ul className="mt-6 grid grid-cols-1 gap-1 sm:grid-cols-2">
         {Object.keys(screens).map((name) => (
           <li key={name}>

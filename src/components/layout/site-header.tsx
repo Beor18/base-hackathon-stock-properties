@@ -5,6 +5,7 @@ import { Wordmark } from "@/components/brand/wordmark";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/es";
 
+import { HeaderAccount } from "./header-account";
 import { LangSwitch } from "./lang-switch";
 
 type SiteHeaderProps = {
@@ -33,6 +34,7 @@ export function SiteHeader({ lang, common }: SiteHeaderProps) {
         >
           <LangSwitch current={lang} label={common.language} switchTo={common.switchTo} />
         </Suspense>
+        <HeaderAccount lang={lang} label={common.account} />
       </div>
     </header>
   );

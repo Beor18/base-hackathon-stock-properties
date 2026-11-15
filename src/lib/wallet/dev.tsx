@@ -113,8 +113,14 @@ export function DevAccountProvider({ children, labels }: { children: ReactNode; 
     if (accounts === "error") return { status: "unconfigured" };
     if (accounts === null || selected === undefined) return { status: "loading" };
     if (selected === null) return { status: "signed-out", signIn };
-    return { status: "ready", address: selected, wallet: devWallet(selected) };
-  }, [accounts, selected, signIn]);
+    return {
+      status: "ready",
+      address: selected,
+      wallet: devWallet(selected),
+      email: null,
+      signOut: async () => select(null),
+    };
+  }, [accounts, selected, signIn, select]);
 
   return (
     <AccountContext.Provider value={session}>

@@ -25,4 +25,11 @@ export type AccountSession =
   | { status: "signed-out"; signIn: SignInProps }
   /** Signed in, but the account never became usable (e.g. the sign-in provider's wallet frame did not load). */
   | { status: "failed" }
-  | { status: "ready"; address: Address; wallet: AccountWallet };
+  | {
+      status: "ready";
+      address: Address;
+      wallet: AccountWallet;
+      /** The email the person signed in with. Null for local dev accounts. */
+      email: string | null;
+      signOut: () => Promise<void>;
+    };
