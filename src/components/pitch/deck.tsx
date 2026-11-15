@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -8,7 +9,7 @@ import { deployment } from "@/config/deployment";
 import { useStats } from "@/hooks/queries";
 import type { Locale } from "@/i18n/config";
 import { fill, formatAmount, formatBps, formatMoney } from "@/i18n/format";
-import type { PitchDeck, PitchSlide } from "@/i18n/pitch/es";
+import type { PitchDeck, PitchShot, PitchSlide } from "@/i18n/pitch/es";
 import { DEPOSIT_PCT, MIN_CONTRIBUTION_USD } from "@/lib/product";
 import { wadToNumber } from "@/lib/view-models";
 
@@ -152,83 +153,125 @@ function Slide({
 }) {
   const tone = tones[slide.tone];
   const text = (template: string) => fill(template, values);
-  const titleSize =
-    slide.layout === "cover" || slide.layout === "close" || slide.layout === "statement"
-      ? "text-[clamp(2.5rem,7vw,5.5rem)] leading-[0.95]"
-      : "text-[clamp(2rem,4.6vw,3.75rem)] leading-[0.98]";
+  const big = slide.layout === "cover" || slide.layout === "statement" || slide.layout === "close";
+  const titleSize = big ? "text-[clamp(2.25rem,6vw,4.75rem)] leading-[1.02]" : "text-[clamp(1.75rem,4.2vw,3.5rem)] leading-[1.06]";
+
+  const title = <h2 className={`type-display max-w-5xl text-balance ${titleSize}`}>{text(slide.title)}</h2>;
+  const body = slide.body && <p className={`mt-4 max-w-2xl text-pretty md:mt-5 md:text-h3 md:leading-snug ${tone.muted}`}>{text(slide.body)}</p>;
+  const foot = slide.foot && <p className={`mt-6 max-w-3xl text-label text-pretty md:mt-8 ${tone.muted}`}>{text(slide.foot)}</p>;
 
   return (
     <section
       data-slide={index}
       aria-roledescription="slide"
       aria-label={fill(deck.nav.slide, { n: index + 1, total })}
-      className={`flex min-h-full snap-start flex-col px-6 pb-24 pt-8 md:px-16 md:pb-28 md:pt-12 ${tone.slide}`}
+      className={`flex min-h-full snap-start flex-col px-6 pb-20 pt-6 md:px-16 md:pb-24 md:pt-10 ${tone.slide}`}
     >
       <div className="flex items-center justify-between">
         <Wordmark title="" className="h-6 w-auto" />
         {slide.label && <p className={`text-label font-semibold ${tone.muted}`}>{slide.label}</p>}
       </div>
 
-      <div className="mx-auto my-auto flex w-full max-w-6xl flex-col py-10">
-        {slide.layout === "cover" && (
-          <svg viewBox="0 0 96 80" className="mb-8 h-24 w-28 md:h-32 md:w-36" fill="none" aria-hidden>
-            <path d="M14 34L48 8l34 26" stroke="#b3165a" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M26 74V48c0-9 7-16 16-16h0c9 0 16 7 16 16v26" stroke="#15232b" strokeWidth="7" strokeLinecap="round" />
-            <path d="M26 56V74" stroke="#15232b" strokeWidth="7" strokeLinecap="round" />
-          </svg>
+      <div className="mx-auto my-auto w-full max-w-6xl py-6 md:py-8">
+        {slide.layout === "cover" && slide.shots?.[0] ? (
+          <div className="grid items-center gap-8 md:grid-cols-[1.25fr_1fr] md:gap-16">
+            <div>
+              {title}
+              {body}
+              {foot}
+            </div>
+            <Phone shot={slide.shots[0]} className="h-[30vh] justify-self-center md:h-[min(68vh,36rem)] md:rotate-[2.5deg]" />
+          </div>
+        ) : slide.layout === "growth" && slide.points && slide.shots?.[0] ? (
+          <div className="grid items-center gap-x-14 md:grid-cols-[1fr_auto]">
+            <div>
+              {title}
+              {body}
+              <div className="mt-6 grid grid-cols-[1fr_5.5rem] items-start gap-4 sm:grid-cols-[1fr_8rem] md:mt-8 md:block">
+                <ol className="grid gap-4 md:gap-5">
+                  {slide.points.map((point, pointIndex) => (
+                    <li key={point.title} className="flex items-start gap-3 md:gap-4">
+                      <span
+                        aria-hidden
+                        className="type-display flex size-8 shrink-0 items-center justify-center rounded-full bg-[#f5b83d] text-body text-[#15232b] md:size-9 md:text-[1.0625rem]"
+                      >
+                        {pointIndex + 1}
+                      </span>
+                      <p className="pt-1 font-semibold text-pretty md:text-h3 md:leading-snug">{text(point.title)}</p>
+                    </li>
+                  ))}
+                </ol>
+                <Phone shot={slide.shots[0]} className="w-full md:hidden" />
+              </div>
+              {foot}
+            </div>
+            <Phone shot={slide.shots[0]} className="hidden md:block md:h-[min(66vh,34rem)] md:-rotate-[2deg]" />
+          </div>
+        ) : (
+          <>
+            {title}
+            {body}
+          </>
         )}
 
-        <h2 className={`type-wide max-w-5xl text-balance ${titleSize}`}>{text(slide.title)}</h2>
-        {slide.body && (
-          <p className={`mt-6 max-w-2xl text-lead md:text-h3 md:leading-snug text-pretty ${tone.muted}`}>{text(slide.body)}</p>
-        )}
-
-        {slide.points && slide.layout !== "team" && (
-          <ol
-            className={`mt-10 grid gap-x-8 gap-y-8 ${
-              slide.points.length === 4
-                ? "md:grid-cols-2 lg:grid-cols-4"
-                : slide.points.length > 4
-                  ? "md:grid-cols-2 lg:grid-cols-3"
-                  : "md:grid-cols-3"
-            }`}
-          >
-            {slide.points.map((point, pointIndex) => (
-              <li key={point.title} className={`border-t-2 pt-4 ${tone.rule}`}>
-                {slide.layout === "steps" && (
-                  <span aria-hidden className={`type-wide mb-2 block text-h1 leading-none ${tone.accent}`}>
-                    {pointIndex + 1}
-                  </span>
-                )}
-                {point.tag && <p className={`mb-2 text-label font-semibold uppercase tracking-wide ${tone.accent}`}>{point.tag}</p>}
-                <p className={`type-semiwide text-balance ${slide.numbers ? "text-h1" : "text-h3"}`}>{text(point.title)}</p>
-                {point.body && <p className={`mt-2 text-pretty ${tone.muted}`}>{text(point.body)}</p>}
-              </li>
-            ))}
-          </ol>
-        )}
-
-        {slide.layout === "live" && <LiveNumbers labels={deck.live} lang={lang} tone={tone} />}
-
-        {slide.layout === "compare" && slide.compare && <CompareTable compare={slide.compare} tone={tone} />}
-
-        {slide.layout === "team" && slide.points && (
-          <ul className="mt-10 grid gap-8 md:grid-cols-2">
-            {slide.points.map((person) => (
-              <li key={person.title} className={`border-t-2 pt-4 ${tone.rule}`}>
-                <p className="type-wide text-h2">{person.title}</p>
-                <p className={`mt-2 text-lead ${tone.muted}`}>{person.body}</p>
+        {slide.layout === "points" && slide.points && (
+          <ul className="mt-7 grid gap-x-10 gap-y-5 md:mt-10 md:grid-cols-3 md:gap-y-7">
+            {slide.points.map((point) => (
+              <li key={point.title} className={`border-t-2 pt-3 md:pt-4 ${tone.rule}`}>
+                <p className={`type-display text-balance ${slide.numbers ? "text-[clamp(2rem,4.4vw,3.5rem)] leading-none" : "text-h3"}`}>
+                  {text(point.title)}
+                </p>
+                {point.body && <p className={`mt-2 text-label text-pretty md:mt-3 md:text-body ${tone.muted}`}>{text(point.body)}</p>}
               </li>
             ))}
           </ul>
         )}
 
-        {slide.foot && <p className={`${slide.layout === "compare" ? "mt-6" : "mt-10"} max-w-3xl text-label text-pretty ${tone.muted}`}>{text(slide.foot)}</p>}
+        {slide.layout === "product" && slide.shots && (
+          <ol className="-mx-6 mt-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-2 md:mx-0 md:grid md:grid-cols-3 md:gap-10 md:overflow-visible md:px-0">
+            {slide.shots.map((shot) => (
+              <li key={shot.src} className="flex w-[62vw] shrink-0 snap-center flex-col items-center sm:w-[40vw] md:w-auto">
+                <Phone shot={shot} className="h-[38vh] md:h-[min(39vh,24rem)]" />
+                {shot.title && <p className="type-heading mt-5 text-center text-h3">{text(shot.title)}</p>}
+                {shot.body && <p className={`mt-1 max-w-64 text-center text-label text-pretty md:text-body ${tone.muted}`}>{text(shot.body)}</p>}
+              </li>
+            ))}
+          </ol>
+        )}
+
+        {slide.layout === "zero" && (
+          <>
+            <LiveNumbers labels={deck.live} lang={lang} />
+            {slide.points && (
+              <ol className="mt-6 grid gap-x-10 gap-y-4 md:mt-8 md:grid-cols-3">
+                {slide.points.map((point) => (
+                  <li key={point.title} className={`border-t-2 pt-2 md:pt-3 ${tone.rule}`}>
+                    <p className="type-heading md:text-h3">{text(point.title)}</p>
+                    {point.body && <p className={`mt-1 text-label text-pretty md:mt-1.5 md:text-body ${tone.muted}`}>{text(point.body)}</p>}
+                  </li>
+                ))}
+              </ol>
+            )}
+          </>
+        )}
+
+        {slide.layout === "close" && slide.points && (
+          <ul className="mt-7 grid gap-5 md:mt-10 md:grid-cols-2 md:gap-6">
+            {slide.points.map((person) => (
+              <li key={person.title} className={`border-t-2 pt-4 ${tone.rule}`}>
+                <p className="type-heading text-h2">{person.title}</p>
+                <p className={`mt-1.5 text-label md:text-body ${tone.muted}`}>{person.body}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {slide.layout !== "cover" && slide.layout !== "growth" && foot}
 
         {slide.layout === "close" && (
           <Link
             href={`/${lang}/casa`}
-            className="type-semiwide mt-10 inline-flex min-h-14 w-full items-center justify-center rounded-[var(--radius-control)] bg-white px-8 text-[1.0625rem] text-[#b3165a] hover:bg-[#f7e3ec] sm:w-auto sm:self-start"
+            className="type-heading mt-8 inline-flex min-h-14 w-full items-center justify-center rounded-[var(--radius-control)] bg-[#b3165a] px-8 text-[1.0625rem] text-white hover:bg-[#9a124d] sm:w-auto"
           >
             {deck.nav.openApp}
           </Link>
@@ -238,13 +281,22 @@ function Slide({
   );
 }
 
-type Tone = (typeof tones)[PitchSlide["tone"]];
+/** A product capture in a phone frame. Sized by height (`className`); the width follows the screen. */
+function Phone({ shot, className = "" }: { shot: PitchShot; className?: string }) {
+  return (
+    <div
+      className={`aspect-[640/1385] overflow-hidden rounded-[1.75rem] border-[5px] border-[#15232b] bg-[#15232b] shadow-[0_28px_60px_-24px_rgba(21,35,43,0.55)] ${className}`}
+    >
+      <Image src={shot.src} alt={shot.alt} width={640} height={1385} sizes="(min-width: 768px) 320px, 62vw" className="block size-full object-cover object-top" />
+    </div>
+  );
+}
 
 /**
- * Traction read from the contracts at the moment the slide is shown. Zeros are shown as zeros:
- * the point of the slide is that nobody typed these numbers.
+ * Where Seña stands today, read from the contracts as the slide is shown. Zeros are shown as zeros:
+ * the slide is about starting from them.
  */
-function LiveNumbers({ labels, lang, tone }: { labels: PitchDeck["live"]; lang: Locale; tone: Tone }) {
+function LiveNumbers({ labels, lang }: { labels: PitchDeck["live"]; lang: Locale }) {
   const { data, isError } = useStats();
   const explorer = deployment.explorerUrl;
   const numbers = data
@@ -252,87 +304,47 @@ function LiveNumbers({ labels, lang, tone }: { labels: PitchDeck["live"]; lang: 
         { label: labels.goals, value: formatAmount(data.goalCount, lang) },
         { label: labels.reservations, value: formatAmount(data.reservationCount, lang) },
         { label: labels.locked, value: formatMoney(Math.round(wadToNumber(data.lockedValueUsd)), lang) },
-        { label: labels.stocks, value: formatAmount(data.listedStocks, lang) },
       ]
     : null;
 
   return (
-    <div className="mt-10">
+    <div className="mt-6 rounded-[var(--radius-sheet)] bg-[#15232b] p-4 text-[#f3f4ef] md:mt-8 md:p-6">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+        <p className="flex items-center gap-2 text-label font-semibold">
+          <span aria-hidden className="size-2.5 rounded-full bg-[#f5b83d] motion-safe:animate-pulse" />
+          {labels.title}
+        </p>
+        {explorer && (
+          <a
+            href={`${explorer}/address/${deployment.contracts.reservationEscrow}`}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex min-h-11 items-center text-label font-semibold text-[#f5b83d] underline underline-offset-4"
+          >
+            {labels.verify}
+          </a>
+        )}
+      </div>
       {numbers ? (
-        <dl className="grid max-w-4xl gap-x-12 gap-y-8 sm:grid-cols-2">
+        <dl className="mt-2 grid grid-cols-3 gap-4 md:mt-3">
           {numbers.map((item) => (
-            <div key={item.label} className={`flex flex-col-reverse border-t-2 pt-4 ${tone.rule}`}>
-              <dt className={`mt-2 ${tone.muted}`}>{item.label}</dt>
-              <dd className="type-wide text-[clamp(2.25rem,5vw,3.75rem)] leading-none tabular">{item.value}</dd>
+            <div key={item.label} className="flex flex-col-reverse">
+              <dt className="mt-1 text-label text-[#b9c6ca]">{item.label}</dt>
+              <dd className="type-display text-[clamp(1.5rem,4vw,3rem)] leading-none tabular">{item.value}</dd>
             </div>
           ))}
         </dl>
       ) : (
-        <div role="status">
+        <div role="status" className="mt-3">
           {/* Every wait in Seña shows a bar, what is happening and how long it usually takes. */}
           {!isError && (
-            <div className="mb-3 h-2.5 w-full max-w-md overflow-hidden rounded-full bg-white/15" aria-hidden>
+            <div className="mb-2 h-2.5 w-full max-w-md overflow-hidden rounded-full bg-white/15" aria-hidden>
               <div className="h-full w-1/2 animate-pulse rounded-full bg-[#f5b83d]" />
             </div>
           )}
-          <p className={`text-lead ${tone.muted}`}>{isError ? labels.unavailable : labels.loading}</p>
+          <p className="text-label text-[#b9c6ca]">{isError ? labels.unavailable : labels.loading}</p>
         </div>
       )}
-      {explorer && (
-        <p className={`mt-8 flex flex-wrap gap-x-6 gap-y-2 text-label ${tone.muted}`}>
-          <span>{labels.contracts}</span>
-          {[
-            { label: labels.escrow, address: deployment.contracts.reservationEscrow },
-            { label: labels.registry, address: deployment.contracts.goalRegistry },
-          ].map((contract) => (
-            <a
-              key={contract.address}
-              href={`${explorer}/address/${contract.address}`}
-              target="_blank"
-              rel="noreferrer"
-              className={`font-semibold underline underline-offset-4 ${tone.accent}`}
-            >
-              {contract.label}
-            </a>
-          ))}
-        </p>
-      )}
     </div>
-  );
-}
-
-/** Alternatives against the three things Seña does at once. Our row is the only full one. */
-function CompareTable({ compare, tone }: { compare: NonNullable<PitchSlide["compare"]>; tone: Tone }) {
-  return (
-    <table className="mt-8 w-full max-w-5xl border-collapse text-left">
-      <thead>
-        <tr className={`border-b-2 ${tone.rule}`}>
-          <td />
-          {compare.columns.map((column) => (
-            <th key={column} scope="col" className={`w-[19%] px-1 pb-3 text-center align-bottom text-label font-semibold md:w-[15%] md:px-3 ${tone.muted}`}>
-              {column}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {compare.rows.map((row) => (
-          <tr key={row.name} className={row.ours ? "bg-[#b3165a] text-white" : "border-b border-[#15232b]/15"}>
-            <th scope="row" className={`py-2.5 pl-3 pr-2 font-semibold ${row.ours ? "type-semiwide text-h3" : ""}`}>
-              {row.name}
-              {row.note && <span className={`block text-label font-normal md:ml-2 md:inline ${tone.muted}`}>{row.note}</span>}
-            </th>
-            {row.cells.map((cell, cellIndex) => (
-              <td key={compare.columns[cellIndex]} className="px-1 py-2.5 text-center md:px-3">
-                <span className="sr-only">{cell ? compare.yes : compare.no}</span>
-                <svg viewBox="0 0 20 20" className={`mx-auto size-6 ${cell ? "" : "opacity-35"}`} aria-hidden fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-                  {cell ? <path d="M4.5 10.5l3.5 3.5 7.5-8" /> : <path d="M6 6l8 8M14 6l-8 8" />}
-                </svg>
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
   );
 }
