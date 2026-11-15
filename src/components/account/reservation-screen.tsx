@@ -262,7 +262,7 @@ function ReservationReady({
       <span className={`inline-flex items-center rounded-full px-3 py-1 text-label font-bold ${statusTone[r.status]}`}>
         {t.status[r.status]}
       </span>
-      <h1 className="type-wide mt-3 text-h1 text-balance text-ink">{r.property.title}</h1>
+      <h1 className="type-display mt-3 text-h1 text-balance text-ink">{r.property.title}</h1>
       <p className="mt-2 text-lead text-ink-2 text-pretty">{statusBody}</p>
 
       {claiming && actions.onClaim && !pending && (
@@ -337,7 +337,7 @@ function ClaimForm({
     <form onSubmit={submit} className="mt-6 rounded-[var(--radius-sheet)] border border-accent bg-surface p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="type-semiwide text-h3 text-ink">{labels.actions.claim}</p>
+          <p className="type-heading text-h3 text-ink">{labels.actions.claim}</p>
           <p className="text-ink-2">{labels.actions.claimHint}</p>
         </div>
         <Button variant="quiet" size="md" onClick={onCancel}>

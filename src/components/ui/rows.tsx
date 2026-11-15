@@ -21,7 +21,7 @@ export function Row({ label, value, hint, emphasis = false }: RowProps) {
     <div className="flex items-start justify-between gap-4 py-3">
       <dt className={emphasis ? "font-semibold text-ink" : "text-ink-2"}>{label}</dt>
       <dd className="text-right">
-        <span className={`tabular ${emphasis ? "type-semiwide text-lead text-ink" : "font-semibold text-ink"}`}>
+        <span className={`tabular ${emphasis ? "type-heading text-lead text-ink" : "font-semibold text-ink"}`}>
           {value}
         </span>
         {hint && <span className="block text-label text-ink-2">{hint}</span>}

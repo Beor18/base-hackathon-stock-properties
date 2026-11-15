@@ -20,7 +20,7 @@ export default async function CasaPage() {
     <>
       <div className="mx-auto w-full max-w-6xl px-5 md:px-8">
         <div className="mt-6 max-w-2xl md:mt-12">
-          <h1 className="type-wide text-h1 text-balance text-ink md:text-display">{dict.search.title}</h1>
+          <h1 className="type-display text-h1 text-balance text-ink md:text-display">{dict.search.title}</h1>
           <p className="mt-3 text-lead text-ink-2">{dict.search.body}</p>
         </div>
         <div className="mt-6 md:mt-8">

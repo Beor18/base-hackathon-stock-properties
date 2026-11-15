@@ -162,11 +162,11 @@ export function PropertyDetailView({ lang, propertyRef, sourceUrl, labels }: Pro
           <div className="mt-6">
             {property.priceUsd !== null ? (
               <>
-                <p className="type-wide text-h1 text-ink tabular">{formatMoney(property.priceUsd, lang)}</p>
+                <p className="type-display text-h1 text-ink tabular">{formatMoney(property.priceUsd, lang)}</p>
                 <h1 className="mt-2 text-h3 font-semibold text-balance text-ink">{property.title}</h1>
               </>
             ) : (
-              <h1 className="type-wide text-h2 text-balance text-ink">{property.title}</h1>
+              <h1 className="type-display text-h2 text-balance text-ink">{property.title}</h1>
             )}
             {property.location && <p className="mt-1 text-lead text-ink-2">{property.location}</p>}
             {facts.length > 0 && <p className="mt-1 text-ink-3">{facts.join(", ")}</p>}
@@ -192,7 +192,7 @@ export function PropertyDetailView({ lang, propertyRef, sourceUrl, labels }: Pro
 
           {property.description && (
             <section aria-labelledby="about-heading" className="mt-8">
-              <h2 id="about-heading" className="type-semiwide text-h3 text-ink">
+              <h2 id="about-heading" className="type-heading text-h3 text-ink">
                 {detail.description}
               </h2>
               <p className="mt-3 max-w-prose whitespace-pre-line text-ink-2 text-pretty">{property.description}</p>
@@ -248,7 +248,7 @@ export function PropertyDetailView({ lang, propertyRef, sourceUrl, labels }: Pro
           {canContinue && (
             <div className="shrink-0">
               <p className="text-label text-ink-2">{common.sena}</p>
-              <p className="type-semiwide text-ink tabular">
+              <p className="type-heading text-ink tabular">
                 {formatMoney(Math.round((property.priceUsd ?? manualPriceUsd ?? 0) * (pct / 100)), lang)}
               </p>
             </div>

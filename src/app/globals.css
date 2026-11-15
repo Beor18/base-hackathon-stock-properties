@@ -117,10 +117,11 @@
   --color-danger-soft: var(--danger-soft);
 
   --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
 
   /*
    * Type scale after Bringhurst's classic progression (14, 16, 18, 21, 24, 36, 48, 60, 72).
-   * Display sizes are set expanded and heavy; everything else stays at normal width.
+   * Headlines use the display face with room between lines; reading sizes stay in the text face.
    */
   --text-label: 0.875rem;
   --text-label--line-height: 1.25rem;
@@ -129,15 +130,15 @@
   --text-lead: 1.125rem;
   --text-lead--line-height: 1.6rem;
   --text-h3: 1.3125rem;
-  --text-h3--line-height: 1.2;
+  --text-h3--line-height: 1.25;
   --text-h2: 1.5rem;
-  --text-h2--line-height: 1.1;
+  --text-h2--line-height: 1.2;
   --text-h1: 2.25rem;
-  --text-h1--line-height: 1;
+  --text-h1--line-height: 1.1;
   --text-display: 3rem;
-  --text-display--line-height: 0.95;
+  --text-display--line-height: 1.05;
   --text-display-lg: 4.5rem;
-  --text-display-lg--line-height: 0.92;
+  --text-display-lg--line-height: 1.02;
 
   /* Radii follow hierarchy: photos are the softest, controls tighter, tags round. */
   --radius-photo: 1.75rem;
@@ -196,21 +197,19 @@
 }
 
 @layer components {
-  /* Expanded, heavy setting used for headlines and money. Archivo has a 62–125 width axis. */
-  .type-wide {
-    font-stretch: 125%;
+  /* Headlines and money: the display face, heavy, tracked in a little. `@theme inline` emits no
+     variables, so these name the font variables from the layout directly. */
+  .type-display {
+    font-family: var(--font-bricolage), var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
     font-weight: 800;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
   }
 
-  .type-semiwide {
-    font-stretch: 112%;
+  /* Card titles, prices and buttons: the display face one step lighter. */
+  .type-heading {
+    font-family: var(--font-bricolage), var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
     font-weight: 700;
     letter-spacing: -0.01em;
-  }
-
-  .type-narrow {
-    font-stretch: 88%;
   }
 
   .tabular {

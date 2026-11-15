@@ -142,7 +142,7 @@ export function PropertySearch({ lang, labels }: { lang: Locale; labels: Labels 
       />
 
       <section aria-labelledby="results-heading" className="mt-10">
-        <h2 id="results-heading" className="type-semiwide text-h3 text-ink">
+        <h2 id="results-heading" className="type-heading text-h3 text-ink">
           {activeQuery && list.status === "ready"
             ? fill(plural(search.results, list.total), { q: activeQuery })
             : search.featured}

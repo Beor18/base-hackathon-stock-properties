@@ -265,7 +265,7 @@ function GoalProgress({
       )}
 
       <p className="text-ink-2">{goal.property.title}</p>
-      <h1 className="type-wide mt-1 text-h1 text-balance text-ink tabular">
+      <h1 className="type-display mt-1 text-h1 text-balance text-ink tabular">
         {reached
           ? t.reachedTitle
           : fill(t.progress, { saved: formatMoney(goal.savedUsd, lang), target: formatMoney(goal.targetUsd, lang) })}
@@ -308,7 +308,7 @@ function GoalProgress({
             {goal.houseChangePct !== null && (
               <div className="rounded-[var(--radius-control)] border border-line p-4">
                 <dt className="text-ink-2">{t.houseChange}</dt>
-                <dd className="type-semiwide mt-1 text-h3">
+                <dd className="type-heading mt-1 text-h3">
                   <Change pct={goal.houseChangePct} lang={lang} flat={t.noChange} />
                 </dd>
               </div>
@@ -316,7 +316,7 @@ function GoalProgress({
             {goal.stocksChangePct !== null && (
               <div className="rounded-[var(--radius-control)] border border-line p-4">
                 <dt className="text-ink-2">{t.stocksChange}</dt>
-                <dd className="type-semiwide mt-1 text-h3">
+                <dd className="type-heading mt-1 text-h3">
                   <Change pct={goal.stocksChangePct} lang={lang} flat={t.noChange} />
                 </dd>
               </div>

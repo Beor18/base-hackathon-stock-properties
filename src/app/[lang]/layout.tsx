@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo } from "next/font/google";
+import { Archivo, Bricolage_Grotesque } from "next/font/google";
 
 import { SiteHeader } from "@/components/layout/site-header";
 import { locales } from "@/i18n/config";
@@ -8,15 +8,21 @@ import { Providers } from "@/lib/providers";
 
 import "../globals.css";
 
-/**
- * Archivo, by the Buenos Aires foundry Omnibus-Type. One variable family carries the whole
- * identity: its width axis (62–125) goes expanded and heavy for headlines and money, and stays
- * normal for reading.
- */
+/** Reading text: Archivo, by the Buenos Aires foundry Omnibus-Type, at its normal width. */
 const archivo = Archivo({
   subsets: ["latin", "latin-ext"],
-  axes: ["wdth"],
   variable: "--font-archivo",
+  display: "swap",
+});
+
+/**
+ * Headlines and money: Bricolage Grotesque. Its optical-size axis draws large type with open
+ * counters and ink traps at normal proportions, so big titles read tall instead of squashed.
+ */
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin", "latin-ext"],
+  axes: ["opsz"],
+  variable: "--font-bricolage",
   display: "swap",
 });
 
@@ -47,7 +53,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   const dict = await getDictionary(lang);
 
   return (
-    <html lang={lang} className={`${archivo.variable} h-full`}>
+    <html lang={lang} className={`${archivo.variable} ${bricolage.variable} h-full`}>
       <body className="flex min-h-full flex-col">
         <a
           href="#contenido"

@@ -39,7 +39,7 @@ export function LiveStats({ stats, lang, labels }: LiveStatsProps) {
         {items.map((item) => (
           <div key={item.label} className="flex flex-col-reverse gap-1">
             <dt className="text-ink-2">{item.label}</dt>
-            <dd className="type-wide text-h1 text-ink tabular">{item.value}</dd>
+            <dd className="type-display text-h1 text-ink tabular">{item.value}</dd>
           </div>
         ))}
       </dl>

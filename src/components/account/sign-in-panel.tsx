@@ -56,7 +56,7 @@ export function SignInPanel({
   if (step === "code") {
     return (
       <form onSubmit={submitCode} noValidate className="rounded-[var(--radius-sheet)] border border-line bg-surface p-5 sm:p-6">
-        <h2 className="type-semiwide text-h2 text-ink">{labels.codeTitle}</h2>
+        <h2 className="type-heading text-h2 text-ink">{labels.codeTitle}</h2>
         <p className="mt-2 text-ink-2 text-pretty">{fill(labels.codeBody, { email })}</p>
         <label htmlFor="sign-in-code" className="mt-5 block text-label font-semibold text-ink">
           {labels.codeLabel}
@@ -103,7 +103,7 @@ export function SignInPanel({
   return (
     <form onSubmit={submitEmail} noValidate className="rounded-[var(--radius-sheet)] border border-line bg-surface p-5 sm:p-6">
       <p className="text-ink-2">{context}</p>
-      <h2 className="type-semiwide mt-2 text-h2 text-ink">{labels.title}</h2>
+      <h2 className="type-heading mt-2 text-h2 text-ink">{labels.title}</h2>
       <p className="mt-1 text-ink-2">{labels.body}</p>
       <label htmlFor="sign-in-email" className="mt-5 block text-label font-semibold text-ink">
         {labels.emailLabel}

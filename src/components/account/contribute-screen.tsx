@@ -293,7 +293,7 @@ export function ContributeForm({
           {t.amountLabel}
         </label>
         <div className="relative mt-1.5">
-          <span className="type-semiwide pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-h3 text-ink-2">
+          <span className="type-heading pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-h3 text-ink-2">
             {code}
           </span>
           <input
@@ -305,7 +305,7 @@ export function ContributeForm({
             placeholder="0"
             aria-invalid={tooSmall || tooBig}
             aria-describedby={`${amountId}-hint`}
-            className="type-wide h-20 w-full rounded-[var(--radius-control)] border border-line-strong bg-surface pl-[5.5rem] pr-4 text-h1 text-ink placeholder:text-line-strong focus:border-ink focus:outline-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus)] aria-[invalid=true]:border-danger tabular"
+            className="type-display h-20 w-full rounded-[var(--radius-control)] border border-line-strong bg-surface pl-[5.5rem] pr-4 text-h1 text-ink placeholder:text-line-strong focus:border-ink focus:outline-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus)] aria-[invalid=true]:border-danger tabular"
           />
         </div>
         <p id={`${amountId}-hint`} className={`mt-2 text-label tabular ${tooSmall || tooBig ? "font-semibold text-danger" : "text-ink-2"}`}>

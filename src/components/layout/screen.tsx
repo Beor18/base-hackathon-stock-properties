@@ -35,7 +35,7 @@ export function Screen({ title, lead, back, media, children, dock, width = "narr
       {media && <div className="mt-3">{media}</div>}
       {(title || lead) && (
         <div className={media ? "mt-6" : "mt-6 md:mt-10"}>
-          {title && <h1 className="type-wide text-h1 text-balance text-ink">{title}</h1>}
+          {title && <h1 className="type-display text-h1 text-balance text-ink">{title}</h1>}
           {lead && <p className="mt-3 max-w-prose text-lead text-ink-2 text-pretty">{lead}</p>}
         </div>
       )}
@@ -64,7 +64,7 @@ export function StateMessage({
   return (
     <div className="flex flex-col items-start py-6">
       {icon && <div className="mb-5">{icon}</div>}
-      <h2 className="type-wide text-h2 text-balance text-ink">{title}</h2>
+      <h2 className="type-display text-h2 text-balance text-ink">{title}</h2>
       {body && <p className="mt-3 max-w-prose text-lead text-ink-2 text-pretty">{body}</p>}
       {children && <div className="mt-6 w-full">{children}</div>}
     </div>

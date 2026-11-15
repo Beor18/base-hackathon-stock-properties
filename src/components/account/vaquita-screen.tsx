@@ -249,7 +249,7 @@ function Home({
     <Screen media={<HomePhoto lang={lang} goal={goal} labels={labels} className="aspect-[16/10]" />} dock={dock}>
       <p className="font-semibold text-ink">{goal.property.title}</p>
       {goal.property.location && <p className="text-label text-ink-2">{goal.property.location}</p>}
-      <h1 className="type-wide mt-3 text-h1 text-balance text-ink tabular">{heading ?? progressLine(goal, lang, labels)}</h1>
+      <h1 className="type-display mt-3 text-h1 text-balance text-ink tabular">{heading ?? progressLine(goal, lang, labels)}</h1>
       {children}
     </Screen>
   );

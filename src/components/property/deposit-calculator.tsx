@@ -80,7 +80,7 @@ export function DepositCalculator({
       <h2 id={`${sliderId}-title`} className="font-semibold text-ink">
         {labels.title}
       </h2>
-      <p className="type-wide mt-1 text-h1 text-ink tabular" aria-live="polite">
+      <p className="type-display mt-1 text-h1 text-ink tabular" aria-live="polite">
         {formatMoney(amount ?? 0, lang)}
       </p>
       <p className="mt-1 text-ink-2 tabular">{fill(labels.pctOfPrice, { pct: formatPct(pct, lang) })}</p>

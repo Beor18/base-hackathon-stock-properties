@@ -54,7 +54,7 @@ export function PropertyCard({ property, lang, labels, priority }: PropertyCardP
         )}
       </div>
       <div className="px-1 pt-3">
-        <p className="type-semiwide text-h3 text-ink tabular">
+        <p className="type-heading text-h3 text-ink tabular">
           {property.priceUsd !== null ? formatMoney(property.priceUsd, lang) : labels.cardNoPrice}
           {property.listingType === "rent" && (
             <span className="ml-2 align-middle text-label font-semibold text-ink-2">{labels.forRent}</span>
