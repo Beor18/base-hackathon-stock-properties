@@ -9,7 +9,7 @@
   "owner": "0xAe0f63D5bCE6DCE7F8593F2073F3EeF5614a877A",
   "treasury": "0xAe0f63D5bCE6DCE7F8593F2073F3EeF5614a877A",
   "arbiter": "0xAe0f63D5bCE6DCE7F8593F2073F3EeF5614a877A",
-  "builderCode": null,
+  "builderCode": "bc_ypl8v014",
   "contracts": {
     "stockOracle": "0x04d3d4672024357d40a4739Ad03f04e68987101d",
     "reservationEscrow": "0x5584F9a333faCbB8f01D22524c517Cf2BaB84a95",

@@ -14,7 +14,7 @@ import {
 import { loadArtifact } from "./artifacts";
 import { discoverUsdArsFeed, feedToNumber, type FeedReading } from "./chainlink";
 import { confirm, connect, createMainnetClient, type Signer } from "./clients";
-import { DEMO_FAUCET_USD, NETWORKS, PAY_TOKENS, PRODUCT, type NetworkName } from "./deploy-config";
+import { BUILDER_CODE, DEMO_FAUCET_USD, NETWORKS, PAY_TOKENS, PRODUCT, type NetworkName } from "./deploy-config";
 import { writeDeployment } from "./deployment-file";
 import { discoverAggregatorRouter, discoverPayTokens, type VerifiedToken } from "./mainnet-assets";
 import { discoverStockUniverse, type UniverseStock } from "./stock-universe";
@@ -132,7 +132,7 @@ export async function runDeploy(options: DeployOptions) {
     owner,
     treasury,
     arbiter,
-    builderCode: options.builderCode ?? null,
+    builderCode: options.builderCode ?? BUILDER_CODE,
     contracts: { stockOracle: oracle, reservationEscrow: escrow, goalRegistry },
     exchange: market.exchange,
     routers: market.routers,

@@ -35,6 +35,9 @@ export function isNetworkName(value: string): value is NetworkName {
 }
 
 /** Product rules. Contract-enforced values are immutable or owner-only once deployed. */
+/** Accasa's Base Builder Code (Base Dashboard), appended to every transaction for attribution. `--builder-code` overrides it. */
+export const BUILDER_CODE = "bc_ypl8v014";
+
 export const PRODUCT = {
   /** Reservation (seña) as a share of the property price: 5% by default, the person picks 1% to 10%. */
   reservationBps: { default: 500, min: 100, max: 1_000 },
