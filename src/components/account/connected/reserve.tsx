@@ -82,7 +82,7 @@ export function ConnectedReserveScreen({ lang, labels }: { lang: Locale; labels:
     if (!goalView.reached) {
       state = { kind: "not-reached", goal };
     } else {
-      // The broker generates the link on Seña itself, so the message points straight at that page.
+      // The broker generates the link on Accasa itself, so the message points straight at that page.
       const params = new URLSearchParams({ casa: goalView.property.ref });
       if (goalView.property.ref.startsWith("link:") && goalView.property.sourceUrl) params.set("url", goalView.property.sourceUrl);
       state = {

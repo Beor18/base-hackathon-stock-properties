@@ -8,7 +8,7 @@ export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = "es";
 
 /** Cookie that remembers an explicit language choice made with the language switch. */
-export const LOCALE_COOKIE = "sena-lang";
+export const LOCALE_COOKIE = "accasa-lang";
 
 export function hasLocale(value: string): value is Locale {
   return (locales as readonly string[]).includes(value);

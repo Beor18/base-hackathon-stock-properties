@@ -2,7 +2,7 @@ import { intlLocale, type Locale } from "./config";
 
 /**
  * Formatting helpers shared by server and client components.
- * Money is written as "USD 19.750" in both languages: the people using Seña think in dollars,
+ * Money is written as "USD 19.750" in both languages: the people using Accasa think in dollars,
  * and the explicit code avoids confusing USD with pesos (both use "$" in Argentina).
  */
 

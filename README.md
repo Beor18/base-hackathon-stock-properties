@@ -1,4 +1,4 @@
-# Seña: your next home, in stocks
+# Accasa: your next home, in stocks
 
 Save in tokenized stocks toward a specific property. When you reach the deposit, your stocks are locked as the reservation, never sold. If the buyer backs out, the broker is paid in USDC.
 
@@ -6,7 +6,7 @@ Built for [Base Stocks Maxxing](https://www.base.org/stocksmaxxing), track **Pro
 
 ## What it is
 
-In Argentina, homes are bought in dollars and in cash. In Buenos Aires, 17.5% of August 2026 deeds used a mortgage; the rest came from years of idle savings. Seña turns that saving into a goal and the goal into a deposit:
+In Argentina, homes are bought in dollars and in cash. In Buenos Aires, 17.5% of August 2026 deeds used a mortgage; the rest came from years of idle savings. Accasa turns that saving into a goal and the goal into a deposit:
 
 1. **Pick a home.** Real Puerto Rico listings from [Smarlin](https://www.smarlin.com) (our live AI property platform: 11,925 listings, 120,002 closed sales analyzed, 78 municipalities), or paste a link from any Argentine portal. Deposit = `price x deposit %` (default 5%, adjustable 1% to 10%).
 2. **Add.** Contribute USDC or wARS (digital pesos). It becomes the tokenized stock chosen for the goal. The goal screen shows progress and "the home +x %, your stocks +y %" since the start.

@@ -293,7 +293,7 @@ function Phone({ shot, className = "" }: { shot: PitchShot; className?: string }
 }
 
 /**
- * Where Seña stands today, read from the contracts as the slide is shown. Zeros are shown as zeros:
+ * Where Accasa stands today, read from the contracts as the slide is shown. Zeros are shown as zeros:
  * the slide is about starting from them.
  */
 function LiveNumbers({ labels, lang }: { labels: PitchDeck["live"]; lang: Locale }) {
@@ -336,7 +336,7 @@ function LiveNumbers({ labels, lang }: { labels: PitchDeck["live"]; lang: Locale
         </dl>
       ) : (
         <div role="status" className="mt-3">
-          {/* Every wait in Seña shows a bar, what is happening and how long it usually takes. */}
+          {/* Every wait in Accasa shows a bar, what is happening and how long it usually takes. */}
           {!isError && (
             <div className="mb-2 h-2.5 w-full max-w-md overflow-hidden rounded-full bg-white/15" aria-hidden>
               <div className="h-full w-1/2 animate-pulse rounded-full bg-[#f5b83d]" />

@@ -1,7 +1,7 @@
 import { isMainnet } from "@/config/deployment";
 
 /**
- * Seña is not offered in the United States and its territories (Puerto Rico included): nobody
+ * Accasa is not offered in the United States and its territories (Puerto Rico included): nobody
  * there trades stock through the app. Enforced on mainnet only, by the platform's country header.
  */
 export const BLOCKED_COUNTRIES: ReadonlySet<string> = new Set(["US", "PR", "VI", "GU", "AS", "MP", "UM"]);

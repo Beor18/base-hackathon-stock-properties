@@ -7,7 +7,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getPitchDeck()).title };
 }
 
-/** The pitch deck (es/en). The only screen that names the technologies behind Seña. */
+/** The pitch deck (es/en). The only screen that names the technologies behind Accasa. */
 export default async function PitchPage() {
   const lang = await getLocale();
   const deck = await getPitchDeck(lang);

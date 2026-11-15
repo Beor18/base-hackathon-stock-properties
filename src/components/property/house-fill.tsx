@@ -19,7 +19,7 @@ type HouseFillProps = {
 };
 
 /**
- * Seña's signature visual: the home you're saving for, in grey, filling with color from the
+ * Accasa's signature visual: the home you're saving for, in grey, filling with color from the
  * ground up as the savings grow. A mango line marks how far you've got.
  */
 export function HouseFill({ src, alt, progress, animate = false, label, sizes, priority, className = "" }: HouseFillProps) {

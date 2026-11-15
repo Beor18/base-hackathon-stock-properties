@@ -1,7 +1,9 @@
-# HANDOFF: Seña (Base Stocks Maxxing)
+# HANDOFF: Accasa (Base Stocks Maxxing)
 
 Documento de traspaso para continuar el trabajo desde otra cuenta de Claude.
 Estado al **14 nov 2026**. Repo: `https://github.com/Beor18/base-hackathon-stock-properties` (rama `main`).
+
+> **Nombre (15 nov 2026):** el producto se llamaba **Seña** y pasó a llamarse **Accasa** (acción + casa, se lee "a casa"). "Seña" sin la ñ queda "sena", que no sirve como dirección web. La palabra "seña" sigue siendo el depósito que se deja para reservar. Dirección: https://accasa.vercel.app (la anterior, sena-app-blond.vercel.app, sigue andando).
 
 > **La fuente de verdad del producto es [`docs/superpowers/specs/2026-11-14-sena-design.md`](docs/superpowers/specs/2026-11-14-sena-design.md).** Si algo de este documento la contradice, gana el spec. El enfoque anterior ("Garante", garantía de alquiler) quedó reemplazado: sus datos técnicos y de mercado siguen valiendo y están acá abajo.
 
@@ -28,7 +30,7 @@ Estado al **14 nov 2026**. Repo: `https://github.com/Beor18/base-hackathon-stock
 
 | Tema | Decisión |
 |---|---|
-| Producto | **Seña: tu próxima casa, en acciones.** La persona ahorra en acciones tokenizadas con una propiedad real como meta, aporta con USDC o wARS y, cuando llega, sus acciones quedan como reserva (seña) de la casa sin venderlas. Si se arrepiente, el corredor cobra en USDC. Hereda el mecanismo de Camalote (Camalote está en pausa). |
+| Producto | **Accasa: tu próxima casa, en acciones.** La persona ahorra en acciones tokenizadas con una propiedad real como meta, aporta con USDC o wARS y, cuando llega, sus acciones quedan como reserva (seña) de la casa sin venderlas. Si se arrepiente, el corredor cobra en USDC. Hereda el mecanismo de Camalote (Camalote está en pausa). |
 | Track | **Programmable Stock Markets** (pool Base USD 20.000). Solo se puede entrar a un track. |
 | Usuarios y mercados | Fuera de EE.UU., **Argentina primero**. La portada y la demo son propiedades de **Puerto Rico** (Smarlin, Kelvin). La entrada es cualquier portal argentino pegando el link. Las acciones tokenizadas de Coinbase son solo para no-US y las reglas descalifican proyectos que habiliten trading a usuarios de EE.UU., Puerto Rico incluido: por eso nadie del lado del vendedor recibe acciones (el corredor cobra en USDC) y la app bloquea EE.UU. y territorios en mainnet. Ver `docs/NARRATIVE.md` §4. |
 | Flujo | Tres pasos: elegir la casa (seña = precio x % de seña, default 5%, ajustable 1% a 10%), sumar (USDC o wARS a la acción de la meta; una acción por meta en v1) y reservar (acciones al escrow a favor del corredor, con árbitro). El corredor genera un **link de reserva** (con login, sin transacción) y lo comparte por WhatsApp. |
@@ -143,7 +145,7 @@ Con `verifiedOnly=true` había 9 propiedades en venta y 3 en alquiler, todas de 
 
 **Código fuente de Smarlin en la PC de Fernando:** `~/Documentos/test-opencode/real-state-startup` (remote `Beor18/real-state-matches`). Ante cualquier duda sobre la API, leer el código ahí en vez de inferir desde el sitio.
 
-**Decisión (14 nov 2026): Seña usa los endpoints públicos de Smarlin, sin key.** Smarlin los documenta como contrato estable (`ENDPOINTS_SMARLIN` en `lectura-inmobiliaria-contrato.ts`): `GET /api/properties`, `GET /api/properties/<id>`, `GET /api/tasas/vigente`, `GET /api/mercado/str` y `GET /api/properties/renta-mercado`. También son públicos `fair-price` y `/api/properties/<id>/comparables`. Así la app no suma variables de entorno.
+**Decisión (14 nov 2026): Accasa usa los endpoints públicos de Smarlin, sin key.** Smarlin los documenta como contrato estable (`ENDPOINTS_SMARLIN` en `lectura-inmobiliaria-contrato.ts`): `GET /api/properties`, `GET /api/properties/<id>`, `GET /api/tasas/vigente`, `GET /api/mercado/str` y `GET /api/properties/renta-mercado`. También son públicos `fair-price` y `/api/properties/<id>/comparables`. Así la app no suma variables de entorno.
 
 **Para más adelante (opcional): la API para partners**, leída del código el 14 nov 2026. Sirve si hace falta el inventario completo de un agente o el webhook de cambios:
 
@@ -154,7 +156,7 @@ Con `verifiedOnly=true` había 9 propiedades en venta y 3 en alquiler, todas de 
 
 - **Auth:** header `x-api-key`. La key sale de la tabla `partner_api_keys` (se crea desde el admin de Smarlin, `/api/admin/api-keys`) o del env legacy `PARTNER_API_KEYS` (`label:key,…`).
 - **Gate:** el agente pedido tiene que tener el sello de **Agente Verificado**; si no, responde 403 `agent_not_verified`. Todo indica que Kelvin está verificado, porque sus publicaciones son las únicas que devuelve `verifiedOnly=true`. Confirmarlo al crear la key.
-- **Webhook:** al guardar un listado, Smarlin avisa a los partners configurados en `PARTNER_WEBHOOKS` (`src/lib/partner-webhooks.ts`), y el partner vuelve a pedir solo ese `mls`. Seña puede registrarse como partner y refrescar su caché por webhook.
+- **Webhook:** al guardar un listado, Smarlin avisa a los partners configurados en `PARTNER_WEBHOOKS` (`src/lib/partner-webhooks.ts`), y el partner vuelve a pedir solo ese `mls`. Accasa puede registrarse como partner y refrescar su caché por webhook.
 - La respuesta trae `agent_phone` y `agent_email`: la lista blanca de campos de nuestro servidor sigue siendo obligatoria.
 - Si algún día se usa, la key es una variable de entorno más de servidor (`SMARLIN_PARTNER_KEY`); por eso hoy no entra.
 
@@ -173,7 +175,7 @@ Con `verifiedOnly=true` había 9 propiedades en venta y 3 en alquiler, todas de 
   - `RouteContext<'/ruta/[id]'>` es global pero requiere `next typegen` (ya está en `npm run typecheck`).
   - Tailwind va por el loader `@tailwindcss/turbopack` en `next.config.ts` (no hay `postcss.config`).
   - i18n recomendado: segmento `app/[lang]` + redirect en `proxy.ts`.
-- **Configuración:** el enfoque anterior usaba `public-env.ts` con varias variables. En Seña queda **una** (`NEXT_PUBLIC_PRIVY_APP_ID`) y el resto sale de `src/config/deployment.json`. Si `next build` o `typegen` fallan por variables faltantes, es código viejo que hay que migrar.
+- **Configuración:** el enfoque anterior usaba `public-env.ts` con varias variables. En Accasa queda **una** (`NEXT_PUBLIC_PRIVY_APP_ID`) y el resto sale de `src/config/deployment.json`. Si `next build` o `typegen` fallan por variables faltantes, es código viejo que hay que migrar.
 - **Foundry está instalado por npm** (`@foundry-rs/forge`, `anvil`, `cast`). Instalarlo con `curl | bash` fue bloqueado por permisos. Los links en `node_modules/.bin` se pierden después de cada `npm install`: usar siempre `npm run forge -- <cmd>` o `node node_modules/@foundry-rs/anvil/bin.mjs`. Si falta el binario: `npm rebuild @foundry-rs/forge @foundry-rs/anvil @foundry-rs/cast`.
 - **`forge-std` y OpenZeppelin vienen de npm**, con remappings a `node_modules` (sin submódulos git).
 - **wagmi v3:** `useAccount` → `useConnection`; `useConnect().connectors` ya no existe (usar `useConnectors()`); los hooks de mutación exponen `mutate`/`mutateAsync`; `useSendCalls`, `useCapabilities`, `useWaitForCallsStatus` se importan de `wagmi`. Los conectores son peers opcionales (`@base-org/account` ya instalado).
@@ -323,7 +325,7 @@ Estas direcciones son referencia: **el script debe descubrirlas del directorio d
 7. Loom ≤ 3 min: problema (20 s), flujo real en mainnet, números de tracción, qué se construyó durante el Quest, roadmap.
 8. Enviar el 4 dic, un día antes del cierre.
 
-## Apéndice B2: Research nuevo para Seña (14 nov 2026)
+## Apéndice B2: Research nuevo para Accasa (14 nov 2026)
 
 Cifras con fuente. Las que no tienen fuente están en **[completar]** en la narrativa.
 

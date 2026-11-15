@@ -6,12 +6,12 @@
  */
 const es = {
   meta: {
-    title: "Seña: tu próxima casa, en acciones",
+    title: "Accasa: tu próxima casa, en acciones",
     description:
       "Ahorrá en acciones con la casa que querés como meta. Cuando llegás, tus acciones quedan como seña, sin venderlas.",
   },
   common: {
-    brand: "Seña",
+    brand: "Accasa",
     home: "Inicio",
     skipToContent: "Saltar al contenido",
     back: "Volver",
@@ -46,7 +46,7 @@ const es = {
     heroCaption: "Seña de esta casa en {place}",
     heroCaptionFallback: "Tu seña",
     heroPhotoAlt: "{title}, en {place}",
-    turnTitle: "Con Seña, esa plata trabaja mientras llegás.",
+    turnTitle: "Con Accasa, esa plata trabaja mientras llegás.",
     turnBody:
       "Ahorrás en acciones de empresas como Apple o Nvidia, con tu próxima casa como meta. Y tu casa se va pintando a medida que sumás.",
     stepsTitle: "Cómo funciona",
@@ -67,7 +67,7 @@ const es = {
     promiseTitle: "¿Y si me arrepiento?",
     promiseBody:
       "El corredor cobra la seña en dólares desde tus acciones y el resto sigue siendo tuyo. Si hay desacuerdo, decide un árbitro neutral.",
-    statsTitle: "Seña hoy",
+    statsTitle: "Accasa hoy",
     stats: {
       goals: "metas activas",
       saved: "en señas con acciones",
@@ -304,7 +304,7 @@ const es = {
     rampBody: "Compralos con transferencia en un servicio externo y mandalos a tu dirección.",
     rampCta: "Comprar dólares digitales",
     testTitle: "Saldo de bienvenida",
-    testBody: "Te damos saldo para que recorras todo el camino. Es para usar dentro de Seña: sumalo a tu meta.",
+    testBody: "Te damos saldo para que recorras todo el camino. Es para usar dentro de Accasa: sumalo a tu meta.",
     testCta: "Recibir {amount} de bienvenida",
     testSteps: ["Cargando tu saldo de bienvenida", "Confirmando"],
     testSeconds: 4,
@@ -336,13 +336,13 @@ const es = {
     successBody: "Le avisamos al corredor. Tus acciones quedan bloqueadas hasta el {date}.",
     successCta: "Ver la reserva",
     share: "Compartir por WhatsApp",
-    shareMessage: "Reservé {title} con Seña. Acá está la reserva: {url}",
+    shareMessage: "Reservé {title} con Accasa. Acá está la reserva: {url}",
     error: "No se pudo reservar. Tus acciones siguen libres en tu cuenta.",
     noLinkTitle: "Pedile el link al corredor",
     noLinkBody: "Para reservar necesitás el link de reserva del corredor de esta casa. Te armamos el mensaje.",
     noLinkCta: "Pedir el link por WhatsApp",
     noLinkMessage:
-      "Hola{agent}, quiero reservar {title} con Seña. ¿Me mandás el link de reserva? {url}",
+      "Hola{agent}, quiero reservar {title} con Accasa. ¿Me mandás el link de reserva? {url}",
     notReachedTitle: "Todavía no llegaste a la seña",
     notReachedBody: "Te faltan {amount}. Cuando llegues, reservás desde acá.",
     notReachedCta: "Sumar a mi seña",
@@ -429,7 +429,7 @@ const es = {
     readyTitle: "Link listo",
     readyBody: "Mandáselo al comprador. Cuando reserve, te llega el aviso.",
     share: "Mandar por WhatsApp",
-    shareMessage: "Hola, este es el link para reservar {title} con Seña: {url}",
+    shareMessage: "Hola, este es el link para reservar {title} con Accasa: {url}",
     copy: "Copiar link",
     copied: "Link copiado",
     error: "No pudimos generar el link. Probá de nuevo.",
@@ -482,7 +482,7 @@ const es = {
       invalid_pct: "El porcentaje de seña no es válido.",
       key_too_long: "El link de la publicación es muy largo. Probá con el link corto.",
       not_available: "El saldo de bienvenida no está en esta versión.",
-      unavailable_region: "Seña no está disponible en tu país.",
+      unavailable_region: "Accasa no está disponible en tu país.",
     },
     reasons: {
       InsufficientCollateral: "Tus acciones no alcanzan para cubrir la seña con el margen que pide esta empresa.",
@@ -517,7 +517,7 @@ const es = {
     },
   },
   unavailable: {
-    title: "Seña no está disponible en tu país",
+    title: "Accasa no está disponible en tu país",
     body: "Por ahora funciona fuera de Estados Unidos y sus territorios. Mientras tanto, podés buscar casas en Smarlin.",
     cta: "Ir a Smarlin",
   },

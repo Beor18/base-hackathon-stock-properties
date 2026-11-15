@@ -92,7 +92,7 @@ export const SOURCES = {
   baseTokenList: "https://tokens.coingecko.com/base/all.json",
   kyberAggregator: "https://aggregator-api.kyberswap.com/base/api/v1",
   /** KyberSwap is keyless but asks integrators to identify themselves. */
-  kyberClientId: "sena",
+  kyberClientId: "accasa",
   /** Base mainnet, read on every network: real prices seed the demo feeds. */
   baseMainnetRpc: "https://mainnet.base.org",
 } as const;

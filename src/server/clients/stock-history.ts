@@ -33,7 +33,7 @@ export async function getChange12mPct(ticker: string): Promise<number | null> {
   try {
     const url = `${CHART_URL}/${encodeURIComponent(ticker)}?range=1y&interval=1mo`;
     const response = await fetch(url, {
-      headers: { accept: "application/json", "user-agent": "Mozilla/5.0 (sena-app)" },
+      headers: { accept: "application/json", "user-agent": "Mozilla/5.0 (accasa-app)" },
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     if (!response.ok) return null;

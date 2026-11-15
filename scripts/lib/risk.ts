@@ -39,7 +39,7 @@ export async function assessRisk(ticker: string, feedPriceUsd: number): Promise<
   let chart: z.infer<typeof chartSchema>;
   try {
     const url = `${SOURCES.yahooChart}/${encodeURIComponent(ticker)}?range=1y&interval=1d`;
-    chart = chartSchema.parse(await fetchJson(url, { "user-agent": "Mozilla/5.0 (sena-deploy)" }));
+    chart = chartSchema.parse(await fetchJson(url, { "user-agent": "Mozilla/5.0 (accasa-deploy)" }));
   } catch (error) {
     return maxRatio(0, `no price history (${(error as Error).message})`);
   }

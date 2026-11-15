@@ -3,12 +3,12 @@ import type { Dictionary } from "./es";
 /** English, mainly for judges. Same rules as Spanish: short, no jargon, no third-party brands. */
 const en: Dictionary = {
   meta: {
-    title: "Seña: your next home, in stocks",
+    title: "Accasa: your next home, in stocks",
     description:
       "Save in stocks with the home you want as your goal. When you get there, your stocks become the deposit, without selling them.",
   },
   common: {
-    brand: "Seña",
+    brand: "Accasa",
     home: "Home",
     skipToContent: "Skip to content",
     back: "Back",
@@ -43,7 +43,7 @@ const en: Dictionary = {
     heroCaption: "Deposit for this home in {place}",
     heroCaptionFallback: "Your deposit",
     heroPhotoAlt: "{title}, in {place}",
-    turnTitle: "With Seña, that money works while you get there.",
+    turnTitle: "With Accasa, that money works while you get there.",
     turnBody:
       "You save in stocks of companies like Apple or Nvidia, with your next home as the goal. And your home fills with color as you add.",
     stepsTitle: "How it works",
@@ -64,7 +64,7 @@ const en: Dictionary = {
     promiseTitle: "What if I change my mind?",
     promiseBody:
       "The broker collects the deposit in dollars from your stocks and the rest stays yours. If there's a disagreement, a neutral arbiter decides.",
-    statsTitle: "Seña today",
+    statsTitle: "Accasa today",
     stats: {
       goals: "active goals",
       saved: "in stock-backed deposits",
@@ -301,7 +301,7 @@ const en: Dictionary = {
     rampBody: "Buy them by bank transfer on an external service and send them to your address.",
     rampCta: "Buy digital dollars",
     testTitle: "Welcome balance",
-    testBody: "We give you a balance so you can walk the whole path. It works inside Seña: add it to your goal.",
+    testBody: "We give you a balance so you can walk the whole path. It works inside Accasa: add it to your goal.",
     testCta: "Get your {amount} welcome balance",
     testSteps: ["Adding your welcome balance", "Confirming"],
     testSeconds: 4,
@@ -333,12 +333,12 @@ const en: Dictionary = {
     successBody: "We let the broker know. Your stocks stay locked until {date}.",
     successCta: "See the reservation",
     share: "Share on WhatsApp",
-    shareMessage: "I reserved {title} with Seña. Here's the reservation: {url}",
+    shareMessage: "I reserved {title} with Accasa. Here's the reservation: {url}",
     error: "The reservation didn't go through. Your stocks are still unlocked in your account.",
     noLinkTitle: "Ask the broker for the link",
     noLinkBody: "To reserve you need the reservation link from this home's broker. We'll write the message for you.",
     noLinkCta: "Ask for the link on WhatsApp",
-    noLinkMessage: "Hi{agent}, I'd like to reserve {title} with Seña. Can you send me the reservation link? {url}",
+    noLinkMessage: "Hi{agent}, I'd like to reserve {title} with Accasa. Can you send me the reservation link? {url}",
     notReachedTitle: "You haven't reached the deposit yet",
     notReachedBody: "{amount} to go. When you get there, you reserve from here.",
     notReachedCta: "Add to my deposit",
@@ -425,7 +425,7 @@ const en: Dictionary = {
     readyTitle: "Link ready",
     readyBody: "Send it to the buyer. You'll be notified when they reserve.",
     share: "Send on WhatsApp",
-    shareMessage: "Hi, here's the link to reserve {title} with Seña: {url}",
+    shareMessage: "Hi, here's the link to reserve {title} with Accasa: {url}",
     copy: "Copy link",
     copied: "Link copied",
     error: "We couldn't create the link. Try again.",
@@ -478,7 +478,7 @@ const en: Dictionary = {
       invalid_pct: "The deposit percentage is not valid.",
       key_too_long: "The listing link is too long. Try its short link.",
       not_available: "The welcome balance is not part of this version.",
-      unavailable_region: "Seña is not available in your country.",
+      unavailable_region: "Accasa is not available in your country.",
     },
     reasons: {
       InsufficientCollateral: "Your stocks do not cover the deposit with the cushion this company needs.",
@@ -513,7 +513,7 @@ const en: Dictionary = {
     },
   },
   unavailable: {
-    title: "Seña isn't available in your country",
+    title: "Accasa isn't available in your country",
     body: "For now it works outside the United States and its territories. Meanwhile, you can browse homes on Smarlin.",
     cta: "Go to Smarlin",
   },

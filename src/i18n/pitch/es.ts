@@ -71,7 +71,7 @@ const es: PitchDeck = {
       id: "cover",
       title: "Tu próxima casa, en acciones.",
       body: "Ahorrás en acciones con tu casa como meta. Cuando llegás, esas acciones son tu seña. No vendés nada.",
-      shots: [{ src: "/pitch/meta-es.webp", alt: "La meta en Seña: la foto de la casa se pinta a medida que ahorrás." }],
+      shots: [{ src: "/pitch/meta-es.webp", alt: "La meta en Accasa: la foto de la casa se pinta a medida que ahorrás." }],
       foot: "Base Stocks Maxxing 2026",
       tone: "paper",
       layout: "cover",
@@ -106,7 +106,7 @@ const es: PitchDeck = {
       shots: [
         {
           src: "/pitch/casa-es.webp",
-          alt: "Elegir una casa en venta en Seña.",
+          alt: "Elegir una casa en venta en Accasa.",
           title: "Elegí la casa",
           body: "Una de Puerto Rico, o el link de cualquier portal.",
         },
@@ -185,7 +185,7 @@ const es: PitchDeck = {
       body: "Y mirá cómo se pinta.",
       points: [
         { title: "Kelvin Garcia Vale", body: "Corredor en Puerto Rico. Trae a los primeros corredores." },
-        { title: "Fernando Lopez", body: "Ingeniero en Buenos Aires. Construyó Seña de punta a punta." },
+        { title: "Fernando Lopez", body: "Ingeniero en Buenos Aires. Construyó Accasa de punta a punta." },
       ],
       foot: "Somos el equipo de Smarlin, con 11.925 propiedades publicadas en Puerto Rico. Buscamos 3 corredores que acepten la primera reserva con acciones.",
       tone: "ink",

@@ -1,6 +1,6 @@
-# Seña: la narrativa
+# Accasa: la narrativa
 
-> **Seña: tu próxima casa, en acciones.**
+> **Accasa: tu próxima casa, en acciones.**
 > Ahorrá en acciones con una casa como meta. Cuando llegás, tus acciones quedan como seña, sin venderlas.
 
 > **Actualizado el 14 nov 2026** con `docs/research/2026-11-14-mercado-y-competencia.md` (mercado, competencia y lo que es oficial del hackathon) y `docs/LEAN.md` (hipótesis, métricas y experimentos). Si un número de acá no coincide con el research, vale el research.
@@ -13,7 +13,7 @@ Este documento es la historia de la startup de 0 a 1: problema, solución, por q
 
 Somos el equipo que construyó **Smarlin**, una plataforma de IA de bienes raíces que ya funciona en Puerto Rico: búsqueda de propiedades por estilo de vida, análisis de precio justo y riesgo, y datos de mercado a partir de cierres reales. Hoy tiene **11.925 propiedades publicadas**, **120.002 ventas cerradas analizadas** y cobertura de los **78 municipios** (cifras de su propia API, 14 nov 2026). Kelvin vende propiedades allá. Fernando construye el producto desde Buenos Aires.
 
-**Seña se apoya en esa base.** La portada del producto son propiedades reales de Puerto Rico, sacadas de Smarlin por API, con datos que nadie más tiene: precio justo, renta de corto plazo, renta de mercado y comparables.
+**Accasa se apoya en esa base.** La portada del producto son propiedades reales de Puerto Rico, sacadas de Smarlin por API, con datos que nadie más tiene: precio justo, renta de corto plazo, renta de mercado y comparables.
 
 Antes habíamos construido una garantía de alquiler con acciones (Garante). El contrato de custodia, el oráculo y el cobro en caso de reclamo quedaron. Lo que cambió es la historia: la garantía de un alquiler es un trámite que se hace una vez. **Ahorrar para una casa es algo que se hace todos los meses durante años.** Eso es uso real, repetido, y es lo que mide el hackathon.
 
@@ -40,7 +40,7 @@ Quien tiene su ahorro invertido tiene que venderlo para reservar. Vende de golpe
 
 ## 2. La solución
 
-**Seña es una cuenta para ahorrar en acciones con una casa concreta como meta. Cuando llegás, las acciones quedan como reserva de la propiedad, sin venderlas.**
+**Accasa es una cuenta para ahorrar en acciones con una casa concreta como meta. Cuando llegás, las acciones quedan como reserva de la propiedad, sin venderlas.**
 
 Tres pasos:
 
@@ -67,7 +67,7 @@ Login con email, cuenta invisible, gas pago, una sola llamada para aprobar y act
 
 Casa de USD 100.000, seña de 5% (USD 5.000), ahorro de USD 300 por mes (unos 17 meses).
 
-| | Billetes | Pesos en un plazo fijo | **Seña** |
+| | Billetes | Pesos en un plazo fijo | **Accasa** |
 |---|---|---|---|
 | Qué hace tu plata mientras ahorrás | Nada | Pierde valor real contra el dólar si el peso se devalúa **[confirmar con datos]** | Sigue el mercado de las acciones que elegiste |
 | Meta visible | No | No | Sí: casa, monto y progreso |
@@ -142,7 +142,7 @@ El research previo (para la garantía de alquiler) no encontró ningún producto
 
 ## 7. Diferenciador
 
-**Seña es la única forma de ahorrar para una casa en la que tu plata sigue siendo tuya, sigue invertida y se convierte en la seña sin venderla.**
+**Accasa es la única forma de ahorrar para una casa en la que tu plata sigue siendo tuya, sigue invertida y se convierte en la seña sin venderla.**
 
 Cuatro cosas lo sostienen:
 
@@ -223,26 +223,26 @@ Hay que decirlo sin maquillaje: **el ingreso por persona es chico al principio.*
 
 **Tagline**
 
-> Seña: your next home, in stocks.
+> Accasa: your next home, in stocks.
 
 **One-liner**
 
-> Seña lets people outside the US save in tokenized stocks on Base toward a specific property, and lock those stocks as the reservation deposit when they get there, without selling them. If the buyer backs out, the broker is paid in USDC. Listings come live from Smarlin, our property platform in Puerto Rico, or from any Argentine portal by pasting a link.
+> Accasa lets people outside the US save in tokenized stocks on Base toward a specific property, and lock those stocks as the reservation deposit when they get there, without selling them. If the buyer backs out, the broker is paid in USDC. Listings come live from Smarlin, our property platform in Puerto Rico, or from any Argentine portal by pasting a link.
 
 **Form: project description (1 to 2 sentences)**
 
-> Seña is a savings account in tokenized stocks with a specific property as the goal. Add USDC or digital pesos, pick a home from Smarlin or paste any portal link, and when you reach the deposit your stocks are locked in an onchain escrow as the reservation, never sold. If the buyer backs out, the contract sells just enough stock to pay the broker in USDC.
+> Accasa is a savings account in tokenized stocks with a specific property as the goal. Add USDC or digital pesos, pick a home from Smarlin or paste any portal link, and when you reach the deposit your stocks are locked in an onchain escrow as the reservation, never sold. If the buyer backs out, the contract sells just enough stock to pay the broker in USDC.
 
 **Form: "Why should we select you?"**
 
-> In Argentina, homes are bought in dollars and in cash: in Buenos Aires, 17.5% of August 2026 deeds used a mortgage, so the rest came from years of saved dollars sitting idle (INDEC puts USD 254.9B of private dollars outside the banking system). Meanwhile over a million Argentines already hold US stocks that are useless the day they must reserve a home. Seña turns that saving into a goal and the goal into a deposit, without selling. Every contribution is onchain usage, from USD 5, and the final reservation is a programmed stock action that does not exist anywhere else: lock, release, or sell to pay a broker in USDC with a slippage cap enforced by the contract. We are the team behind Smarlin, a live AI property platform in Puerto Rico with 11,925 active listings and 120,002 closed sales analyzed. One of us sells properties there; the other builds onchain from Buenos Aires, where the product can be used today. US persons are blocked on mainnet and no US person ever receives stocks.
+> In Argentina, homes are bought in dollars and in cash: in Buenos Aires, 17.5% of August 2026 deeds used a mortgage, so the rest came from years of saved dollars sitting idle (INDEC puts USD 254.9B of private dollars outside the banking system). Meanwhile over a million Argentines already hold US stocks that are useless the day they must reserve a home. Accasa turns that saving into a goal and the goal into a deposit, without selling. Every contribution is onchain usage, from USD 5, and the final reservation is a programmed stock action that does not exist anywhere else: lock, release, or sell to pay a broker in USDC with a slippage cap enforced by the contract. We are the team behind Smarlin, a live AI property platform in Puerto Rico with 11,925 active listings and 120,002 closed sales analyzed. One of us sells properties there; the other builds onchain from Buenos Aires, where the product can be used today. US persons are blocked on mainnet and no US person ever receives stocks.
 
 **Loom, 3 minutos**
 
 | Tiempo | Qué se muestra | Qué se dice |
 |---|---|---|
 | 0:00 a 0:20 | Una cuenta con dólares quietos y un portal con una casa | "In Argentina you buy a home with dollars you saved for years. That money sits still. And when you find the home, you must sell what you invested to reserve it." |
-| 0:20 a 0:40 | Landing con el 1-2-3 | "Seña: your next home, in stocks. Three steps." |
+| 0:20 a 0:40 | Landing con el 1-2-3 | "Accasa: your next home, in stocks. Three steps." |
 | 0:40 a 1:10 | Elegir una casa de Puerto Rico en Smarlin (datos de precio justo y renta) y pegar un link de un portal argentino | "Pick a listing from Smarlin, or paste any link. We compute the deposit." |
 | 1:10 a 1:50 | Sumar con USDC y con pesos digitales; pantalla de meta con "la casa +x %, tus acciones +y %" | "Add dollars or pesos. They become the stock you chose. Fee always visible. Every step is onchain." |
 | 1:50 a 2:30 | Reservar: link del corredor, un toque, página pública de la reserva; luego reclamo y cobro en USDC | "You reached the goal. One tap locks your stocks as the deposit. If you back out, the broker claims and is paid in USDC, with a slippage cap enforced onchain. If the deal closes, your stocks come home." |
@@ -252,6 +252,6 @@ Hay que decirlo sin maquillaje: **el ingreso por persona es chico al principio.*
 
 > In Argentina you buy a home with dollars you saved for years. That money sits still.
 >
-> We built Seña: save in tokenized stocks toward the home you want. When you get there, your stocks become the deposit. You never sell them.
+> We built Accasa: save in tokenized stocks toward the home you want. When you get there, your stocks become the deposit. You never sell them.
 >
-> Seña: your next home, in stocks. @buildonbase
+> Accasa: your next home, in stocks. @buildonbase

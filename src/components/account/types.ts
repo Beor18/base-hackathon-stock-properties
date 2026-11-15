@@ -70,7 +70,7 @@ export type TxProgress = { step: number };
 
 /**
  * Email sign-in, rendered by every account screen when there is no session.
- * Two steps (email, then code) so the whole login happens inside Seña's own UI.
+ * Two steps (email, then code) so the whole login happens inside Accasa's own UI.
  */
 export type SignInProps = {
   step: "email" | "code";

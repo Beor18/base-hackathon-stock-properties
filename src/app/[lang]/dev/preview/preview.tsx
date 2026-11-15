@@ -115,7 +115,7 @@ function signIn(overrides: Partial<SignInProps> = {}): SignInProps {
   };
 }
 
-const VAQUITA_URL = "https://sena.example/es/vaquita/0x5a1e0c8b9e3f4d2a7c6b1e0f9d8c7b6a5e4d3c2b";
+const VAQUITA_URL = "https://accasa.example/es/vaquita/0x5a1e0c8b9e3f4d2a7c6b1e0f9d8c7b6a5e4d3c2b";
 const FUND_FROM_VAQUITA = "/es/cargar?vaquita=0x5a1e0c8b9e3f4d2a7c6b1e0f9d8c7b6a5e4d3c2b";
 
 /* ---------- Interactive contribute samples ---------- */
@@ -267,43 +267,43 @@ const screens: Record<string, Entry> = {
     />
   ),
   "reserve.success": (lang, dict) => (
-    <ReserveScreen lang={lang} labels={dict} state={{ kind: "success", goal: goal(19_930), reservationId: "12", reservationUrl: "https://sena.example/es/r/12", endsAt: 1_797_000_000 }} />
+    <ReserveScreen lang={lang} labels={dict} state={{ kind: "success", goal: goal(19_930), reservationId: "12", reservationUrl: "https://accasa.example/es/r/12", endsAt: 1_797_000_000 }} />
   ),
 
   "reservation.loading": (lang, dict) => <ReservationScreen lang={lang} labels={dict} state={{ kind: "loading" }} />,
   "reservation.not-found": (lang, dict) => <ReservationScreen lang={lang} labels={dict} state={{ kind: "not-found" }} />,
   "reservation.broker": (lang, dict) => (
-    <ReservationScreen lang={lang} labels={dict} state={{ kind: "ready", reservation, role: "beneficiary", actions: { onRelease: noop, onClaim: noop }, pending: null, actionError: false, shareUrl: "https://sena.example/es/r/12" }} />
+    <ReservationScreen lang={lang} labels={dict} state={{ kind: "ready", reservation, role: "beneficiary", actions: { onRelease: noop, onClaim: noop }, pending: null, actionError: false, shareUrl: "https://accasa.example/es/r/12" }} />
   ),
   "reservation.buyer": (lang, dict) => (
-    <ReservationScreen lang={lang} labels={dict} state={{ kind: "ready", reservation, role: "depositor", actions: {}, pending: null, actionError: false, shareUrl: "https://sena.example/es/r/12" }} />
+    <ReservationScreen lang={lang} labels={dict} state={{ kind: "ready", reservation, role: "depositor", actions: {}, pending: null, actionError: false, shareUrl: "https://accasa.example/es/r/12" }} />
   ),
   "reservation.claimed-buyer": (lang, dict) => (
     <ReservationScreen
       lang={lang}
       labels={dict}
-      state={{ kind: "ready", reservation: { ...reservation, status: "claimed", claim: { amountUsd: 19_700, respondBy: 1_795_000_000 } }, role: "depositor", actions: { onAccept: noop, onDispute: noop }, pending: null, actionError: false, shareUrl: "https://sena.example/es/r/12" }}
+      state={{ kind: "ready", reservation: { ...reservation, status: "claimed", claim: { amountUsd: 19_700, respondBy: 1_795_000_000 } }, role: "depositor", actions: { onAccept: noop, onDispute: noop }, pending: null, actionError: false, shareUrl: "https://accasa.example/es/r/12" }}
     />
   ),
   "reservation.disputed-arbiter": (lang, dict) => (
     <ReservationScreen
       lang={lang}
       labels={dict}
-      state={{ kind: "ready", reservation: { ...reservation, status: "disputed", claim: { amountUsd: 19_700, respondBy: 1_795_000_000 } }, role: "arbiter", actions: { onResolve: noop }, pending: null, actionError: false, shareUrl: "https://sena.example/es/r/12" }}
+      state={{ kind: "ready", reservation: { ...reservation, status: "disputed", claim: { amountUsd: 19_700, respondBy: 1_795_000_000 } }, role: "arbiter", actions: { onResolve: noop }, pending: null, actionError: false, shareUrl: "https://accasa.example/es/r/12" }}
     />
   ),
   "reservation.payable": (lang, dict) => (
     <ReservationScreen
       lang={lang}
       labels={dict}
-      state={{ kind: "ready", reservation: { ...reservation, status: "payable", claim: { amountUsd: 19_700, respondBy: 1_795_000_000 } }, role: "beneficiary", actions: { onSettle: noop }, pending: { action: "settle", step: 0 }, actionError: false, shareUrl: "https://sena.example/es/r/12" }}
+      state={{ kind: "ready", reservation: { ...reservation, status: "payable", claim: { amountUsd: 19_700, respondBy: 1_795_000_000 } }, role: "beneficiary", actions: { onSettle: noop }, pending: { action: "settle", step: 0 }, actionError: false, shareUrl: "https://accasa.example/es/r/12" }}
     />
   ),
   "reservation.paid-viewer": (lang, dict) => (
     <ReservationScreen
       lang={lang}
       labels={dict}
-      state={{ kind: "ready", reservation: { ...reservation, status: "paid", paidUsd: 19_700 }, role: "viewer", actions: {}, pending: null, actionError: false, shareUrl: "https://sena.example/es/r/12" }}
+      state={{ kind: "ready", reservation: { ...reservation, status: "paid", paidUsd: 19_700 }, role: "viewer", actions: {}, pending: null, actionError: false, shareUrl: "https://accasa.example/es/r/12" }}
     />
   ),
 

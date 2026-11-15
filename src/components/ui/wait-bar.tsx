@@ -18,7 +18,7 @@ type WaitBarProps = {
 };
 
 /**
- * Every wait in Seña shows this: a bar, the current step and how long it usually takes.
+ * Every wait in Accasa shows this: a bar, the current step and how long it usually takes.
  * The bar advances on its own within the running step (easing toward, never reaching, its end)
  * so a slow network still reads as progress, and jumps when the caller moves to the next step.
  */

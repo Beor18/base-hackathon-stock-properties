@@ -20,7 +20,7 @@ type SignInPanelProps = SignInProps & {
 const inputClass =
   "h-14 w-full rounded-[var(--radius-control)] border border-line-strong bg-surface px-4 text-lead text-ink placeholder:text-ink-3 focus:border-ink focus:outline-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus)] aria-[invalid=true]:border-danger";
 
-/** Email + one-time code, inside Seña's own UI. No passwords and no account words. */
+/** Email + one-time code, inside Accasa's own UI. No passwords and no account words. */
 export function SignInPanel({
   step,
   email,

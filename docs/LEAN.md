@@ -1,4 +1,4 @@
-# Seña: plan Lean
+# Accasa: plan Lean
 
 Cómo decidimos qué construir, qué medir y cuándo cambiar de rumbo. Sigue el método de *The Lean Startup* (Eric Ries): construir lo mínimo, medir con números que no se puedan maquillar y aprender antes de gastar.
 
@@ -8,7 +8,7 @@ La historia completa de la startup está en `docs/NARRATIVE.md`. El research de 
 
 Una persona que ahorra para una casa prefiere que su ahorro siga invertido, con la casa a la vista, y que ese mismo ahorro sirva de seña sin venderlo.
 
-Si eso es cierto, Seña es el lugar donde se ahorra para una casa. Si no lo es, tenemos un contrato de custodia sin usuarios.
+Si eso es cierto, Accasa es el lugar donde se ahorra para una casa. Si no lo es, tenemos un contrato de custodia sin usuarios.
 
 ## 2. Las tres hipótesis
 
@@ -77,7 +77,7 @@ Elegimos uno por vez. Hoy apostamos al viral.
 
 | Fecha | De | A | Qué aprendimos |
 |---|---|---|---|
-| Nov 2026 | Garantía de alquiler con acciones | Seña: ahorrar para una casa y reservarla | Una garantía se hace una sola vez. Para una casa se ahorra todos los meses. El contrato de custodia, el oráculo y el cobro del reclamo sirvieron tal cual |
+| Nov 2026 | Garantía de alquiler con acciones | Accasa: ahorrar para una casa y reservarla | Una garantía se hace una sola vez. Para una casa se ahorra todos los meses. El contrato de custodia, el oráculo y el cobro del reclamo sirvieron tal cual |
 | Nov 2026 | Solo USDC | USDC y pesos digitales | El que ahorra en Argentina cobra en pesos |
 | Nov 2026 | Solo propiedades de Smarlin | Smarlin y cualquier link pegado | La portada es Puerto Rico, pero quien puede usarlo hoy está en Argentina |
 

@@ -18,7 +18,7 @@ const en: PitchDeck = {
       id: "cover",
       title: "Your next home, in stocks.",
       body: "You save in stocks with your home as the goal. When you get there, those stocks are your deposit. You sell nothing.",
-      shots: [{ src: "/pitch/meta-en.webp", alt: "A goal in Seña: the home's photo fills with color as you save." }],
+      shots: [{ src: "/pitch/meta-en.webp", alt: "A goal in Accasa: the home's photo fills with color as you save." }],
       foot: "Base Stocks Maxxing 2026",
       tone: "paper",
       layout: "cover",
@@ -53,7 +53,7 @@ const en: PitchDeck = {
       shots: [
         {
           src: "/pitch/casa-en.webp",
-          alt: "Picking a home for sale in Seña.",
+          alt: "Picking a home for sale in Accasa.",
           title: "Pick the home",
           body: "One in Puerto Rico, or a link from any listings site.",
         },
@@ -132,7 +132,7 @@ const en: PitchDeck = {
       body: "And watch it fill with color.",
       points: [
         { title: "Kelvin Garcia Vale", body: "Broker in Puerto Rico. Brings the first brokers." },
-        { title: "Fernando Lopez", body: "Engineer in Buenos Aires. Built Seña end to end." },
+        { title: "Fernando Lopez", body: "Engineer in Buenos Aires. Built Accasa end to end." },
       ],
       foot: "We are the team behind Smarlin, with 11,925 listings in Puerto Rico. We are looking for 3 brokers to accept the first reservation backed by stocks.",
       tone: "ink",
