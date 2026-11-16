@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
+import { HouseAvatar } from "@/components/brand/house-avatar";
 import { Wordmark } from "@/components/brand/wordmark";
 import { deployment } from "@/config/deployment";
 import { useStats } from "@/hooks/queries";
@@ -36,7 +37,10 @@ function deckValues(lang: Locale): Record<string, string> {
   const contributionFees = (EXAMPLE_DEPOSIT_USD * contributionFeeBps) / 10_000;
   const reservationFee = (EXAMPLE_DEPOSIT_USD * reservationFeeBps) / 10_000;
   const pct = (value: number) => formatBps(value * 100, lang);
+  const ratios = deployment.stocks.map((stock) => stock.collateralRatioBps);
   return {
+    minMargin: formatBps(Math.min(...ratios) - 10_000, lang),
+    maxMargin: formatBps(Math.max(...ratios) - 10_000, lang),
     minContribution: formatMoney(MIN_CONTRIBUTION_USD, lang),
     contributionFee: formatBps(contributionFeeBps, lang),
     reservationFee: formatBps(reservationFeeBps, lang),
@@ -153,7 +157,7 @@ function Slide({
 }) {
   const tone = tones[slide.tone];
   const text = (template: string) => fill(template, values);
-  const big = slide.layout === "cover" || slide.layout === "statement" || slide.layout === "close";
+  const big = slide.layout === "cover" || slide.layout === "statement";
   const titleSize = big ? "text-[clamp(2.25rem,6vw,4.75rem)] leading-[1.02]" : "text-[clamp(1.75rem,4.2vw,3.5rem)] leading-[1.06]";
 
   const title = <h2 className={`type-display max-w-5xl text-balance ${titleSize}`}>{text(slide.title)}</h2>;
@@ -207,6 +211,23 @@ function Slide({
             </div>
             <Phone shot={slide.shots[0]} className="hidden md:block md:h-[min(66vh,34rem)] md:-rotate-[2deg]" />
           </div>
+        ) : slide.layout === "contract" && slide.points ? (
+          <div className="grid items-center gap-8 md:grid-cols-[1.25fr_1fr] md:gap-14">
+            <div>
+              {title}
+              {body}
+              <dl className="mt-6 grid gap-3 md:mt-7 md:gap-4">
+                {slide.points.map((point) => (
+                  <div key={point.title} className={`border-t-2 pt-2.5 md:pt-3 ${tone.rule}`}>
+                    <dt className="type-heading md:text-h3">{text(point.title)}</dt>
+                    {point.body && <dd className={`mt-1 text-label text-pretty md:text-body ${tone.muted}`}>{text(point.body)}</dd>}
+                  </div>
+                ))}
+              </dl>
+              {foot}
+            </div>
+            {slide.listing && <Listing listing={slide.listing} muted={tone.muted} />}
+          </div>
         ) : (
           <>
             {title}
@@ -218,6 +239,7 @@ function Slide({
           <ul className="mt-7 grid gap-x-10 gap-y-5 md:mt-10 md:grid-cols-3 md:gap-y-7">
             {slide.points.map((point) => (
               <li key={point.title} className={`border-t-2 pt-3 md:pt-4 ${tone.rule}`}>
+                {point.tag && <p className={`mb-1.5 text-label font-semibold ${tone.accent}`}>{point.tag}</p>}
                 <p className={`type-display text-balance ${slide.numbers ? "text-[clamp(2rem,4.4vw,3.5rem)] leading-none" : "text-h3"}`}>
                   {text(point.title)}
                 </p>
@@ -255,20 +277,37 @@ function Slide({
           </>
         )}
 
-        {slide.layout === "close" && slide.points && (
-          <ul className="mt-7 grid gap-5 md:mt-10 md:grid-cols-2 md:gap-6">
-            {slide.points.map((person) => (
-              <li key={person.title} className={`border-t-2 pt-4 ${tone.rule}`}>
-                <p className="type-heading text-h2">{person.title}</p>
-                <p className={`mt-1.5 text-label md:text-body ${tone.muted}`}>{person.body}</p>
-              </li>
-            ))}
-          </ul>
+        {slide.layout === "ask" && slide.funds && (
+          <div className="mt-6 grid gap-8 md:mt-9 md:grid-cols-[1.1fr_1fr] md:gap-14">
+            <ul className="grid gap-3.5 md:gap-4">
+              {slide.funds.map((fund, fundIndex) => (
+                <li key={fund.title}>
+                  <p className="flex items-baseline justify-between gap-4">
+                    <span className={fundIndex === 0 ? "type-heading md:text-h3" : "font-semibold"}>{text(fund.title)}</span>
+                    <span className="type-heading tabular md:text-h3">{formatPercent(fund.pct, lang)}</span>
+                  </p>
+                  <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-white/15" aria-hidden>
+                    <div className={`h-full rounded-full ${fundIndex === 0 ? "bg-[#f5b83d]" : "bg-[#f3f4ef]/70"}`} style={{ width: `${fund.pct}%` }} />
+                  </div>
+                </li>
+              ))}
+            </ul>
+            {slide.points && (
+              <ol className="grid content-start gap-4">
+                {slide.points.map((point) => (
+                  <li key={point.title} className={`border-t-2 pt-2.5 ${tone.rule}`}>
+                    <p className="type-heading md:text-h3">{text(point.title)}</p>
+                    {point.body && <p className={`mt-1 text-label text-pretty md:text-body ${tone.muted}`}>{text(point.body)}</p>}
+                  </li>
+                ))}
+              </ol>
+            )}
+          </div>
         )}
 
-        {slide.layout !== "cover" && slide.layout !== "growth" && foot}
+        {slide.layout !== "cover" && slide.layout !== "growth" && slide.layout !== "contract" && foot}
 
-        {slide.layout === "close" && (
+        {slide.layout === "ask" && (
           <Link
             href={`/${lang}/casa`}
             className="type-heading mt-8 inline-flex min-h-14 w-full items-center justify-center rounded-[var(--radius-control)] bg-[#b3165a] px-8 text-[1.0625rem] text-white hover:bg-[#9a124d] sm:w-auto"
@@ -278,6 +317,42 @@ function Slide({
         )}
       </div>
     </section>
+  );
+}
+
+/** Shares of 100 as a percentage, in the deck's language ("40 %" in Spanish, "40%" in English). */
+function formatPercent(value: number, lang: Locale): string {
+  return formatBps(value * 100, lang);
+}
+
+/**
+ * A listing as it would look on someone else's site, with the one button Accasa adds. Drawn, not
+ * captured: it stands for any portal, so it names none.
+ */
+function Listing({ listing, muted }: { listing: NonNullable<PitchSlide["listing"]>; muted: string }) {
+  return (
+    <figure className="mx-auto w-full max-w-[19rem] md:rotate-[1.5deg]">
+      <div className="overflow-hidden rounded-[1.25rem] bg-white text-[#15232b] shadow-[0_28px_60px_-24px_rgba(21,35,43,0.45)]">
+        <p className="border-b border-[#15232b]/10 px-4 py-2.5 text-label font-semibold text-[#4a5b64]">{listing.site}</p>
+        {/* The drawing is square; the frame crops it to a listing photo's shape. */}
+        <div className="aspect-[2/1] overflow-hidden">
+          <HouseAvatar seed="0x7a3f9c1e5b2d4a6c8e0f1a2b3c4d5e6f7a8b9c0d" label={listing.title} className="-mt-[25%] aspect-square w-full" />
+        </div>
+        <div className="p-4">
+          <p className="type-heading md:text-h3">{listing.title}</p>
+          <p className="mt-0.5 font-semibold tabular">{listing.price}</p>
+          <div className="mt-3 grid gap-2">
+            <span className="flex min-h-11 items-center justify-center rounded-[var(--radius-control)] border border-[#15232b]/20 text-label font-semibold">
+              {listing.contact}
+            </span>
+            <span className="flex min-h-11 items-center justify-center rounded-[var(--radius-control)] bg-[#b3165a] text-label font-semibold text-white ring-4 ring-[#f5b83d]">
+              {listing.reserve}
+            </span>
+          </div>
+        </div>
+      </div>
+      <figcaption className={`mt-3 text-center text-label text-pretty md:-rotate-[1.5deg] ${muted}`}>{listing.caption}</figcaption>
+    </figure>
   );
 }
 

@@ -1,9 +1,10 @@
 /**
  * Pitch deck (Spanish). The only screen allowed to name third-party brands, and only in sources.
- * Told by the founders, not the engineers: the problem, the insight, the product on screen, how it
- * grows from zero and how it makes money. Market figures come from docs/NARRATIVE.md and
- * docs/research, with their sources. Product figures (fees, minimums) are `{placeholders}` filled
- * from the deployment by the deck.
+ * Told by the founders, not the engineers, in ten slides: the problem, the insight, the product, the
+ * contract underneath it, how it grows, the market, the legal work country by country, who we are and
+ * what we need. Every market figure carries its source. Product figures (fees, minimums, margins) are
+ * `{placeholders}` filled from the deployment by the deck. There is no investment offer here: the deck
+ * is public, so the amount and terms of a round only go in private conversations.
  */
 export type PitchShot = {
   /** A phone-sized capture of the product, under `/public/pitch`. */
@@ -20,11 +21,16 @@ export type PitchSlide = {
   label?: string;
   title: string;
   body?: string;
-  points?: { title: string; body?: string }[];
+  /** `tag`: a small label above the point (TAM, SAM, SOM on the market slide). */
+  points?: { title: string; body?: string; tag?: string }[];
   /** Point titles are figures: render them large. */
   numbers?: boolean;
   /** Product screens. The cover and growth slides show one; the product slide shows three. */
   shots?: PitchShot[];
+  /** `contract` slide: a listing on someone else's site, with the button that reserves it with stocks. */
+  listing?: { site: string; title: string; price: string; contact: string; reserve: string; caption: string };
+  /** `ask` slide: where the first year's money goes, as shares of 100. */
+  funds?: { title: string; pct: number }[];
   /** Small print under the content: sources, or the one line that answers the obvious question. */
   foot?: string;
   /** Visual treatment of the slide. */
@@ -32,10 +38,11 @@ export type PitchSlide = {
   /**
    * - `cover`, `growth`: text with one phone beside it.
    * - `product`: three phones with their captions.
-   * - `zero`: live numbers from the contracts, then the steps to the first hundred.
-   * - `close`: the team, the ask and the button to the app.
+   * - `contract`: the rules of the seña on one side, the listing with the button on the other.
+   * - `zero`: live numbers from the contracts, then the team.
+   * - `ask`: where the money goes, the milestones and the button to the app.
    */
-  layout: "cover" | "statement" | "points" | "product" | "growth" | "zero" | "close";
+  layout: "cover" | "statement" | "points" | "product" | "growth" | "contract" | "zero" | "ask";
 };
 
 export type PitchDeck = {
@@ -94,7 +101,7 @@ const es: PitchDeck = {
       id: "insight",
       label: "Lo que vimos",
       title: "El que tiene plata no vende sus acciones. Las pone de garantía.",
-      body: "Los bancos privados lo hacen hace décadas, para carteras grandes. Nosotros lo hacemos para el que ahorra de a USD 100 por mes.",
+      body: "Los bancos privados lo hacen hace décadas, para carteras grandes. Con acciones tokenizadas en Base, hoy se puede hacer para el que ahorra USD 100 por mes.",
       foot: "En un solo banco de EE.UU. hay USD 33.400 M prestados con acciones de garantía, 59 % más que hace un año (Schwab, junio de 2026).",
       tone: "mango",
       layout: "statement",
@@ -123,9 +130,31 @@ const es: PitchDeck = {
           body: "Tus acciones quedan como seña. Si la compra sale, vuelven a vos.",
         },
       ],
-      foot: "Entrás con tu email. No ves billeteras ni pagás costos de red.",
+      foot: "Son acciones tokenizadas en Base: siguen el precio de la acción y no dan voto. Entrás con tu email, sin ver billeteras ni pagar costos de red.",
       tone: "paper",
       layout: "product",
+    },
+    {
+      id: "contract",
+      label: "Lo que hay abajo",
+      title: "La seña, escrita en un contrato.",
+      body: "Hoy la seña depende de un recibo y de la confianza. Acá las reglas las cumple un contrato en Base.",
+      points: [
+        { title: "Si la compra sale", body: "Las acciones vuelven a quien reservó." },
+        { title: "Si el comprador se arrepiente", body: "El corredor cobra la seña en dólares desde las acciones. El resto vuelve al comprador." },
+        { title: "Si la acción baja", body: "Lo bloqueado vale entre {minMargin} y {maxMargin} más que la seña, según la acción. Nadie vende por la baja." },
+        { title: "Si no se ponen de acuerdo", body: "Decide un árbitro neutral, con plazos fijos." },
+      ],
+      listing: {
+        site: "Cualquier portal de propiedades",
+        title: "Casa en venta en Puerto Rico",
+        price: "USD 120.000",
+        contact: "Contactar al corredor",
+        reserve: "Reservar con acciones",
+        caption: "El botón que cualquier portal o inmobiliaria puede sumar. Las 11.925 propiedades de Smarlin ya se pueden reservar desde Accasa.",
+      },
+      tone: "ink",
+      layout: "contract",
     },
     {
       id: "growth",
@@ -143,53 +172,76 @@ const es: PitchDeck = {
       layout: "growth",
     },
     {
-      id: "zero",
-      label: "De 0 a 1",
-      title: "Empezamos en cero. Así llegamos a 100 casas.",
+      id: "market",
+      label: "El mercado",
+      title: "Solo en cuatro mercados se entregan USD 3.000 M por año en señas.",
+      body: "Ganamos {contributionFee} de cada aporte y {reservationFee} de la seña al reservar: {exampleRevenue} por una seña de {exampleDeposit}. Después, corredores y portales pagan por el botón.",
       points: [
-        {
-          title: "Hasta el 28 de noviembre",
-          body: "Kelvin les muestra una reserva a 10 corredores de su red. Seguimos si 3 la aceptan.",
-        },
-        {
-          title: "Hasta el 5 de diciembre",
-          body: "20 conocidos arman su meta y comparten su vaquita. Seguimos si 4 de cada 10 vuelven a sumar solos.",
-        },
-        {
-          title: "Antes del cierre",
-          body: "La primera reserva de punta a punta con un corredor. Es el caso que les mostramos a los próximos 100.",
-        },
-      ],
-      foot: "Cada paso termina en una decisión: seguir o cambiar el rumbo. Medimos gente que suma por casa, no visitas.",
-      tone: "paper",
-      layout: "zero",
-    },
-    {
-      id: "model",
-      label: "El negocio",
-      title: "Ganamos cuando vos avanzás.",
-      body: "Dos comisiones, siempre a la vista antes de confirmar. Una seña de {exampleDeposit} nos deja {exampleRevenue}.",
-      points: [
-        { title: "{contributionFee}", body: "de cada aporte." },
-        { title: "{reservationFee}", body: "de la seña, al reservar." },
-        { title: "USD 409 M", body: "por año se entregan como seña solo en la Ciudad de Buenos Aires." },
+        { tag: "TAM", title: "USD 3.000 M", body: "por año en señas en Brasil, Buenos Aires, Lima y Puerto Rico: USD 60.800 M en compras, con 5 % de seña." },
+        { tag: "SAM", title: "USD 520 M", body: "en la Ciudad de Buenos Aires y Puerto Rico, los dos primeros mercados." },
+        { tag: "SOM", title: "USD 5,2 M", body: "Nuestra meta a tres años: 1 de cada 100 compras en esos dos mercados, unas 780 casas por año." },
       ],
       numbers: true,
-      foot: "Después: un plan mensual para corredores. Mercado: 68.109 compras por año a USD 120.106 de promedio, con 5 % de seña (Colegio de Escribanos, 2025 a 2026).",
+      foot: "Compras por año × precio promedio × 5 % de seña, el valor por defecto en Accasa. Es un piso: Brasil y Lima cuentan solo vivienda nueva, Puerto Rico solo ventas con hipoteca, y faltan México, Colombia y Chile. Fuentes: Colegio de Escribanos de la Ciudad (2025 a 2026), OCIF (2024), CBIC (2025) y CODI (2025); tipo de cambio de la Reserva Federal y del Banco Central de Perú.",
+      tone: "paper",
+      layout: "points",
+    },
+    {
+      id: "legal",
+      label: "Lo legal",
+      title: "Lo legal va primero. País por país.",
+      body: "Una seña con acciones tiene que valer ante un juez y respetar las reglas de valores de cada país. Es lo primero que hacemos y lo que más cuesta.",
+      points: [
+        {
+          title: "Argentina, primero",
+          body: "El Código Civil y Comercial acepta como seña dinero o cosas muebles (art. 1060). Validamos que las acciones tokenizadas entren ahí, con corredores matriculados y los controles de la UIF.",
+        },
+        {
+          title: "Puerto Rico, después",
+          body: "Corredores y propiedades ya están, con Smarlin. Pero rigen las leyes de valores de EE.UU.: hoy solo ahorra quien vive fuera de EE.UU. Para los compradores de la isla buscamos un socio con licencia.",
+        },
+        {
+          title: "Una versión por país",
+          body: "México, Colombia y Chile tienen cada uno su figura para la seña y su regulador. Cada versión del contrato la revisan abogados de allá.",
+        },
+      ],
+      foot: "Hoy Accasa funciona en la red de prueba de Base y no se ofrece a residentes de EE.UU. ni de sus territorios.",
       tone: "mango",
       layout: "points",
     },
     {
-      id: "close",
-      title: "Elegí una casa. Sumá {minContribution}.",
-      body: "Y mirá cómo se pinta.",
+      id: "team",
+      label: "Quiénes somos",
+      title: "Dos personas, un mes, y ya funciona.",
+      body: "Accasa entero lo hicimos durante la Quest, del 5 de noviembre al 5 de diciembre. Smarlin, nuestro portal de propiedades en Puerto Rico, ya existía.",
       points: [
-        { title: "Kelvin Garcia Vale", body: "Corredor en Puerto Rico. Trae a los primeros corredores." },
+        { title: "Kelvin Garcia Vale", body: "Corredor en Puerto Rico. Trae a los corredores y las propiedades." },
         { title: "Fernando Lopez", body: "Ingeniero en Buenos Aires. Construyó Accasa de punta a punta." },
+        { title: "Hecho en la Quest", body: "El contrato de reserva, la app, los links de corredor y su bandeja. Smarlin aporta las publicaciones." },
       ],
-      foot: "Somos el equipo de Smarlin, con 11.925 propiedades publicadas en Puerto Rico. Buscamos 3 corredores que acepten la primera reserva con acciones.",
+      foot: "La primera meta se completó de punta a punta el 15 de noviembre, con los costos de red pagos por Accasa.",
+      tone: "paper",
+      layout: "zero",
+    },
+    {
+      id: "ask",
+      label: "Qué necesitamos",
+      title: "Qué necesitamos para el primer año.",
+      body: "Lo legal es lo que más cuesta y lo que más importa: sin eso, ninguna seña vale.",
+      funds: [
+        { title: "Legal y licencias en Argentina y Puerto Rico", pct: 40 },
+        { title: "Producto e ingeniería", pct: 25 },
+        { title: "Auditoría de seguridad de los contratos", pct: 20 },
+        { title: "Corredores piloto y primeros compradores", pct: 15 },
+      ],
+      points: [
+        { title: "Mes 3", body: "Opinión legal en los dos países y contratos auditados." },
+        { title: "Mes 6", body: "Red principal de Base y las primeras 10 reservas con corredores matriculados en Buenos Aires." },
+        { title: "Mes 12", body: "100 casas reservadas y un portal, además de Smarlin, con el botón." },
+      ],
+      foot: "Buscamos corredores piloto en Buenos Aires y Puerto Rico, y estudios legales en los dos países.",
       tone: "ink",
-      layout: "close",
+      layout: "ask",
     },
   ],
 };
