@@ -89,6 +89,8 @@ Sigue el "Show us" de la idea 3.3: depositar, bloquear, devolver o cobrar, una p
 
 ## 3. Post en X (con el video)
 
+**Publicado el 23/11/2026 desde @beor22: https://x.com/beor22/status/2124961077566067117** (este es el link que pide el Submission Form).
+
 Con `accasa-demo-x.mp4` adjunto (279 caracteres, el tope de una cuenta gratis es 280):
 
 > Saving for a home in stocks means selling it all the day the home shows up.
@@ -109,7 +111,7 @@ Respuesta al post, con los links:
 
 - [x] Video con voz, publicado en YouTube (23/11)
 - [x] Inscripción (Application Form) enviada (23/11)
-- [ ] Post en X con el video, etiquetando a @buildonbase
+- [x] Post en X con el video, etiquetando a @buildonbase (23/11): https://x.com/beor22/status/2124961077566067117
 - [ ] Submission Form (cuando lo publiquen) con el link al post, el track y "What was built during the Quest"
 - [ ] Precios de prueba restaurados y `DEMO_PAUSED_TICKERS` quitada
 - [ ] Mandarlo antes del 4 de diciembre, para tener un día de margen
