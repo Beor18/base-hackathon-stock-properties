@@ -40,7 +40,11 @@ Reemplaza a "Textos listos para la entrega" de `docs/NARRATIVE.md`, que quedó c
 
 ---
 
-## 2. Video (3 minutos)
+## 2. Video
+
+**Ya hay un video listo (23 nov 2026): `~/Vídeos/accasa/accasa-demo-en.mp4`, 2:04, 1920x1080, con textos en inglés y sin voz.** Muestra el deck, las 8 escenas del flujo (ahorrar, link del corredor, reservar con "What if…", reclamo, aceptación, prueba de estrés antes y después, pausa por split, cobro en USDC) y la página para desarrolladores. Se grabó en una cadena local con los mismos contratos de Base Sepolia, y lo dice en pantalla. Se puede subir así, o grabar una voz encima siguiendo el guion de abajo. Las herramientas para cambiar un texto y rearmarlo están en `~/Vídeos/accasa/pipeline/`.
+
+### Guion para grabarlo a mano (3 minutos)
 
 Sigue el "Show us" de la idea 3.3: depositar, bloquear, devolver o cobrar, una prueba de estrés y el mercado exacto que se usa.
 
