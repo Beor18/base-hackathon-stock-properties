@@ -1,5 +1,6 @@
 "use client";
 
+import { deployment } from "@/config/deployment";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/es";
 import { fill, formatBps, formatDate, formatMoney, formatShares } from "@/i18n/format";
@@ -29,6 +30,8 @@ export type ReservationOffer = {
  * `/reservar`: lock the goal's stocks as the seña.
  *
  * - `offer-missing`: the short link points at no offer (mistyped or made up).
+ * - `stock-unavailable`: the goal's stock can't be locked now: paused for a corporate action, or no
+ *   price for days. Nothing is quoted; the one action goes back to the goal.
  * - `offer-own`: the broker opened their own link. Nobody can reserve with their own link, so the
  *   one action leads to their account, where the reservation shows up once the buyer makes it.
  * - `offer-no-goal`: the broker's link was opened by an account with no goal yet. The one action
@@ -47,6 +50,7 @@ export type ReserveScreenState =
   | { kind: "error"; onRetry: () => void }
   | { kind: "no-goal" }
   | { kind: "offer-missing" }
+  | { kind: "stock-unavailable"; goal: Goal; stock: string; market: "paused" | "closed" }
   | { kind: "offer-own" }
   | { kind: "offer-no-goal"; offer: ReservationOffer; setupHref: string }
   | { kind: "not-reached"; goal: Goal }
@@ -113,6 +117,23 @@ export function ReserveScreen({ lang, state, labels }: ReserveScreenProps) {
           <StateMessage icon={<EmptyHouse />} title={t.offerMissingTitle} body={t.offerMissingBody}>
             <ButtonLink href={`/${lang}/casa`} block className="sm:w-auto sm:min-w-64">
               {labels.contribute.noGoalCta}
+            </ButtonLink>
+          </StateMessage>
+        </Screen>
+      );
+    case "stock-unavailable":
+      return (
+        <Screen back={{ href: `/${lang}/meta`, label: common.back }}>
+          <StateMessage
+            icon={<EmptyHouse />}
+            title={fill(state.market === "paused" ? t.stockPausedTitle : t.stockClosedTitle, { stock: state.stock })}
+            body={fill(state.market === "paused" ? t.stockPausedBody : t.stockClosedBody, {
+              stock: state.stock,
+              days: Math.round(deployment.params.collateralMaxAgeSeconds / 86_400),
+            })}
+          >
+            <ButtonLink href={`/${lang}/meta`} block className="sm:w-auto sm:min-w-64">
+              {t.stockUnavailableCta}
             </ButtonLink>
           </StateMessage>
         </Screen>

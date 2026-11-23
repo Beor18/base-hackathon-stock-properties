@@ -4,6 +4,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { deployment } from "@/config/deployment";
+import { stockMarket } from "@/domain/market";
 import { keys, useAccountSnapshot, useReservation } from "@/hooks/queries";
 import { useTransaction } from "@/hooks/use-transaction";
 import type { Locale } from "@/i18n/config";
@@ -76,6 +78,10 @@ export function ConnectedReserveScreen({ lang, labels }: { lang: Locale; labels:
 
   const reservationId = createdId ?? goalView?.activeReservationId ?? null;
   const reservation = useReservation(reservationId);
+  // A paused stock (or one with no price for days) can't be locked: say so instead of quoting. The
+  // clock is read once per visit; the price data refreshes with the account query.
+  const [openedAt] = useState(() => Math.floor(Date.now() / 1000));
+  const lockMarket = goalView ? stockMarket(goalView.stock, "lock", openedAt, deployment.params) : "open";
 
   const quote = useQuery({
     queryKey: ["reserve-quote", address, offer?.id],
@@ -83,7 +89,7 @@ export function ConnectedReserveScreen({ lang, labels }: { lang: Locale; labels:
       if (!address || !offer) throw new Error("No offer");
       return (await plans.reserve({ account: address, ref: offer.ref, url: offer.sourceUrl, pct: offer.pct, broker: offer.broker })).quote;
     },
-    enabled: Boolean(address && offer && goalView && !reservationId),
+    enabled: Boolean(address && offer && goalView && !reservationId && lockMarket === "open"),
     staleTime: 15_000,
     retry: false,
   });
@@ -150,6 +156,8 @@ export function ConnectedReserveScreen({ lang, labels }: { lang: Locale; labels:
         listingUrl: `${window.location.origin}/${lang}/pedir?${params}`,
       };
     }
+  } else if (lockMarket !== "open") {
+    state = { kind: "stock-unavailable", goal: toGoal(goalView), stock: goalView.stock.shortName, market: lockMarket };
   } else if (quote.isPending) {
     state = { kind: "loading" };
   } else if (quote.isError) {

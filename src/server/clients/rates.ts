@@ -1,11 +1,10 @@
 import "server-only";
 
 import { cacheLife } from "next/cache";
-import { createPublicClient, getAddress, http, isAddress, parseAbi, type Address } from "viem";
-import { base } from "viem/chains";
+import { getAddress, isAddress, parseAbi, type Address } from "viem";
 import { z } from "zod";
 
-import { serverEnv } from "@/config/server-env";
+import { mainnetClient as baseClient } from "./mainnet";
 
 /**
  * Chainlink reference rates on Base mainnet. The feed address is discovered from Chainlink's
@@ -24,8 +23,6 @@ const aggregatorAbi = parseAbi([
   "function latestRoundData() view returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)",
 ]);
 
-/** Always Base mainnet: the reference rate is real data even when the app runs on a testnet. */
-const baseClient = createPublicClient({ chain: base, transport: http(serverEnv.BASE_MAINNET_RPC_URL) });
 
 export type FeedInfo = { name: string; address: Address; decimals: number };
 
@@ -66,7 +63,7 @@ export async function readUsdArsFeed(): Promise<FeedReading> {
 
   return {
     ...feed,
-    chainId: base.id,
+    chainId: baseClient.chain.id,
     value: Number(answer) / 10 ** feed.decimals,
     updatedAt: Number(updatedAt),
   };

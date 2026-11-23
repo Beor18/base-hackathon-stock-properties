@@ -261,6 +261,9 @@ const screens: Record<string, Entry> = {
 
   "reserve.signed-out": (lang, dict) => <ReserveScreen lang={lang} labels={dict} state={{ kind: "signed-out", signIn: signIn({ email: "" }) }} />,
   "reserve.offer-own": (lang, dict) => <ReserveScreen lang={lang} labels={dict} state={{ kind: "offer-own" }} />,
+  "reserve.stock-paused": (lang, dict) => (
+    <ReserveScreen lang={lang} labels={dict} state={{ kind: "stock-unavailable", goal: goal(22_655), stock: "Apple", market: "paused" }} />
+  ),
   "reserve.offer-no-goal": (lang, dict) => (
     <ReserveScreen
       lang={lang}
@@ -317,6 +320,13 @@ const screens: Record<string, Entry> = {
       lang={lang}
       labels={dict}
       state={{ kind: "ready", reservation: { ...reservation, status: "payable", claim: { amountUsd: 19_700, respondBy: 1_795_000_000 } }, role: "beneficiary", actions: { onSettle: noop }, pending: { action: "settle", step: 0 }, actionError: false, shareUrl: "https://accasa.example/es/r/12" }}
+    />
+  ),
+  "reservation.payable-paused": (lang, dict) => (
+    <ReservationScreen
+      lang={lang}
+      labels={dict}
+      state={{ kind: "ready", reservation: { ...reservation, status: "payable", market: "paused", claim: { amountUsd: 19_700, respondBy: 1_795_000_000 } }, role: "beneficiary", actions: { onSettle: noop }, pending: null, actionError: false, shareUrl: "https://accasa.example/es/r/12" }}
     />
   ),
   "reservation.paid-viewer": (lang, dict) => (

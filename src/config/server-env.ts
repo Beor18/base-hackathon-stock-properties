@@ -21,6 +21,11 @@ const schema = z.object({
   SUPABASE_SECRET_KEY: z.preprocess(emptyToUndefined, z.string().min(20).optional()),
   /** Privy app the identity tokens must be issued for (the same public id the browser uses). */
   PRIVY_APP_ID: z.preprocess(emptyToUndefined, z.string().optional()),
+  /**
+   * Testnets only: tickers to show as paused ("AAPL,TSLA"), to film how Accasa reacts to a
+   * corporate-action pause without waiting for a real one. Ignored on Base mainnet.
+   */
+  DEMO_PAUSED_TICKERS: z.preprocess(emptyToUndefined, z.string().optional()),
 });
 
 export const serverEnv = schema.parse({
@@ -32,4 +37,5 @@ export const serverEnv = schema.parse({
   SUPABASE_URL: process.env.SUPABASE_URL,
   SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY,
   PRIVY_APP_ID: process.env.NEXT_PUBLIC_PRIVY_APP_ID?.trim(),
+  DEMO_PAUSED_TICKERS: process.env.DEMO_PAUSED_TICKERS,
 });

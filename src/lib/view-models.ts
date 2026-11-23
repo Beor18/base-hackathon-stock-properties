@@ -1,6 +1,7 @@
 import { formatUnits } from "viem";
 
 import { deployment } from "@/config/deployment";
+import { stockMarket } from "@/domain/market";
 import type { PropertyDetail } from "@/domain/property";
 import type { AccountSnapshot, GoalPropertyDto, GoalView, Reservation, ReservationDetail, Stock } from "@/domain/types";
 import type { ReservationStatus, ReservationView } from "@/components/account/reservation-screen";
@@ -89,6 +90,7 @@ export function toReservationView(reservation: ReservationDetail, fallbackTitle:
     claimableUsd: Math.floor(wadToNumber(reservation.coverageUsd)),
     shares: unitsToNumber(reservation.collateral, reservation.stock.decimals),
     stock: toStockOption(reservation.stock),
+    market: stockMarket(reservation.stock, "settle", Math.floor(Date.now() / 1000), deployment.params),
     valueUsd: wadToNumber(reservation.collateralValueUsd),
     buyer: reservation.depositor,
     broker: { address: reservation.beneficiary, name: null, company: null },

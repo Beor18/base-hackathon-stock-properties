@@ -25,6 +25,12 @@ export type Stock = {
   collateralRatioBps: number;
   /** Whether the stock can back new goals and reservations. */
   enabled: boolean;
+  /**
+   * Coinbase paused the stock for a corporate action (a split, for instance): its price is frozen and
+   * nothing should lock or settle against it until the pause ends. Read from the registry on Base
+   * mainnet, for the real stock a testnet token mirrors.
+   */
+  paused: boolean;
   /** Change of the underlying share over the last 12 months, in percent. Null when unknown. */
   change12mPct: number | null;
 };

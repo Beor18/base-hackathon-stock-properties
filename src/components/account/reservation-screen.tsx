@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState, type FormEvent, type ReactNode } from "react";
+import type { StockMarket } from "@/domain/market";
 
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/es";
@@ -31,6 +32,8 @@ export type ReservationView = {
   claimableUsd?: number;
   shares: number;
   stock: StockOption;
+  /** Whether a claim can be paid now with this stock's price (see `stockMarket`). Missing means open. */
+  market?: StockMarket;
   /** Current value of the locked shares. */
   valueUsd: number;
   buyer: string;
@@ -214,6 +217,14 @@ function ReservationReady({
           {t.actions.resolveBuyer}
         </Button>
       </div>
+    );
+  } else if (r.status === "payable" && actions.onSettle && r.market && r.market !== "open") {
+    // Checked before the button: paying against a frozen or old price would fail in the contract (or,
+    // during a pause, settle on a price nobody should use). The notice says why and when.
+    dock = (
+      <Notice tone="info">
+        {fill(r.market === "paused" ? t.actions.settlePaused : t.actions.settleClosed, { stock: r.stock.name })}
+      </Notice>
     );
   } else if (r.status === "payable" && actions.onSettle) {
     dock = (

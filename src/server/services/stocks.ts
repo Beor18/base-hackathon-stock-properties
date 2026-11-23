@@ -6,7 +6,9 @@ import { erc20Abi, type Address } from "viem";
 import { deployment } from "@/config/deployment";
 import type { Stock } from "@/domain/types";
 import { oracleContract, publicClient } from "@/server/chain";
+import { serverEnv } from "@/config/server-env";
 import { getStockMetadataByAddress, type StockMetadata } from "@/server/clients/coinbase-stocks";
+import { readPausedTokens } from "@/server/clients/stock-registry";
 import { getChange12mPct } from "@/server/clients/stock-history";
 
 /**
@@ -23,7 +25,8 @@ export async function listStocks(): Promise<Stock[]> {
     getStockMetadataByAddress().catch((): Record<string, StockMetadata> => ({})),
   ]);
 
-  const stocks = await Promise.all(tokens.map((token) => readStock(token, metadataByAddress)));
+  const paused = await pausedTokens(tokens);
+  const stocks = await Promise.all(tokens.map((token) => readStock(token, metadataByAddress, paused)));
   return stocks.sort((a, b) => a.shortName.localeCompare(b.shortName));
 }
 
@@ -38,7 +41,36 @@ export async function requireStock(address: Address): Promise<Stock> {
   return stock;
 }
 
-async function readStock(token: Address, metadataByAddress: Record<string, StockMetadata>): Promise<Stock> {
+/** The real stock behind a token: itself on mainnet, the stock it mirrors on a testnet. */
+function realToken(token: Address): Address {
+  const deployed = deployment.stocks.find((stock) => stock.token.toLowerCase() === token.toLowerCase());
+  return (deployed?.mirrorOf as Address | undefined) ?? token;
+}
+
+/**
+ * Tokens whose real stock is paused on the registry, lowercased. Plus, on testnets, the tickers in
+ * `DEMO_PAUSED_TICKERS`. A registry outage never blocks the app: it logs and counts nothing as paused.
+ */
+async function pausedTokens(tokens: readonly Address[]): Promise<Set<string>> {
+  const real = tokens.map(realToken);
+  const pausedReal = await readPausedTokens(real).catch((error: unknown) => {
+    console.warn("[stocks] could not read the pause registry", error);
+    return new Set<string>();
+  });
+  const demoTickers =
+    deployment.chainId === 8453
+      ? []
+      : (serverEnv.DEMO_PAUSED_TICKERS ?? "").split(",").map((ticker) => ticker.trim().toUpperCase()).filter(Boolean);
+
+  const paused = new Set<string>();
+  tokens.forEach((token, index) => {
+    const ticker = deployment.stocks.find((stock) => stock.token.toLowerCase() === token.toLowerCase())?.ticker?.toUpperCase();
+    if (pausedReal.has(real[index].toLowerCase()) || (ticker && demoTickers.includes(ticker))) paused.add(token.toLowerCase());
+  });
+  return paused;
+}
+
+async function readStock(token: Address, metadataByAddress: Record<string, StockMetadata>, paused: Set<string>): Promise<Stock> {
   const deployed = deployment.stocks.find((stock) => stock.token.toLowerCase() === token.toLowerCase());
 
   const [listing, [priceUsd, priceUpdatedAt], onchainSymbol, onchainName] = await Promise.all([
@@ -65,6 +97,7 @@ async function readStock(token: Address, metadataByAddress: Record<string, Stock
     priceUpdatedAt: Number(priceUpdatedAt),
     collateralRatioBps: listing.collateralRatioBps,
     enabled: listing.enabled,
+    paused: paused.has(token.toLowerCase()),
     change12mPct: await getChange12mPct(ticker),
   };
 }
