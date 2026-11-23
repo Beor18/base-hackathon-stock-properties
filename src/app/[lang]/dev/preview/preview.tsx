@@ -276,14 +276,14 @@ const screens: Record<string, Entry> = {
     <ReserveScreen
       lang={lang}
       labels={dict}
-      state={{ kind: "ready", goal: goal(19_930), offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 5, verified: true }, senaUsd: 19_700, lock: { shares: 86.2, valueUsd: 19_930 }, feeBps: 100, feeUsd: 197, endsAt: 1_797_000_000, onReserve: noop, tx: null, txError: false }}
+      state={{ kind: "ready", goal: goal(19_930), offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 5, verified: true }, senaUsd: 19_700, lock: { shares: 98, valueUsd: 22_655 }, feeBps: 100, feeUsd: 197, endsAt: 1_797_000_000, onReserve: noop, tx: null, txError: false }}
     />
   ),
   "reserve.tx": (lang, dict) => (
     <ReserveScreen
       lang={lang}
       labels={dict}
-      state={{ kind: "ready", goal: goal(19_930), offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 5, verified: true }, senaUsd: 19_700, lock: { shares: 86.2, valueUsd: 19_930 }, feeBps: 100, feeUsd: 197, endsAt: 1_797_000_000, onReserve: noop, tx: { step: 1 }, txError: false }}
+      state={{ kind: "ready", goal: goal(19_930), offer: { brokerName: "Kelvin Garcia Vale", brokerCompany: "Kelvin Garcia Realty", depositPct: 5, verified: true }, senaUsd: 19_700, lock: { shares: 98, valueUsd: 22_655 }, feeBps: 100, feeUsd: 197, endsAt: 1_797_000_000, onReserve: noop, tx: { step: 1 }, txError: false }}
     />
   ),
   "reserve.success": (lang, dict) => (

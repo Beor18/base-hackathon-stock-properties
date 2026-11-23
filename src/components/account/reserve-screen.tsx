@@ -202,6 +202,13 @@ function ReserveReady({
 }) {
   const { reserve: t, common } = labels;
   const sena = formatMoney(state.senaUsd, lang);
+  // How much more the locked shares are worth than the seña, and how far the stock can fall before
+  // they stop covering it. Both rounded down, so the screen never promises more than the contract holds.
+  // (The 1e-9 keeps float noise like 14.9999… from showing as 14 %.)
+  const cover = state.senaUsd > 0 ? state.lock.valueUsd / state.senaUsd : 0;
+  const wholePct = (fraction: number) => Math.max(Math.floor(fraction * 100 + 1e-9), 0);
+  const margin = formatBps(wholePct(cover - 1) * 100, lang);
+  const drop = formatBps((cover > 1 ? wholePct(1 - 1 / cover) : 0) * 100, lang);
 
   return (
     <Screen
@@ -246,7 +253,7 @@ function ReserveReady({
           <Row
             label={t.lock}
             value={fill(t.lockValue, { shares: formatShares(state.lock.shares, lang), stock: state.goal.stock.name })}
-            hint={fill(t.lockWorth, { amount: formatMoney(state.lock.valueUsd, lang) })}
+            hint={fill(t.lockWorth, { amount: formatMoney(state.lock.valueUsd, lang), margin })}
           />
           <Row
             label={common.sena}
@@ -262,16 +269,21 @@ function ReserveReady({
         </Rows>
       </div>
 
-      <ul className="mt-6 flex flex-col gap-3">
-        {t.facts.map((fact) => (
-          <li key={fact} className="flex gap-3 text-ink-2">
-            <svg viewBox="0 0 20 20" className="mt-0.5 size-5 shrink-0 text-palm" aria-hidden fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4.5 10.5l3.5 3.5 7.5-8" />
-            </svg>
-            <span className="text-pretty">{fact}</span>
-          </li>
-        ))}
-      </ul>
+      {/* Every outcome and every risk on the same screen as the button: cost, limits and what happens if
+          the stock falls, the market closes or the stock is suspended. */}
+      <section aria-labelledby="reserva-que-pasa" className="mt-7">
+        <h2 id="reserva-que-pasa" className="font-semibold text-ink">
+          {t.whatIfTitle}
+        </h2>
+        <dl className="mt-1 divide-y divide-line">
+          {t.whatIf.map((item) => (
+            <div key={item.q} className="py-3">
+              <dt className="font-semibold text-ink">{item.q}</dt>
+              <dd className="mt-0.5 text-ink-2 text-pretty">{fill(item.a, { sena, drop })}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
     </Screen>
   );
 }
