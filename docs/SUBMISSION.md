@@ -4,6 +4,12 @@ Todo lo que hay que mandar antes del **5 de diciembre de 2026, 23:59 UTC**: el f
 
 Reemplaza a "Textos listos para la entrega" de `docs/NARRATIVE.md`, que quedó con el encuadre viejo.
 
+**Estado al 23/11/2026**
+
+- Inscripción enviada (el "Application Form" de la página de la Quest, con la cuenta de Google de Fernando): track Programmable Stock Markets, partner Bankr, link a la app y al video. Respondió "Application received".
+- La entrega final es otra cosa (reglas, §5): un post público en X con el video que etiquete a @buildonbase, y el "Submission Form" con el link a ese post. La página de la Quest dice "Dec 5: Submit your project"; ese formulario todavía no está publicado. Cuando aparezca, se completa con los textos de abajo.
+- Video con voz en YouTube: https://youtu.be/Plg5xluQ7bw (2:32). Para X hay un corte de 2:16, porque las cuentas sin Premium aceptan hasta 2:20.
+
 ---
 
 ## 1. Formulario
@@ -42,7 +48,12 @@ Reemplaza a "Textos listos para la entrega" de `docs/NARRATIVE.md`, que quedó c
 
 ## 2. Video
 
-**Ya hay un video listo (23 nov 2026): `~/Vídeos/accasa/accasa-demo-en.mp4`, 2:04, 1920x1080, con textos en inglés y sin voz.** Muestra el deck, las 8 escenas del flujo (ahorrar, link del corredor, reservar con "What if…", reclamo, aceptación, prueba de estrés antes y después, pausa por split, cobro en USDC) y la página para desarrolladores. Se grabó en una cadena local con los mismos contratos de Base Sepolia, y lo dice en pantalla. Se puede subir así, o grabar una voz encima siguiendo el guion de abajo. Las herramientas para cambiar un texto y rearmarlo están en `~/Vídeos/accasa/pipeline/`.
+**Videos listos (23 nov 2026), 1920x1080, con locución en inglés (voz Ines de Higgsfield):**
+
+- `~/Vídeos/accasa/accasa-demo-en-final.mp4`: 2:32, publicado en YouTube (https://youtu.be/Plg5xluQ7bw).
+- `~/Vídeos/accasa/accasa-demo-x.mp4`: 2:16, para subir directo a X (tope de 2:20 sin Premium). Mismas escenas con frases más cortas.
+
+Muestran el deck, las 8 escenas del flujo (ahorrar, link del corredor, reservar con "What if…", reclamo, aceptación, prueba de estrés antes y después, pausa por split, cobro en USDC) y la página para desarrolladores. Se grabaron en una cadena local con los mismos contratos de Base Sepolia, y lo dicen en pantalla. Para cambiar una frase: `~/Vídeos/accasa/pipeline/voice*/lines.tsv`, borrar su `.mp3` y `.json`, generarla de nuevo y correr `assemble.py` (el corte para X: `VOICE_DIR=voice-x RESERVE_SPEED=0.95 CLAIM_SPEED=1.3 DEV_MAX=10.5`).
 
 ### Guion para grabarlo a mano (3 minutos)
 
@@ -78,23 +89,27 @@ Sigue el "Show us" de la idea 3.3: depositar, bloquear, devolver o cobrar, una p
 
 ## 3. Post en X (con el video)
 
-> Saving for a home in stocks means selling everything the day the home shows up.
+Con `accasa-demo-x.mp4` adjunto (279 caracteres, el tope de una cuenta gratis es 280):
+
+> Saving for a home in stocks means selling it all the day the home shows up.
 >
-> Accasa locks them as the reservation deposit instead. If the deal closes, they come back. If the buyer walks, the contract sells just enough to pay the broker in USDC.
+> Accasa locks them as the reservation deposit instead. If the buyer walks, the contract sells just enough to pay the broker in USDC.
 >
-> Built for Stocks Maxxing on @buildonbase, Programmable Stock Markets track.
+> For Stocks Maxxing on @buildonbase, Programmable Stock Markets track.
 
 Respuesta al post, con los links:
 
-> Contracts verified, open to any app: https://accasa.vercel.app/en/developers
 > Try it on Base Sepolia: https://accasa.vercel.app/en
+> Contracts and docs: https://accasa.vercel.app/en/developers
+> Full demo: https://youtu.be/Plg5xluQ7bw
 
 ---
 
 ## 4. Checklist
 
-- [ ] Video grabado y subido (Loom u otro)
+- [x] Video con voz, publicado en YouTube (23/11)
+- [x] Inscripción (Application Form) enviada (23/11)
 - [ ] Post en X con el video, etiquetando a @buildonbase
-- [ ] Formulario enviado con el link al post, el track y "What was built during the Quest"
+- [ ] Submission Form (cuando lo publiquen) con el link al post, el track y "What was built during the Quest"
 - [ ] Precios de prueba restaurados y `DEMO_PAUSED_TICKERS` quitada
 - [ ] Mandarlo antes del 4 de diciembre, para tener un día de margen

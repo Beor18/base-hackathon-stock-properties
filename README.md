@@ -6,6 +6,7 @@ Built during [Base Stocks Maxxing](https://www.base.org/stocksmaxxing), track **
 
 **Live on Base Sepolia**
 
+- Demo video (2:32): https://youtu.be/Plg5xluQ7bw
 - App: https://accasa.vercel.app (Spanish) and https://accasa.vercel.app/en
 - Developer page (contracts, lifecycle, code sample, API): https://accasa.vercel.app/en/developers
 - Pitch deck: https://accasa.vercel.app/en/pitch
