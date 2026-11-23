@@ -19,7 +19,7 @@ const SOURCE_EXPLORER: Partial<Record<number, string>> = {
 };
 
 /** Contracts whose source is verified on Blockscout for this deployment (checked on 23 Nov 2026). */
-const VERIFIED: ContractKey[] = ["reservationEscrow"];
+const VERIFIED: ContractKey[] = ["reservationEscrow", "stockOracle", "goalRegistry"];
 
 /** Every figure the copy quotes, from the deployment the contracts were created with. */
 function values(lang: Locale): Record<string, string | number> {
