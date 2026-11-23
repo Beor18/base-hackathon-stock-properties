@@ -57,6 +57,14 @@ export async function findOffer(id: string): Promise<OfferRow | null> {
   return rows[0] ?? null;
 }
 
+/**
+ * The cheapest real query: one id. A Supabase project on the free plan pauses after 7 days without
+ * activity, which takes broker links and the inbox down; a daily cron calls this to keep it awake.
+ */
+export async function pingStore(): Promise<void> {
+  await rest("reservation_offers?select=id&limit=1");
+}
+
 /** When the broker last opened their inbox, or null if never. `account` is lowercase. */
 export async function readInboxSeen(account: string): Promise<Date | null> {
   const rows = z
