@@ -27,6 +27,9 @@ export function SiteFooter({ lang, footer, dockSpace = false }: SiteFooterProps)
           <Link href={`/${lang}/pitch`} className="inline-flex min-h-11 items-center px-2 text-ink-2 hover:text-ink">
             {footer.pitch}
           </Link>
+          <Link href={`/${lang}/developers`} className="inline-flex min-h-11 items-center px-2 text-ink-2 hover:text-ink">
+            {footer.developers}
+          </Link>
         </nav>
       </div>
     </footer>

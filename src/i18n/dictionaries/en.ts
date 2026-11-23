@@ -36,6 +36,7 @@ const en: Dictionary = {
     risk: "Investing in stocks carries risk: their value can go up or down.",
     pitch: "Pitch",
     brokers: "I'm a broker",
+    developers: "Developers",
   },
   landing: {
     heroTitle: "Saving for a home deposit takes years.",

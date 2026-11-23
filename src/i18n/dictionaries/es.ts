@@ -39,6 +39,7 @@ const es = {
     risk: "Invertir en acciones tiene riesgo: su valor puede subir o bajar.",
     pitch: "Presentación",
     brokers: "Soy corredor",
+    developers: "Desarrolladores",
   },
   landing: {
     heroTitle: "La seña de tu casa se junta en años.",
