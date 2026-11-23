@@ -219,39 +219,6 @@ Hay que decirlo sin maquillaje: **el ingreso por persona es chico al principio.*
 
 ---
 
-## Textos listos para la entrega (en inglés)
+## Textos listos para la entrega
 
-**Tagline**
-
-> Accasa: your next home, in stocks.
-
-**One-liner**
-
-> Accasa lets people outside the US save in tokenized stocks on Base toward a specific property, and lock those stocks as the reservation deposit when they get there, without selling them. If the buyer backs out, the broker is paid in USDC. Listings come live from Smarlin, our property platform in Puerto Rico, or from any Argentine portal by pasting a link.
-
-**Form: project description (1 to 2 sentences)**
-
-> Accasa is a savings account in tokenized stocks with a specific property as the goal. Add USDC or digital pesos, pick a home from Smarlin or paste any portal link, and when you reach the deposit your stocks are locked in an onchain escrow as the reservation, never sold. If the buyer backs out, the contract sells just enough stock to pay the broker in USDC.
-
-**Form: "Why should we select you?"**
-
-> In Argentina, homes are bought in dollars and in cash: in Buenos Aires, 17.5% of August 2026 deeds used a mortgage, so the rest came from years of saved dollars sitting idle (INDEC puts USD 254.9B of private dollars outside the banking system). Meanwhile over a million Argentines already hold US stocks that are useless the day they must reserve a home. Accasa turns that saving into a goal and the goal into a deposit, without selling. Every contribution is onchain usage, from USD 5, and the final reservation is a programmed stock action that does not exist anywhere else: lock, release, or sell to pay a broker in USDC with a slippage cap enforced by the contract. We are the team behind Smarlin, a live AI property platform in Puerto Rico with 11,925 active listings and 120,002 closed sales analyzed. One of us sells properties there; the other builds onchain from Buenos Aires, where the product can be used today. US persons are blocked on mainnet and no US person ever receives stocks.
-
-**Loom, 3 minutos**
-
-| Tiempo | Qué se muestra | Qué se dice |
-|---|---|---|
-| 0:00 a 0:20 | Una cuenta con dólares quietos y un portal con una casa | "In Argentina you buy a home with dollars you saved for years. That money sits still. And when you find the home, you must sell what you invested to reserve it." |
-| 0:20 a 0:40 | Landing con el 1-2-3 | "Accasa: your next home, in stocks. Three steps." |
-| 0:40 a 1:10 | Elegir una casa de Puerto Rico en Smarlin (datos de precio justo y renta) y pegar un link de un portal argentino | "Pick a listing from Smarlin, or paste any link. We compute the deposit." |
-| 1:10 a 1:50 | Sumar con USDC y con pesos digitales; pantalla de meta con "la casa +x %, tus acciones +y %" | "Add dollars or pesos. They become the stock you chose. Fee always visible. Every step is onchain." |
-| 1:50 a 2:30 | Reservar: link del corredor, un toque, página pública de la reserva; luego reclamo y cobro en USDC | "You reached the goal. One tap locks your stocks as the deposit. If you back out, the broker claims and is paid in USDC, with a slippage cap enforced onchain. If the deal closes, your stocks come home." |
-| 2:30 a 3:00 | Stats on-chain y roadmap | "Built during Stocks Maxxing. Next: first brokers, a plan for agencies on Smarlin, other portals." |
-
-**Post de lanzamiento en X**
-
-> In Argentina you buy a home with dollars you saved for years. That money sits still.
->
-> We built Accasa: save in tokenized stocks toward the home you want. When you get there, your stocks become the deposit. You never sell them.
->
-> Accasa: your next home, in stocks. @buildonbase
+Pasaron a [`docs/SUBMISSION.md`](SUBMISSION.md) (23 nov 2026): formulario, guion del video con la reserva de prueba y post en X, con el encuadre de la idea 3.3 y Latinoamérica.

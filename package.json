@@ -15,6 +15,7 @@
     "chain": "npm run contracts:build && tsx scripts/chain.ts",
     "deploy": "npm run contracts:build && tsx scripts/deploy.ts",
     "demo:prices": "tsx scripts/demo-prices.ts",
+    "demo:reservation": "tsx scripts/demo-reservation.ts",
     "smoke": "tsx scripts/smoke.ts"
   },
   "dependencies": {

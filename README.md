@@ -1,115 +1,101 @@
 # Accasa: your next home, in stocks
 
-Save in tokenized stocks toward a specific property. When you reach the deposit, your stocks are locked as the reservation, never sold. If the buyer backs out, the broker is paid in USDC.
+Save in tokenized stocks toward a specific home. When you reach the deposit, your stocks are locked onchain as the reservation deposit, never sold. If the buyer backs out, the contract sells just enough stock to pay the broker in USDC. If the purchase goes through, the stocks come back.
 
-Built for [Base Stocks Maxxing](https://www.base.org/stocksmaxxing), track **Programmable Stock Markets**. Product source of truth: [`docs/superpowers/specs/2026-11-14-sena-design.md`](docs/superpowers/specs/2026-11-14-sena-design.md). The full story (problem, market, business model, plan) is in [`docs/NARRATIVE.md`](docs/NARRATIVE.md).
+Built during [Base Stocks Maxxing](https://www.base.org/stocksmaxxing), track **Programmable Stock Markets**: a stock-backed financing primitive (idea 3.3, "stock-backed loans") applied to the step everyone in Latin America has to fund first: the home deposit.
 
-## What it is
+**Live on Base Sepolia**
 
-In Argentina, homes are bought in dollars and in cash. In Buenos Aires, 17.5% of August 2026 deeds used a mortgage; the rest came from years of idle savings. Accasa turns that saving into a goal and the goal into a deposit:
+- App: https://accasa.vercel.app (Spanish) and https://accasa.vercel.app/en
+- Developer page (contracts, lifecycle, code sample, API): https://accasa.vercel.app/en/developers
+- Pitch deck: https://accasa.vercel.app/en/pitch
+- A reservation, end to end: https://accasa.vercel.app/en/r/1
+- Contracts, source verified on Blockscout: [ReservationEscrow](https://base-sepolia.blockscout.com/address/0x5584F9a333faCbB8f01D22524c517Cf2BaB84a95?tab=contract), [StockOracle](https://base-sepolia.blockscout.com/address/0x04d3d4672024357d40a4739Ad03f04e68987101d?tab=contract), [GoalRegistry](https://base-sepolia.blockscout.com/address/0x67cE534C1fB313763A03909994212cf4B5228Dca?tab=contract)
 
-1. **Pick a home.** Real Puerto Rico listings from [Smarlin](https://www.smarlin.com) (our live AI property platform: 11,925 listings, 120,002 closed sales analyzed, 78 municipalities), or paste a link from any Argentine portal. Deposit = `price x deposit %` (default 5%, adjustable 1% to 10%).
-2. **Add.** Contribute USDC or wARS (digital pesos). It becomes the tokenized stock chosen for the goal. The goal screen shows progress and "the home +x %, your stocks +y %" since the start.
-3. **Reserve.** One tap locks the stocks in an escrow in favor of the broker, with a neutral arbiter. If the deal closes, the stocks return. If the buyer backs out, the broker claims and **is paid in USDC**: the contract sells the stock needed. Nobody on the seller side ever receives stocks.
+## The problem
 
-Users are outside the US (Argentina first). Puerto Rico is the showcase, but the first usage is in Argentina. See `docs/NARRATIVE.md` section 4.
+In Latin America, buying a home starts with saving the down payment. Mortgage credit is 11% of GDP or less in Brazil, Mexico, Colombia and Peru, against 44% in the US (Deloitte Econosignal 2025; Federal Reserve). In Buenos Aires, 84.6% of purchases close without a mortgage. People save for years, and whoever invested those savings has to sell everything the day the home shows up. Sources and the market sizing are in [`docs/research/2026-11-16-tam-sam-som.md`](docs/research/2026-11-16-tam-sam-som.md).
 
-Product rules: email login (Privy smart wallet), gas sponsored by the Coinbase paymaster, no signing modals, approve plus action in one batched call, mobile first, fees always visible, Spanish (`es`, default) and English (`en`).
+## How it works
 
-## Quickstart
+1. **Pick a home.** Live Puerto Rico listings from [Smarlin](https://www.smarlin.com) (our property platform), or paste a link from any listings site. The deposit is `price x deposit %` (default 5%, 1% to 10%).
+2. **Save.** Add from USD 5 in USDC or digital pesos. Each contribution buys the tokenized stock chosen for the goal. Family can chip in through a shared link.
+3. **Reserve.** The broker sends a short link. One tap locks the stocks in the escrow in the broker's favor, with a neutral arbiter. Cost, margin and every outcome (sale closes, buyer backs out, the stock falls, the market is closed, the stock is paused, a dispute) are on the same screen as the button.
+
+Sign-in is by email (Privy smart wallet), network fees are sponsored (Coinbase paymaster), approve plus action go in one batched call, and every write carries Accasa's Builder Code (ERC-8021).
+
+## What Base asked for in idea 3.3, and where it is
+
+| "Show us" | Accasa |
+|---|---|
+| deposit, borrow, repay, withdraw | save, `createReservation`, then `release` (sale closes) or `fileClaim`, `acceptClaim`/`disputeClaim`, `settleClaim` (buyer backs out) |
+| Cost, conservative limits, liquidation risk on one screen | The reserve screen: fee, locked value and its margin over the deposit, how far the stock can fall before it stops covering it, and what happens in each case |
+| Overnight price gaps | A per-stock margin from 15% to 100% sized on each stock's volatility. Prices older than 26 h can't settle a claim (4 days to lock collateral) |
+| Paused collateral transfers | The app reads Coinbase's oracle registry on Base mainnet (`getOracleParams`) and blocks reserving and payouts while a stock is paused, instead of letting the transaction fail |
+| A stress scenario | `npm run demo:reservation -- drop --pct 20` lowers a testnet price live, and the app shows the deposit still covered |
+| The exact market used | Payouts sell through an owner-allowlisted router with an immutable max slippage (2%). On Base Sepolia that router is a disclosed simulated market (`DemoExchange`) |
+
+## Built during the Quest
+
+Everything in this repository was built during Stocks Maxxing: the first commit is from November 14, 2026. That includes the three contracts and their 46 Foundry tests, the app, the API, the broker links and inbox (Supabase), the pitch deck and the developer page. What existed before: Smarlin, our property platform in Puerto Rico, which provides the listings through its public API.
+
+## The contracts
+
+- **`ReservationEscrow`**: stocks locked as a USD-denominated deposit in favor of a beneficiary (the broker), with an arbiter. Claims are paid in USDC by selling only the stock needed. The same lifecycle works as a rental deposit. Anyone can `topUp`; the depositor can `withdrawExcess` above the margin or `extendEndDate`.
+- **`StockOracle`**: the accepted stocks, their Chainlink feeds (total-return, multiplier included) and per-stock collateral ratios, with two freshness bounds: a lenient one to lock collateral, a strict one to pay value out.
+- **`GoalRegistry`**: one goal per account: the home and the stock it saves in.
+- **Testnet only:** `MockStockToken` (priced from the real Chainlink feeds on Base mainnet), `MockPriceFeed`, `MockUSDC`, `MockWARS` and `DemoExchange`.
+
+Lifecycle: `createReservation` -> (sale closes) `release`, or (buyer backs out) `fileClaim` -> `acceptClaim` or `disputeClaim` (3 days) -> `resolveDispute` (arbiter, 14 days, then the default arbiter) -> `settleClaim` (anyone) -> the rest goes back to the depositor. With no claim, anyone can `release` 15 days after the end date. Every number comes from [`src/config/deployment.json`](src/config/deployment.json); the [developer page](https://accasa.vercel.app/en/developers) renders it.
+
+## Run it
 
 ```bash
 npm install
-npm run chain   # local anvil + deploy + writes src/config/deployment.json
-npm run dev     # http://localhost:3000
+npm run chain            # local anvil + deploy, writes src/config/deployment.json
+npm run dev              # http://localhost:3000 (dev accounts, no Privy needed on 31337)
+npm run contracts:test   # 46 Foundry tests
+npm run smoke            # the full cycle on the local chain
 ```
 
-`TODO(verify)`: exact script names depend on the contracts and deploy work in progress. Check `package.json` `scripts` and `scripts/`.
-
-On the local chain (31337) the app runs in dev mode with anvil accounts, no Privy needed. Mock stocks, a mock price feed, `MockUSDC`, `MockWARS` and a `DemoExchange` are deployed, with faucets.
-
-Other scripts: `npm run contracts:test` (Foundry), `npm run contracts:abi`, `npm run typecheck`, `npm run lint`.
+On Base Sepolia, `npm run demo:reservation` plays a throwaway buyer so the broker side can be shown alone (`create --broker 0x…`, `accept --id N`, `drop --stock AAPL --pct 20`), and `npm run demo:prices -- --network base-sepolia` resyncs testnet prices with the real feeds.
 
 ## Architecture
 
 ```
-contracts/src         Solidity (Foundry): oracle, escrow, goal registry, mocks
-scripts/              deploy and local chain, ABI export
-src/config/           chains + deployment.json (generated by the deploy script)
-src/contracts/        generated ABIs
-src/domain/           shared DTOs and math (property, rates, collateral)
-src/server/           property providers, rates, services (read on-chain state)
-src/app/api/          route handlers
-src/app/[lang]/       UI (es/en)
-src/lib/wallet        sendCalls(calls) -> hash, two implementations: Privy and dev
-src/proxy.ts          language redirect + US geo-block (mainnet only)
+contracts/src      Solidity (Foundry): oracle, escrow, goal registry, testnet mocks
+scripts/           deploy, local chain, demo reservation, price sync, ABI export
+src/config/        chains and deployment.json (written by the deploy script)
+src/domain/        shared types and rules (collateral math, stock market status)
+src/server/        Smarlin and link providers, chain reads, planners that return calls[]
+src/app/api/       route handlers (public, read-only, plus planners and broker offers)
+src/app/[lang]/    UI in Spanish and English
+src/lib/wallet     sendCalls(calls): Privy smart wallet, or anvil accounts in dev
+src/proxy.ts       US geo-block on mainnet, then the language prefix
 ```
 
-`TODO(verify)`: file layout follows the spec (sections 5 to 7); confirm against the final tree.
-
-### Contracts
-
-- **`StockOracle`**: registry of accepted stocks and their Chainlink feeds, with a per-stock collateral ratio. Two immutable freshness bounds: a lax one to take collateral in (accepts Friday's close) and a strict one to take value out (claims). Feeds are 24/5 and freeze on weekends.
-- **`ReservationEscrow`** (evolved from `GuaranteeEscrow`): roles `depositor`, `beneficiary` (the broker, on behalf of the seller) and `arbiter`; field `propertyRef` (`bytes32`, keccak of the property ref); creation fee `feeBps` (cap 3%) to the treasury; on-chain counters for stats.
-- **`GoalRegistry`**: one goal per account: `setGoal(propertyRef, propertyKey, stock, targetUsd, propertyPriceUsd, beneficiary)`, `clearGoal()`, `goalOf(account)`. The stock price at start is read from the oracle, not from the user. Counters `goalCount`, `activeGoals`.
-- **Mocks (local and testnet only):** `MockStockToken`, `MockPriceFeed`, `MockUSDC` (6 dec), `MockWARS` (18 dec), `DemoExchange` (buy and sell stock at the feed price with a fee; whitelisted router in testnet).
-
-### Reservation lifecycle
-
-`create` -> `topUp` / `withdrawExcess` / `extend` -> (deal closes) `release`, or (buyer backs out) `fileClaim` -> `acceptClaim` or `disputeClaim` -> `resolveDispute` (arbiter) -> `settleClaim` -> `release` of the remainder.
-
-`settleClaim(id, router, swapData)` approves the exact stock amount to a router whitelisted by the owner, runs `swapData`, requires the USDC received to be at least `oracle value x (1 - maxSlippageBps)` (`maxSlippageBps` is immutable), pays the broker in USDC and returns the rest to the depositor. A router not on the whitelist reverts. Foundry tests cover the full cycle, slippage, non-whitelisted router and stale price.
-
-### Server and property providers
-
-- **`smarlin`**: public Smarlin endpoints (`/api/properties`, `/api/properties/{id}`, fair price, short-term rental, market rent, comparables), validated with zod, cached with `"use cache"` + `cacheLife`. **Field allowlist:** never forward `embedding`, agent email or phone.
-- **`link`**: reads only the page the user pasted: JSON-LD (schema.org Offer/price), then Open Graph. Anti-SSRF guards: https only, public hosts, size and time limits, no redirects to private IPs. If no price is found it returns `priceUsd: null` and the UI asks for it. ARS prices are converted with the Chainlink USD/ARS feed on Base.
-- Routes: `GET /api/properties`, `GET /api/properties/[ref]`, `POST /api/link-preview`, `GET /api/rates`, plus stocks, protocol and stats. Planners return `calls[]` ready to send as a batch (goal, contribution, reservation) and never sign.
-
-`TODO(verify)`: route and planner names follow the spec.
+Planners never sign: they return the calls, and the wallet sends them as one batch.
 
 ## Trust and security assumptions
 
-- **Oracle owner** can add stocks and set collateral ratios. In production it should be a multisig with a timelock. It also whitelists the settlement routers.
-- **Arbiter** resolves disputes. The default arbiter can resolve after a timeout. In mainnet it should be a multisig or a neutral third party.
-- **The B20 issuer can pause or seize tokens** (`seizeWithMemo`). Per-reservation accounting does not account for seizure. This is a trust assumption on the issuer.
-- **Slippage on settlement** is capped by the immutable `maxSlippageBps`. If the route returns less, the settlement reverts and the claim stays open. Stale prices also revert (for example on weekends).
-- **No sequencer uptime feed check.**
-- Chainlink feeds already include the B20 `multiplier()`: USD value = `balance x answer / 1e8`.
-- Not audited. Mainnet runs with amount caps, and US persons (including Puerto Rico) are geo-blocked on mainnet.
+- Not audited. Mainnet would launch with amount caps.
+- The oracle owner lists stocks, sets collateral ratios and allowlists settlement routers. On mainnet it should be a multisig with a timelock.
+- The arbiter resolves disputes; the default arbiter can act after a timeout. On mainnet, a multisig or a neutral third party.
+- The token issuer can pause or seize tokens. The app honors the registry pause; before mainnet, `StockOracle` should read it too, because a frozen price can be younger than 26 hours.
+- No sequencer uptime check.
+- Tokenized stocks track the share price and carry no vote in the company. US persons (including Puerto Rico residents) can't save: tokenized stocks aren't offered to them, and mainnet is geo-blocked.
 
 ## Configuration
-
-The app reads **one** environment variable:
 
 | Variable | What for |
 |---|---|
 | `NEXT_PUBLIC_PRIVY_APP_ID` | Privy app (email login, smart wallets) |
+| `SUPABASE_SECRET_KEY` | Broker offers (short links) and inbox |
+| `DEMO_PAUSED_TICKERS` | Testnets only: tickers shown as paused, to film the pause handling |
 
-Everything else comes from [`src/config/deployment.json`](src/config/deployment.json), generated by the deploy script and committed: contract addresses, active chain, Builder Code, treasury. The paymaster and the smart wallet type are configured in the Privy dashboard, not in env. Public URLs (Smarlin, RPC) have defaults with optional overrides. Only the deploy script to public networks reads `DEPLOYER_PRIVATE_KEY`.
+Everything else comes from `src/config/deployment.json` or has a public default. Deploys to public networks (`npm run deploy -- --network base-sepolia|base`) sign with `DEPLOYER_PRIVATE_KEY`.
 
-## Deploy by network
+## Team
 
-| | Local (31337) | Base Sepolia (84532), demo | Base (8453), real |
-|---|---|---|---|
-| Stocks | `MockStockToken` | same | real B20 (Tokenized Stocks API) |
-| Prices | `MockPriceFeed` seeded with real `nav_price` | same + sync script | Chainlink |
-| USDC | `MockUSDC` with faucet | `MockUSDC` with faucet | native USDC |
-| wARS | `MockWARS` with faucet | same | real wARS |
-| Swap | `DemoExchange` | same | KyberSwap aggregator, fee to treasury |
-| Account | anvil accounts (dev mode) | Privy smart wallet + paymaster | same |
-
-There are no tokenized stocks on testnet: that is why the mocks exist. `TODO(verify)`: deploy commands per network, for example `npm run deploy -- --network base-sepolia`. Check `scripts/`.
-
-## Hackathon checklist
-
-- [ ] Registered in the form; Bankr and BaseStonk groups joined
-- [ ] Track: Programmable Stock Markets
-- [ ] Builder Code from dashboard.base.org, attached to every write (ERC-8021)
-- [ ] Privy app created, `NEXT_PUBLIC_PRIVY_APP_ID` set
-- [ ] Deployed on Base Sepolia (demo) and Base (capped)
-- [ ] Real on-chain usage (goals, contributions, at least one reservation with a broker); no self-trading (Rules section 13)
-- [ ] US geo-block active on mainnet
-- [ ] Loom of 3 minutes and X post tagging @buildonbase (texts in `docs/NARRATIVE.md`)
-- [ ] Daily build-in-public posts
-- [ ] Submit by Dec 4 (deadline Dec 5, 23:59 UTC)
+- **Kelvin Garcia Vale**, real estate broker in Puerto Rico (Kelvin Garcia Realty), Smarlin.
+- **Fernando Lopez**, engineer in Buenos Aires. Built Accasa end to end.
