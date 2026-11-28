@@ -1,8 +1,10 @@
 # Entrega a Stocks Maxxing
 
-Todo lo que hay que mandar antes del **5 de diciembre de 2026, 23:59 UTC**: el formulario, el video y el post en X que etiqueta a @buildonbase. Los textos para Base van en inglés. El video se narra en castellano con subtítulos en inglés (o lo narra Kelvin en inglés).
+Todo lo que hay que mandar antes del **12 de diciembre de 2026, 23:59 UTC** (Base extendió el cierre; antes era el 5): el formulario, el video y el post en X que etiqueta a @buildonbase. Los textos para Base van en inglés. El video se narra en castellano con subtítulos en inglés (o lo narra Kelvin en inglés).
 
 Reemplaza a "Textos listos para la entrega" de `docs/NARRATIVE.md`, que quedó con el encuadre viejo.
+
+**Novedad al 28/11/2026:** la página de la Quest ahora dice "Nov 5 to Dec 12" y su FAQ pide completar el formulario de entrega "by 11:59 PM UTC on December 12, 2026". Hay una semana más. El Submission Form sigue sin publicarse: el único formulario enlazado es el de inscripción. También sumaron dos partners (Clanker y Sento).
 
 **Estado al 23/11/2026**
 
@@ -114,4 +116,4 @@ Respuesta al post, con los links:
 - [x] Post en X con el video, etiquetando a @buildonbase (23/11): https://x.com/beor22/status/2124961077566067117
 - [ ] Submission Form (cuando lo publiquen) con el link al post, el track y "What was built during the Quest"
 - [ ] Precios de prueba restaurados y `DEMO_PAUSED_TICKERS` quitada
-- [ ] Mandarlo antes del 4 de diciembre, para tener un día de margen
+- [ ] Mandarlo antes del 11 de diciembre, para tener un día de margen (el cierre pasó al 12)

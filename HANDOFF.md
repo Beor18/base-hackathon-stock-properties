@@ -51,7 +51,7 @@ Estado al **14 nov 2026**. Repo: `https://github.com/Beor18/base-hackathon-stock
 
 ## 3. Reglas del hackathon (leídas de la página oficial y `/stocksmaxxing/rules`)
 
-- **Fechas:** 5 nov – 5 dic 2026. Entrega hasta **5 dic 23:59 UTC**.
+- **Fechas:** 5 nov – 12 dic 2026. Entrega hasta **12 dic 23:59 UTC** (Base extendió el cierre, que era el 5 dic; verificado en la página de la Quest el 28/11).
 - **Premios:** USD 50.000 en tracks Base (Meme & Community 10k, **Agentic Stock Finance 20k**, **Programmable Stock Markets 20k**), USD 48.000 de partners, USD 6.000 al "build in public" (voto de la comunidad).
 - **Cómo se juzga: no está publicado.** El reparto 50% tracción, 25% producto, 25% build in public sale de una nota de prensa sin atribución (CryptoBriefing, 6 nov 2026), no de una fuente oficial. Las reglas (§7) dicen que los criterios pesan igual salvo que la Quest Page indique otra cosa, y la página no lista criterios. Hay que preguntarlo por escrito en el grupo de Bankr, junto con un posible reparto del premio (USD 11.000 a proyectos ya lanzados, USD 7.000 a proyectos nuevos) que aparece en el código de la página y no se muestra. Detalle en `docs/research/2026-11-14-mercado-y-competencia.md`.
 - **Entrega:** post público en X con video demo (Loom) etiquetando **@buildonbase** + formulario. El formulario de registro es `https://docs.google.com/forms/d/1zotYvkeAtDjR2MKk3qNxyNIAfJ_IPQtzTtjNhOAF8js/viewform`. El formulario final de entrega aún no estaba publicado.
